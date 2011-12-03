@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd
+END
+AbstractBayeux.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/AbstractBayeux.java
+END
+AbstractCometdServlet.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/AbstractCometdServlet.java
+END
+ChannelId.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/ChannelId.java
+END
+ClientImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/ClientImpl.java
+END
+Transport.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/Transport.java
+END
+AbstractTransport.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/AbstractTransport.java
+END
+BayeuxService.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/BayeuxService.java
+END
+MessageImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/MessageImpl.java
+END
+ChannelImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/ChannelImpl.java
+END
+MessagePool.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/MessagePool.java
+END
+JSONPTransport.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/JSONPTransport.java
+END
+JSONTransport.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/JSONTransport.java
+END

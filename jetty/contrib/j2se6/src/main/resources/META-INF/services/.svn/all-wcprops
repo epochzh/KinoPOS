@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/j2se6/src/main/resources/META-INF/services
+END
+com.sun.net.httpserver.spi.HttpServerProvider
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/j2se6/src/main/resources/META-INF/services/com.sun.net.httpserver.spi.HttpServerProvider
+END

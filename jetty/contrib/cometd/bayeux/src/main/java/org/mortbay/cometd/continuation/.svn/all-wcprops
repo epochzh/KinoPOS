@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/continuation
+END
+ContinuationCometdServlet.java
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/continuation/ContinuationCometdServlet.java
+END
+ContinuationBayeux.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/continuation/ContinuationBayeux.java
+END
+ContinuationClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/cometd/bayeux/src/main/java/org/mortbay/cometd/continuation/ContinuationClient.java
+END

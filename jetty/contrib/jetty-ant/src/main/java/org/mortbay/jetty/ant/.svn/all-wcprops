@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/jetty-ant/src/main/java/org/mortbay/jetty/ant
+END
+JettyWebAppConfiguration.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/jetty-ant/src/main/java/org/mortbay/jetty/ant/JettyWebAppConfiguration.java
+END
+ServerProxyImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/jetty-ant/src/main/java/org/mortbay/jetty/ant/ServerProxyImpl.java
+END
+JettyRunTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/jetty-ant/src/main/java/org/mortbay/jetty/ant/JettyRunTask.java
+END
+WebApplicationProxyImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/cimballi_elance26430508/!svn/ver/2/trunk/jetty/contrib/jetty-ant/src/main/java/org/mortbay/jetty/ant/WebApplicationProxyImpl.java
+END
