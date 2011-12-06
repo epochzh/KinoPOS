@@ -16,6 +16,7 @@ import com.openbravo.pos.sales.cinema.model.CustomerMeta;
 import com.openbravo.pos.sales.cinema.model.Day;
 import com.openbravo.pos.sales.cinema.model.Event;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
+import com.openbravo.pos.sales.cinema.model.Post;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
 import com.openbravo.pos.sales.cinema.model.PriceSpecial;
 import com.openbravo.pos.sales.cinema.model.Screen;
@@ -106,6 +107,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getNextAvailableFilm;
+
+    /**
+     */
+    private BaseSentence getPostByName;
 
     /**
      */
@@ -262,6 +267,12 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "ORDER BY start_date ASC ", new SerializerWriteBasic(
                     Datas.LONG, Datas.STRING), new SerializerReadClass(
                     Event.class));
+
+        this.getPostByName =
+            new StaticSentence(this.session, "SELECT ID, post_title "
+                + "FROM wp_posts " + "WHERE (post_title = ?) "
+                + "AND (post_status = 'publish') ", new SerializerWriteBasic(
+                Datas.STRING), new SerializerReadClass(Post.class));
 
         this.getPriceFirstFilm =
             new StaticSentence(this.session,
@@ -669,6 +680,17 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         }
 
         return next;
+    }
+
+    /**
+     * @param name
+     * @return
+     * @throws BasicException
+     */
+    public Post getPostByName(final String name) throws BasicException {
+        final Post post = (Post) this.getPostByName.find(name, null);
+
+        return post;
     }
 
     /**

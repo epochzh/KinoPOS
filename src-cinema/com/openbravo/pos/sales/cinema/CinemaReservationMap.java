@@ -19,6 +19,7 @@ import com.openbravo.pos.sales.cinema.model.BookingState;
 import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.Event;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
+import com.openbravo.pos.sales.cinema.model.Post;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
 import com.openbravo.pos.sales.cinema.model.PriceSpecial;
 import com.openbravo.pos.sales.cinema.model.PriceType;
@@ -249,6 +250,10 @@ public class CinemaReservationMap extends JTicketsBag {
 
     /**
      */
+    private JLabel ticketStatusLabel;
+
+    /**
+     */
     private ButtonPanel buttonPanel;
 
     /**
@@ -449,6 +454,9 @@ public class CinemaReservationMap extends JTicketsBag {
         if (events.size() > 0) {
             final Event ev = CinemaDaoImpl.getNextAvailableFilm(events, date);
             this.movieCb.setSelectedItem(ev.getName());
+
+            final String status = this.getStatus(ev);
+            this.ticketStatusLabel.setText(status);
         } else {
             this.movieCb.setSelectedIndex(-1);
         }
@@ -608,7 +616,7 @@ public class CinemaReservationMap extends JTicketsBag {
                 priceMatrixes = this.dao.listPrice(this.venue, this.event);
                 priceSpecial = this.dao.getPriceFirstFilm(this.venue);
             } catch (final BasicException ex) {
-                new MessageInf(ex).show(CinemaReservationMap.this);
+                new MessageInf(ex).show(this);
                 return;
             }
 
@@ -654,7 +662,7 @@ public class CinemaReservationMap extends JTicketsBag {
 
                 booking.setId(this.dao.getBookingByBarcode(barcode).getId());
             } catch (final BasicException ex) {
-                new MessageInf(ex).show(CinemaReservationMap.this);
+                new MessageInf(ex).show(this);
                 return;
             }
 
@@ -717,7 +725,7 @@ public class CinemaReservationMap extends JTicketsBag {
                     this.dao.getCustomer(booking.getCustomer().getId());
             }
         } catch (final BasicException ex) {
-            new MessageInf(ex).show(CinemaReservationMap.this);
+            new MessageInf(ex).show(this);
             return;
         }
 
@@ -764,7 +772,7 @@ public class CinemaReservationMap extends JTicketsBag {
         try {
             this.dao.deleteBooking(booking);
         } catch (final BasicException ex) {
-            new MessageInf(ex).show(CinemaReservationMap.this);
+            new MessageInf(ex).show(this);
         }
 
         // Refresh the map.
@@ -777,7 +785,7 @@ public class CinemaReservationMap extends JTicketsBag {
         try {
             this.dao.deleteBooking(this.bookingsCart);
         } catch (final BasicException ex) {
-            new MessageInf(ex).show(CinemaReservationMap.this);
+            new MessageInf(ex).show(this);
         }
 
         // Redirect to the ticket screen.
@@ -795,7 +803,7 @@ public class CinemaReservationMap extends JTicketsBag {
         try {
             this.dao.deleteReserved(this.event);
         } catch (final BasicException ex) {
-            new MessageInf(ex).show(CinemaReservationMap.this);
+            new MessageInf(ex).show(this);
             return;
         }
 
@@ -834,7 +842,7 @@ public class CinemaReservationMap extends JTicketsBag {
         try {
             this.dao.updateBooking(this.bookingsCart);
         } catch (final BasicException ex) {
-            new MessageInf(ex).show(CinemaReservationMap.this);
+            new MessageInf(ex).show(this);
             return;
         }
 
@@ -869,7 +877,9 @@ public class CinemaReservationMap extends JTicketsBag {
 
         final List<String> dateStrings = new ArrayList<String>(21);
 
-        final List<Date> dates = this.dao.listDateThreeWeeks(new Date());
+        // TODO: Remove the static values.
+        final List<Date> dates =
+            this.dao.listDateThreeWeeks(new Date(111, 10, 15));
         for (final Date date : dates) {
             dateStrings.add(DATE_FORMAT.format(date));
         }
@@ -921,6 +931,20 @@ public class CinemaReservationMap extends JTicketsBag {
         cancelReservedButton.setRequestFocusEnabled(false);
         cancelReservedButton.setText("Cancel Reserved");
 
+        /*
+         * TODO: needs the call back changing to show the ticket database for
+         * this film
+         */
+        final JButton bookingsButton = new JButton();
+        // ticketBookingsButton.addActionListener(new CancelReservedAl(this));
+        bookingsButton.setFocusable(false);
+        bookingsButton.setFocusPainted(false);
+        bookingsButton.setMargin(new Insets(6, 6, 6, 6));
+        bookingsButton.setRequestFocusEnabled(false);
+        bookingsButton.setText("Bookings");
+
+        this.ticketStatusLabel = new JLabel();
+
         final JPanel comboBoxesPanel = new JPanel();
         comboBoxesPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -929,6 +953,8 @@ public class CinemaReservationMap extends JTicketsBag {
         comboBoxesPanel.add(this.dateCb);
         comboBoxesPanel.add(cancelButton);
         comboBoxesPanel.add(cancelReservedButton);
+        comboBoxesPanel.add(bookingsButton);
+        comboBoxesPanel.add(this.ticketStatusLabel);
 
         // seatScrollPane
 
@@ -993,6 +1019,29 @@ public class CinemaReservationMap extends JTicketsBag {
             this.movieCb.setEnabled(false);
             this.timeCb.setEnabled(false);
         }
+    }
+
+    /**
+     * @param ev
+     * @return
+     */
+    private String getStatus(final Event ev) {
+        String status;
+
+        try {
+            final Post post = this.dao.getPostByName(ev.getName());
+
+            if (post == null) {
+                status = "null";
+            } else {
+                status = post.getTitle();
+            }
+        } catch (final BasicException ex) {
+            new MessageInf(ex).show(this);
+            status = "failed";
+        }
+
+        return status;
     }
 
     /**
