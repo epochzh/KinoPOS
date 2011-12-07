@@ -1388,6 +1388,7 @@ BeanFactoryApp, TicketsEditor {
         this.m_jButtons = new javax.swing.JPanel();
         this.m_jTicketId = new javax.swing.JLabel();
         this.btnCustomer = new javax.swing.JButton();
+        this.btnMembership = new javax.swing.JButton();
         this.btnSplit = new javax.swing.JButton();
         this.m_jPanelScripts = new javax.swing.JPanel();
         this.m_jButtonsExt = new javax.swing.JPanel();
@@ -1460,6 +1461,21 @@ BeanFactoryApp, TicketsEditor {
             }
         });
         this.m_jButtons.add(this.btnCustomer);
+        
+        this.btnMembership.setIcon(new javax.swing.ImageIcon(this.getClass()
+                .getResource("/com/openbravo/images/colorize.png"))); // NOI18N
+            this.btnMembership.setFocusPainted(false);
+            this.btnMembership.setFocusable(false);
+            this.btnMembership.setMargin(new java.awt.Insets(8, 14, 8, 14));
+            this.btnMembership.setRequestFocusEnabled(false);
+            this.btnMembership.addActionListener(new java.awt.event.ActionListener() {
+
+                @Override
+                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                    JPanelTicket.this.btnMembershipActionPerformed(evt);
+                }
+            });
+            this.m_jButtons.add(this.btnMembership);
 
         this.btnSplit.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/editcut.png"))); // NOI18N
@@ -1977,6 +1993,38 @@ BeanFactoryApp, TicketsEditor {
         this.refreshTicket();
 
     }// GEN-LAST:event_btnCustomerActionPerformed
+    
+    private void
+    btnMembershipActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCustomerActionPerformed
+        // XXX: CINEMA
+    	// XXX: CINEMA
+        final String ticketsbag =
+            this.m_App.getProperties().getProperty("machine.ticketsbag");
+        if ("cinema".equals(ticketsbag)) {
+            ((CinemaReservationMap) this.m_ticketsbag).doMembershipAdd();
+
+            return;
+        }
+
+        final JCustomerFinder finder =
+            JCustomerFinder.getCustomerFinder(this, this.dlCustomers);
+        finder.search(this.m_oTicket.getCustomer());
+        finder.setVisible(true);
+
+        try {
+            this.m_oTicket.setCustomer(finder.getSelectedCustomer() == null
+                ? null : this.dlSales.loadCustomerExt(finder
+                    .getSelectedCustomer().getId()));
+        } catch (final BasicException e) {
+            final MessageInf msg =
+                new MessageInf(MessageInf.SGN_WARNING, AppLocal
+                    .getIntString("message.cannotfindcustomer"), e);
+            msg.show(this);
+        }
+
+        this.refreshTicket();
+
+    }// GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSplitActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSplitActionPerformed
 
@@ -2004,6 +2052,7 @@ BeanFactoryApp, TicketsEditor {
         }
 
     }// GEN-LAST:event_btnSplitActionPerformed
+    
 
     private void jEditAttributesActionPerformed(
     final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jEditAttributesActionPerformed
@@ -2041,6 +2090,8 @@ BeanFactoryApp, TicketsEditor {
     private javax.swing.JButton btnCustomer;
 
     private javax.swing.JButton btnSplit;
+    
+    private javax.swing.JButton btnMembership;
 
     private javax.swing.JPanel catcontainer;
 

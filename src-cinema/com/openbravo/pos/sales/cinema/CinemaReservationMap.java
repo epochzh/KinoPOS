@@ -19,7 +19,6 @@ import com.openbravo.pos.sales.cinema.model.BookingState;
 import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.Event;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
-import com.openbravo.pos.sales.cinema.model.Post;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
 import com.openbravo.pos.sales.cinema.model.PriceSpecial;
 import com.openbravo.pos.sales.cinema.model.PriceType;
@@ -410,6 +409,29 @@ public class CinemaReservationMap extends JTicketsBag {
         } else if (this.customer.getMsType() == MembershipType.SILVER) {
             this.priceType = PriceType.SILVER;
         }
+    }
+    
+    
+    /**
+     */
+    public void doMembershipAdd() {
+        final MemberPopup popup =
+        		MemberPopup.getMemberPopup(this.dao, this);
+        popup.setVisible(true);
+
+//        this.customer = popup.getSelectedCustomer();
+//
+//        if (LOGGER.isLoggable(Level.INFO)) {
+//            LOGGER.info("customer: " + this.customer);
+//        }
+//
+//        if (this.customer == null) {
+//            // Nothing to do.
+//        } else if (this.customer.getMsType() == MembershipType.GOLD) {
+//            this.priceType = PriceType.GOLD;
+//        } else if (this.customer.getMsType() == MembershipType.SILVER) {
+//            this.priceType = PriceType.SILVER;
+//        }
     }
 
     /**

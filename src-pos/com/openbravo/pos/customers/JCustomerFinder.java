@@ -117,6 +117,7 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
         }
     }
     
+    
     private void cleanSearch() {
         jListCustomers.setModel(new MyListData(new ArrayList()));
     }
