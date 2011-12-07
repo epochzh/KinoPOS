@@ -1581,7 +1581,7 @@ BeanFactoryApp, TicketsEditor {
                 JPanelTicket.this.m_jListActionPerformed(evt);
             }
         });
-        this.jPanel2.add(this.m_jList);
+        //this.jPanel2.add(this.m_jList);
 
         this.m_jEditLine.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/color_line.png"))); // NOI18N
@@ -1596,7 +1596,7 @@ BeanFactoryApp, TicketsEditor {
                 JPanelTicket.this.m_jEditLineActionPerformed(evt);
             }
         });
-        this.jPanel2.add(this.m_jEditLine);
+        //this.jPanel2.add(this.m_jEditLine);
 
         this.jEditAttributes.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/colorize.png"))); // NOI18N
@@ -1613,7 +1613,7 @@ BeanFactoryApp, TicketsEditor {
                     JPanelTicket.this.jEditAttributesActionPerformed(evt);
                 }
             });
-        this.jPanel2.add(this.jEditAttributes);
+       // this.jPanel2.add(this.jEditAttributes);
 
         this.jPanel5.add(this.jPanel2, java.awt.BorderLayout.NORTH);
 
@@ -1764,7 +1764,7 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        this.jPanel9.add(this.m_jPrice, gridBagConstraints);
+       // this.jPanel9.add(this.m_jPrice, gridBagConstraints);
 
         this.m_jPor.setBackground(java.awt.Color.white);
         this.m_jPor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -1782,7 +1782,7 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        this.jPanel9.add(this.m_jPor, gridBagConstraints);
+       // this.jPanel9.add(this.m_jPor, gridBagConstraints);
 
         this.m_jEnter.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/barcode.png"))); // NOI18N
@@ -1804,7 +1804,7 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        this.jPanel9.add(this.m_jEnter, gridBagConstraints);
+        //this.jPanel9.add(this.m_jEnter, gridBagConstraints);
 
         this.m_jTax.setFocusable(false);
         this.m_jTax.setRequestFocusEnabled(false);
