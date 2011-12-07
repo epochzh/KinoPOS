@@ -503,6 +503,8 @@ public class CinemaReservationMap extends JTicketsBag {
         if (events.size() > 0) {
             final Event ev = CinemaDaoImpl.getNextAvailableFilm(events, date);
             this.timeCb.setSelectedIndex(events.indexOf(ev));
+            final String status = this.getStatus(ev);
+            this.ticketStatusLabel.setText(status);
         } else {
             this.timeCb.setSelectedIndex(-1);
         }
@@ -1029,12 +1031,12 @@ public class CinemaReservationMap extends JTicketsBag {
         String status;
 
         try {
-            final Post post = this.dao.getPostByName(ev.getName());
+            final String runTime = this.dao.getPostByName(ev.getName());
 
-            if (post == null) {
+            if (runTime == null) {
                 status = "null";
             } else {
-                status = post.getTitle();
+                status = runTime;
             }
         } catch (final BasicException ex) {
             new MessageInf(ex).show(this);

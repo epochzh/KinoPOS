@@ -17,6 +17,7 @@ import com.openbravo.pos.sales.cinema.model.Day;
 import com.openbravo.pos.sales.cinema.model.Event;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
 import com.openbravo.pos.sales.cinema.model.Post;
+import com.openbravo.pos.sales.cinema.model.Postmeta;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
 import com.openbravo.pos.sales.cinema.model.PriceSpecial;
 import com.openbravo.pos.sales.cinema.model.Screen;
@@ -111,6 +112,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getPostByName;
+    
+    private BaseSentence getPostMeta;
 
     /**
      */
@@ -273,6 +276,12 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 + "FROM wp_posts " + "WHERE (post_title = ?) "
                 + "AND (post_status = 'publish') ", new SerializerWriteBasic(
                 Datas.STRING), new SerializerReadClass(Post.class));
+        
+        this.getPostMeta =
+                new StaticSentence(this.session, "SELECT meta_id, meta_key, meta_value "
+                    + "FROM wp_postmeta " + "WHERE (post_id = ?) "
+                    + "AND (meta_key = ?) ", new SerializerWriteBasic(
+                    Datas.INT, Datas.STRING), new SerializerReadClass(Postmeta.class));
 
         this.getPriceFirstFilm =
             new StaticSentence(this.session,
@@ -687,10 +696,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      * @return
      * @throws BasicException
      */
-    public Post getPostByName(final String name) throws BasicException {
+    public String getPostByName(final String name) throws BasicException {
         final Post post = (Post) this.getPostByName.find(name, null);
+        final Postmeta runTime = (Postmeta) this.getPostMeta.find(post.getId(),"runTime");
+        final Postmeta certificate = (Postmeta) this.getPostMeta.find(post.getId(),"certificate");
+        
+        final String status = "run time: " + runTime.getMetaValue() + " mins / " + "certificate: " + certificate.getMetaValue();
 
-        return post;
+        return status;
     }
 
     /**
