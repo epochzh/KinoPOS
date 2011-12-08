@@ -3,6 +3,7 @@ package com.openbravo.pos.sales.cinema;
 import com.openbravo.pos.sales.cinema.listener.BookedTicketDetailsAl;
 import com.openbravo.pos.sales.cinema.listener.BookingAddToCartAl;
 import com.openbravo.pos.sales.cinema.listener.BookingCancelAl;
+import com.openbravo.pos.sales.cinema.listener.BookingCancelLockedAl;
 import com.openbravo.pos.sales.cinema.model.Booking;
 import com.openbravo.pos.sales.cinema.model.BookingState;
 
@@ -162,6 +163,14 @@ public class BookingPopup extends JDialog {
         this.panel.cancelBooking(this.booking);
         this.dispose();
     }
+    
+    /**
+     */
+    public void removeLocked() {
+    	this.panel.removeFromCart(this.booking);
+        this.panel.cancelBooking(this.booking);
+        this.dispose();
+    }
 
     /**
 	 */
@@ -234,6 +243,8 @@ public class BookingPopup extends JDialog {
         } else {
             rows = 6;
         }
+        
+       
 
         final JPanel bookingPanel = new JPanel();
         bookingPanel.setBorder(BORDER);
@@ -311,7 +322,23 @@ public class BookingPopup extends JDialog {
 
             buttonPanel.add(cancelButton);
             buttonPanel.add(addToCartButton);
-        } else {
+        } else if(this.booking.getState() == BookingState.LOCKED){
+        	// TODO check if the seat was locked at the current venue
+        	final BookingCancelLockedAl cancelLocked = new BookingCancelLockedAl(this);
+
+            final JButton printButton = new JButton();
+            printButton.addActionListener(cancelLocked);
+            printButton.setBackground(new Color(1, 47, 204));
+            printButton.setFocusable(false);
+            printButton.setFocusPainted(false);
+            printButton.setForeground(Color.white);
+            printButton.setMargin(new Insets(10, 20, 10, 20));
+            printButton.setRequestFocusEnabled(false);
+            printButton.setText("Remove");
+
+            buttonPanel.add(new JLabel());
+            buttonPanel.add(printButton);
+        }else {
             // printButton
 
             final ActionListener listener = new BookedTicketDetailsAl(this);

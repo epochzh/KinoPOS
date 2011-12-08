@@ -721,6 +721,11 @@ public class CinemaReservationMap extends JTicketsBag {
         final BookingState bookingState = booking.getState();
         if (bookingState == BookingState.LOCKED) {
             // Nothing to do.
+        	 final BookingPopup popup = BookingPopup.getPopup(this);
+        	 popup.setBooking(booking);
+             popup.setPanel(this);
+             popup.init();
+             popup.setVisible(true);
         } else if (bookingState == BookingState.RESERVED) {
             final BookingPopup popup = BookingPopup.getPopup(this);
             popup.setBooking(booking);
@@ -778,6 +783,26 @@ public class CinemaReservationMap extends JTicketsBag {
         // Refresh the map.
         this.onTimeAction();
     }
+    
+    /**
+     * @param booking
+     */
+    public void removeFromCart(final Booking booking) {
+        this.bookingsCart.remove(booking);
+        this.cartPanel.updateCart(this.bookingsCart);
+        if(this.bookingsCart.isEmpty())
+        {
+            // Redirect to the ticket screen.
+            final TicketInfo ticket = super.m_panelticket.getActiveTicket();
+            super.m_panelticket.setActiveTicket(ticket, null);
+        }
+        
+
+        // Refresh the map.
+        this.onTimeAction();
+    }
+    
+    
 
     /**
      */
