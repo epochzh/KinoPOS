@@ -167,6 +167,13 @@ public class Event implements IKeyed, Serializable, SerializableRead {
     public EventType getType() {
         return this.type;
     }
+    
+    /**
+     * @return the type as a string
+     */
+    public String getTypeAsString() {
+        return this.type.getType();
+    }
 
     /**
      * @param type the type to set

@@ -15,6 +15,7 @@ import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.CustomerMeta;
 import com.openbravo.pos.sales.cinema.model.Day;
 import com.openbravo.pos.sales.cinema.model.Event;
+import com.openbravo.pos.sales.cinema.model.EventType;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
 import com.openbravo.pos.sales.cinema.model.Post;
 import com.openbravo.pos.sales.cinema.model.Postmeta;
@@ -122,6 +123,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getScreenByNumber;
+    
+    /**
+     */
+    private BaseSentence getSpecialEventPrice;
 
     /**
      */
@@ -239,14 +244,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         this.getEvent =
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film') "
+                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (event_id = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(Event.class));
 
         this.getEventByName =
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film') "
+                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (venue = ?) " + "AND (event_name = ?) "
                     + "AND (start_date = ?) ", new SerializerWriteBasic(
                     Datas.LONG, Datas.STRING, Datas.TIMESTAMP),
@@ -256,7 +261,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film') "
+                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (venue = ?) " + "AND (start_date >= ?) "
                     + "AND (end_date < ?) " + "ORDER BY start_date ASC LIMIT 1",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
@@ -266,7 +271,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
-                    + "AND (event_type = 'film') " + "AND (start_date >= ?) "
+                    + "AND (event_type = 'film' or event_type LIKE 'event%') " + "AND (start_date >= ?) "
                     + "ORDER BY start_date ASC ", new SerializerWriteBasic(
                     Datas.LONG, Datas.STRING), new SerializerReadClass(
                     Event.class));
@@ -299,6 +304,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "WHERE (venue_idfk = ?) " + "AND (screen_number = ?) ",
                 new SerializerWriteBasic(Datas.LONG, Datas.INT),
                 new SerializerReadClass(Screen.class));
+        
+        this.getSpecialEventPrice =
+        		new StaticSentence(this.session,
+                        "SELECT day, id, name, full_price, gold, kino_friends, "
+                            + "kino_staff, senior, silver, student, u16, "
+                            + "ticketsForOffer, start_time, " + "end_time, venue_idfk "
+                            + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?)" + " AND (name = ?) ",
+                        new SerializerWriteBasic(Datas.LONG, Datas.STRING), 
+                        new SerializerReadClass(PriceMatrix.class));
 
         this.getVenue =
             new StaticSentence(this.session,
@@ -340,7 +354,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film') "
+                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (venue = ?) " + "AND (start_date >= ?) "
                     + "AND (end_date < ?) " + "ORDER BY event_name ASC ",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
@@ -350,7 +364,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
-                    + "AND (event_type = 'film') " + "AND (event_name = ?) "
+                    + "AND (event_type = 'film' or event_type LIKE 'event%') " + "AND (event_name = ?) "
                     + "AND (start_date >= ?) " + "AND (end_date < ?) "
                     + "ORDER BY start_date ASC ", new SerializerWriteBasic(
                     Datas.LONG, Datas.STRING, Datas.TIMESTAMP, Datas.STRING),
@@ -361,7 +375,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 "SELECT day, id, name, full_price, gold, kino_friends, "
                     + "kino_staff, senior, silver, student, u16, "
                     + "ticketsForOffer, start_time, " + "end_time, venue_idfk "
-                    + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?) ",
+                    + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?) " + "AND name NOT LIKE 'event%'",
                 new SerializerWriteBasic(Datas.LONG), new SerializerReadClass(
                     PriceMatrix.class));
 
@@ -723,6 +737,24 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         return price;
     }
+    
+    /**
+     * @param venue
+     * @return the {@link PriceSpecial} of the first film for the specified
+     * {@link Venue}
+     * @throws BasicException
+     */
+    public PriceMatrix getSpecialEventPrice(final Venue venue, final String type)
+    throws BasicException {
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("venue: " + venue);
+        }
+
+        final PriceMatrix price =
+            (PriceMatrix) this.getSpecialEventPrice.find(venue.getId(), type);
+
+        return price;
+    }
 
     /**
      * @param venue
@@ -809,6 +841,9 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         return isFirstFilmApplicable;
     }
 
+
+    
+    
     /**
      * @param customer
      * @return the list of {@link Booking} associated to the specified

@@ -16,6 +16,18 @@ public enum EventType {
     /**
      */
     MAINTENANCE("maintenance"),
+    
+    /**
+     */
+    EVENT1("event1"),
+    
+    /**
+     */
+    EVENT2("event2"),
+    
+    /**
+     */
+    EVENT3("event3"),
 
     /**
      */

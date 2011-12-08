@@ -18,6 +18,7 @@ import com.openbravo.pos.sales.cinema.model.Booking;
 import com.openbravo.pos.sales.cinema.model.BookingState;
 import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.Event;
+import com.openbravo.pos.sales.cinema.model.EventType;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
 import com.openbravo.pos.sales.cinema.model.PriceSpecial;
@@ -631,12 +632,26 @@ public class CinemaReservationMap extends JTicketsBag {
 
             final String barcode;
             final boolean isFirstFilmApplicable;
+            boolean isSpecialEvent = false;
             final List<PriceMatrix> priceMatrixes;
             final PriceSpecial priceSpecial;
+            final PriceMatrix specialEventPrice;
             try {
                 barcode = String.valueOf(this.dao.getBookingBarcodeMax() + 1);
                 isFirstFilmApplicable =
                     this.dao.isFirstFilmApplicable(this.venue, this.event);
+                final String type = this.event.getTypeAsString();
+                // checks to see if the event is marked as a special event
+               
+                if(type.contains("event"))
+                {
+                	isSpecialEvent = true;
+                	specialEventPrice = this.dao.getSpecialEventPrice(this.venue, type);
+                	LOGGER.info("specialEventPrice: " + specialEventPrice.getPriceGold());
+                }else{
+                	isSpecialEvent = false;
+                	specialEventPrice = null;
+                }
                 priceMatrixes = this.dao.listPrice(this.venue, this.event);
                 priceSpecial = this.dao.getPriceFirstFilm(this.venue);
             } catch (final BasicException ex) {
@@ -646,7 +661,11 @@ public class CinemaReservationMap extends JTicketsBag {
 
             Double price = null;
             PriceMatrix priceMatrix = null;
-            if (isFirstFilmApplicable) {
+            if(isSpecialEvent){
+            	LOGGER.info("specialEventPrice inside if else: " + specialEventPrice.getPriceGold());
+            	priceMatrix = specialEventPrice;
+            	price = toPrice(priceMatrix, this.priceType);
+            } else if (isFirstFilmApplicable) {
                 price = priceSpecial.getPrice();
             } else if (priceMatrixes.size() == 1) {
                 priceMatrix = priceMatrixes.get(0);
@@ -903,7 +922,7 @@ public class CinemaReservationMap extends JTicketsBag {
 
         // TODO: Remove the static values.
         final List<Date> dates =
-            this.dao.listDateThreeWeeks(new Date(111, 10, 15));
+            this.dao.listDateThreeWeeks(new Date());
         for (final Date date : dates) {
             dateStrings.add(DATE_FORMAT.format(date));
         }
