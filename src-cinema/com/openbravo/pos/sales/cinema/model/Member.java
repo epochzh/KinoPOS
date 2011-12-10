@@ -46,6 +46,10 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String memberShipType;
+    
+    /**
+     */
+    private String packId;
 
     /**
      */
@@ -233,6 +237,22 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
+	
+
+	/**
+	 * @return the packId
+	 */
+	public String getPackId() {
+		return packId;
+	}
+
+	/**
+	 * @param packId the packId to set
+	 */
+	public void setPackId(String packId) {
+		this.packId = packId;
+	}
 
 	/**
 	 * @return the postcode
@@ -297,7 +317,15 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @param memberShipType the memberShipType to set
 	 */
 	public void setMemberShipType(String memberShipType) {
-		this.memberShipType = memberShipType;
+		if(memberShipType == "gold membership")
+		{
+			this.memberShipType = "Gold Members";
+			this.setPackId("3");
+		}else if(memberShipType == "silver membership")
+		{
+			this.memberShipType = "Silver Members";
+			this.setPackId("2");
+		}
 	}
 
 	/**
@@ -435,23 +463,22 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 							"s:13:\"duration_type\";s:1:\"y\";" +
 							"s:6:\"amount\";s:4:\"0.10\";" +
 							"s:8:\"currency\";s:3:\"GBP\";" +
-							"s:13:\"last_pay_date\";s:10:\"" + this.getLastPayDate() + "\";" +
-							"s:11:\"expire_date\";s:16:\"2012-11-23 16:04\";" +
-							"s:12:\"account_type\";s:12:\"Gold Members\";" +
+							"s:13:\"last_pay_date\";s:10:\"" + this.getMembershipDates("yyyy-MM-dd", 0) + "\";" +
+							"s:11:\"expire_date\";s:16:\"" + this.getMembershipDates("yyyy-MM-dd HH:mm", 1) + "\";" +
+							"s:12:\"account_type\";s:12:\""+ this.getMemberShipType() +"\";" +
 							"s:10:\"status_str\";s:27:\"Last payment was successful\";" +
-							"s:7:\"pack_id\";s:1:\"3\";" +
-							"s:12:\"gateway_used\";" +
-							"s:9:\"ym_paypal\";}";
+							"s:7:\"pack_id\";s:1:\""+ this.getPackId() +"\";" +
+							"s:12:\"gateway_used\";s:9:\"\";}";
 		
 		return userFields;
 	}
 	
-	private String getLastPayDate()
+	private String getMembershipDates(String dateFormat, Integer years)
 	{
 		java.text.SimpleDateFormat sdf = 
-		      new java.text.SimpleDateFormat("yyyy-mm-dd");
+		      new java.text.SimpleDateFormat(dateFormat);
 		Calendar c1 = Calendar.getInstance(); 
-		c1.add(Calendar.YEAR,1);
+		c1.add(Calendar.YEAR,years);
 		
 		return sdf.format(c1.getTime());
 	}

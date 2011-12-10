@@ -18,7 +18,6 @@ import com.openbravo.pos.sales.cinema.model.Booking;
 import com.openbravo.pos.sales.cinema.model.BookingState;
 import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.Event;
-import com.openbravo.pos.sales.cinema.model.EventType;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
 import com.openbravo.pos.sales.cinema.model.PriceSpecial;

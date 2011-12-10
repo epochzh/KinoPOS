@@ -457,8 +457,24 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING,
                     Datas.LONG));
     }
+    
+    
 
     /**
+	 * @return the member
+	 */
+	public Member getMember() {
+		return member;
+	}
+
+	/**
+	 * @param member the member to set
+	 */
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	/**
      * @param booking
      * @throws BasicException
      */
@@ -489,6 +505,9 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         final Date todaysDate= new Date();
         long time = todaysDate.getTime();
         this.member.setRegisteredDate(new Timestamp(time));
+      
+        // todo get the price of a membership
+     // this.getMembershipPrice();
         
         
       this.createWpUser.exec( this.member.getRegisteredDate(), null);
