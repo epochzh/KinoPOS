@@ -15,7 +15,7 @@ import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.CustomerMeta;
 import com.openbravo.pos.sales.cinema.model.Day;
 import com.openbravo.pos.sales.cinema.model.Event;
-import com.openbravo.pos.sales.cinema.model.EventType;
+import com.openbravo.pos.sales.cinema.model.Member;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
 import com.openbravo.pos.sales.cinema.model.Post;
 import com.openbravo.pos.sales.cinema.model.Postmeta;
@@ -28,6 +28,7 @@ import com.openbravo.pos.sales.cinema.transaction.CreateBookingTransaction;
 import com.openbravo.pos.sales.cinema.transaction.DeleteBookingTransaction;
 import com.openbravo.pos.sales.cinema.transaction.UpdateBookingTransaction;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,10 +68,22 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private Session session;
+    
+    /**
+     */
+    private Member member;
 
     /**
      */
     private BaseSentence createBooking;
+    
+    /**
+     */
+    private BaseSentence createWpUser;
+    
+    /**
+     */
+    private BaseSentence createUserMeta;
 
     /**
      */
@@ -105,6 +120,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getFirstFilm;
+    
+    /**
+     */ 
+    private BaseSentence getLastInsertedMemberId;
 
     /**
      */
@@ -131,6 +150,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getVenue;
+    
 
     /**
      */
@@ -200,6 +220,17 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.LONG, Datas.STRING, Datas.STRING, Datas.TIMESTAMP,
                     Datas.LONG, Datas.DOUBLE, Datas.LONG, Datas.STRING,
                     Datas.STRING, Datas.STRING, Datas.STRING));
+        
+        this.createWpUser =  new StaticSentence(this.session, "INSERT INTO wp_users "
+                + "(user_login, user_pass, user_nicename, user_email, "
+                + "user_url, user_registered, user_activation_key, user_status, display_name) "
+                + "VALUES ('', '', '', '', '', ?, '', 0, '') ",
+                new SerializerWriteBasic(Datas.TIMESTAMP));
+        
+        this.createUserMeta =  new StaticSentence(this.session, "INSERT INTO wp_usermeta "
+                + "(user_id, meta_key, meta_value) "
+                + "VALUES (?, ?, ?) ",
+                new SerializerWriteBasic(Datas.INT, Datas.STRING, Datas.STRING));
 
         this.deleteBooking =
             new StaticSentence(this.session, "DELETE FROM dd_bookings "
@@ -266,6 +297,11 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "AND (end_date < ?) " + "ORDER BY start_date ASC LIMIT 1",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
                 new SerializerReadClass(Event.class));
+        
+        this.getLastInsertedMemberId =  new StaticSentence(this.session, "SELECT ID "
+                + "FROM wp_users " + "WHERE (user_registered = ?)", new SerializerWriteBasic(
+                 Datas.TIMESTAMP), new SerializerReadClass(
+                 Member.class));
 
         this.getNextAvailableFilm =
             new StaticSentence(this.session,
@@ -437,6 +473,59 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         transaction.setSentence(this.createBooking);
 
         transaction.execute();
+    }
+    
+    
+    /**
+     * @param booking
+     * @throws BasicException
+     */
+    public void createWpUser(final Member newMember) throws BasicException {
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("new member: " + newMember);
+        }
+        
+        this.member = newMember;
+        final Date todaysDate= new Date();
+        long time = todaysDate.getTime();
+        this.member.setRegisteredDate(new Timestamp(time));
+        
+        
+      this.createWpUser.exec( this.member.getRegisteredDate(), null);
+      
+      final Member lastMemberId =
+              (Member) this.getLastInsertedMemberId.find(newMember.getRegisteredDate(), null);
+      this.member.setId(lastMemberId.getId());
+          
+          LOGGER.info("LAST ID: " + lastMemberId.getId());
+          
+      // create the wp_usermeta
+      //this.createUserMeta();
+      Map<String, String> meta = this.member.populateMap();
+      this.createUserMeta(meta);
+      
+      
+      
+      LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+      
+          
+      
+    }
+    
+    
+    public void createUserMeta(Map<String, String> meta )
+    {
+    	Set<String> set = meta.keySet();
+    	for(String key:set)
+    	{
+    		try {
+    			
+				this.createUserMeta.exec(this.member.getId(), key, meta.get(key));
+			} catch (BasicException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 
     /**

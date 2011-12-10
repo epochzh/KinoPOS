@@ -6,6 +6,7 @@ import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.sales.cinema.model.Booking;
 import com.openbravo.pos.sales.cinema.model.Customer;
+import com.openbravo.pos.sales.cinema.model.Member;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +30,9 @@ import javax.swing.AbstractListModel;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JComboBox;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -49,6 +53,7 @@ public class MemberPopup extends JDialog {
      */
     private static final DateFormat DATE_FORMAT_MS = new SimpleDateFormat(
         "dd-MM-yyyy");
+    
 
     /**
      * @param dao
@@ -160,19 +165,39 @@ public class MemberPopup extends JDialog {
 
     /**
      */
-    private void init() {
+    @SuppressWarnings("unchecked")
+	private void init() {
         this.initComponents();
 
         this.jScrollPane1.getVerticalScrollBar().setPreferredSize(
             new Dimension(35, 35));
 
         this.pinTF.addEditorKeys(this.editorKeys);
-        this.nameTF.addEditorKeys(this.editorKeys);
+        this.firstNameTF.addEditorKeys(this.editorKeys);
+        this.lastNameTF.addEditorKeys(this.editorKeys);
+        this.address1TF.addEditorKeys(this.editorKeys);
+        this.address2TF.addEditorKeys(this.editorKeys);
+        this.cityTF.addEditorKeys(this.editorKeys);
+        this.postcodeTF.addEditorKeys(this.editorKeys);
+        this.telephoneTF.addEditorKeys(this.editorKeys);
+        this.mobileTF.addEditorKeys(this.editorKeys);
+        this.dobTF.addEditorKeys(this.editorKeys);
+        this.membershipTF.addItem("gold membership");
+        this.membershipTF.addItem("silver membership");
 
         this.pinTF.reset();
-        this.nameTF.reset();
+        this.firstNameTF.reset();
+        this.lastNameTF.reset();
+        this.address1TF.reset();
+        this.address2TF.reset();
+        this.cityTF.reset();
+        this.postcodeTF.reset();
+        this.telephoneTF.reset();
+        this.mobileTF.reset();
+        this.dobTF.reset();
+       // this.membershipTF.reset();
 
-        this.pinTF.activate();
+        this.firstNameTF.activate();
 
         this.customersList.setCellRenderer(new CustomerRenderer());
 
@@ -194,40 +219,63 @@ public class MemberPopup extends JDialog {
     /**
      */
     private void executeSearch() {
-        final String name = this.nameTF.getText();
-        final String pin = this.pinTF.getText();
+    	final Member newMember = new Member();
+        newMember.setFirstName(this.firstNameTF.getText());
+        newMember.setLastName(this.lastNameTF.getText());
+        newMember.setAddress1(this.address1TF.getText());
+        newMember.setAddress2(this.address2TF.getText());
+        newMember.setCity(this.cityTF.getText());
+        newMember.setMemberShipType((String) this.membershipTF.getSelectedItem());
+        newMember.setPostcode(this.postcodeTF.getText());
+        newMember.setTelephone(this.telephoneTF.getText());
+        newMember.setMobile(this.mobileTF.getText());
+        newMember.setDob(this.dobTF.getText());
+        final Integer id;
+        LOGGER.info("New member: " + newMember.getFirstName() + newMember.getLastName());
+//        if(!newMember.requiredFields())
+//        {
+//        	JOptionPane.showMessageDialog(null, "Please fill in all required fields marked by '*'");
+//        }else{
+        	try {
+				this.dao.createWpUser(newMember);
+			} catch (BasicException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+      //  }
+        //id = this.dao.insertWpUser();
 
-        final List<Customer> customers;
-        try {
-            if (StringUtils.isNotEmpty(name)) {
-                customers = this.dao.searchCustomer(name);
-            } else if (StringUtils.isNotEmpty(pin)) {
-                customers = Arrays.asList(this.dao.getCustomerByPin(pin));
-            } else {
-                customers = Collections.emptyList();
-            }
-        } catch (final BasicException ex) {
-            new MessageInf(ex).show(this);
-            return;
-        }
-
-        this.customersList.setVisible(customers.size() != 1);
-        this.selectedCustomer = null;
-
-        if (customers.size() == 1) {
-            final JPanel customerPanel = this.toPanel(customers.get(0));
-
-            this.okButton.setEnabled(true);
-
-            this.jScrollPane1.setViewportView(customerPanel);
-        } else {
-            this.customersList.setModel(new MyListData(customers));
-            if (this.customersList.getModel().getSize() > 0) {
-                this.customersList.setSelectedIndex(0);
-            }
-
-            this.jScrollPane1.setViewportView(this.customersList);
-        }
+//        final List<Customer> customers;
+//        try {
+//            if (StringUtils.isNotEmpty(name)) {
+//                customers = this.dao.searchCustomer(name);
+//            } else if (StringUtils.isNotEmpty(pin)) {
+//                customers = Arrays.asList(this.dao.getCustomerByPin(pin));
+//            } else {
+//                customers = Collections.emptyList();
+//            }
+//        } catch (final BasicException ex) {
+//            new MessageInf(ex).show(this);
+//            return;
+//        }
+//
+//        this.customersList.setVisible(customers.size() != 1);
+//        this.selectedCustomer = null;
+//
+//        if (customers.size() == 1) {
+//            final JPanel customerPanel = this.toPanel(customers.get(0));
+//
+//            this.okButton.setEnabled(true);
+//
+//            this.jScrollPane1.setViewportView(customerPanel);
+//        } else {
+//            this.customersList.setModel(new MyListData(customers));
+//            if (this.customersList.getModel().getSize() > 0) {
+//                this.customersList.setSelectedIndex(0);
+//            }
+//
+//            this.jScrollPane1.setViewportView(this.customersList);
+//        }
     }
 
     /**
@@ -244,8 +292,26 @@ public class MemberPopup extends JDialog {
         this.jPanel3 = new javax.swing.JPanel();
         this.jPanel5 = new javax.swing.JPanel();
         this.jPanel7 = new javax.swing.JPanel();
-        this.nameLabel = new javax.swing.JLabel();
-        this.nameTF = new com.openbravo.editor.JEditorString();
+        this.firstNameLabel = new javax.swing.JLabel();
+        this.firstNameTF = new com.openbravo.editor.JEditorString();
+        this.lastNameLabel = new javax.swing.JLabel();
+        this.lastNameTF = new com.openbravo.editor.JEditorString();
+        this.address1Label = new javax.swing.JLabel();
+        this.address1TF = new com.openbravo.editor.JEditorString();
+        this.address2Label = new javax.swing.JLabel();
+        this.address2TF = new com.openbravo.editor.JEditorString();
+        this.cityLabel = new javax.swing.JLabel();
+        this.cityTF = new com.openbravo.editor.JEditorString();
+        this.postcodeLabel = new javax.swing.JLabel();
+        this.postcodeTF = new com.openbravo.editor.JEditorString();
+        this.telephoneLabel = new javax.swing.JLabel();
+        this.telephoneTF = new com.openbravo.editor.JEditorString();
+        this.mobileLabel = new javax.swing.JLabel();
+        this.mobileTF = new com.openbravo.editor.JEditorString();
+        this.dobLabel = new javax.swing.JLabel();
+        this.dobTF = new com.openbravo.editor.JEditorString();
+        this.membershipLabel = new javax.swing.JLabel();
+        this.membershipTF = new javax.swing.JComboBox();
         this.pinLabel = new javax.swing.JLabel();
         this.pinTF = new com.openbravo.editor.JEditorString();
         this.jPanel6 = new javax.swing.JPanel();
@@ -271,7 +337,16 @@ public class MemberPopup extends JDialog {
 
         this.jPanel5.setLayout(new java.awt.BorderLayout());
 
-        this.nameLabel.setText("Name");
+        this.firstNameLabel.setText("First Name");
+        this.lastNameLabel.setText("Last Name");
+        this.address1Label.setText("Address Line 1");
+        this.address2Label.setText("Address Line 2");
+        this.cityLabel.setText("Town/City");
+        this.postcodeLabel.setText("Postcode");
+        this.membershipLabel.setText("Membership Type");
+        this.telephoneLabel.setText("Telephone No.");
+        this.mobileLabel.setText("Mobile No.");
+        this.dobLabel.setText("DOB (yyyy/mm/dd)");
 
         this.pinLabel.setText("PIN");
 
@@ -284,21 +359,93 @@ public class MemberPopup extends JDialog {
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
-                        this.nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        this.firstNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(this.nameTF,
+                        .addComponent(this.firstNameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
-                        this.pinLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        this.membershipLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(this.pinTF,
+                        .addComponent(this.membershipTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 190,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                     jPanel7Layout.createSequentialGroup().addComponent(
+                         this.lastNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                         .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                         .addComponent(this.lastNameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                     jPanel7Layout.createSequentialGroup().addComponent(
+                         this.address1Label, javax.swing.GroupLayout.PREFERRED_SIZE,
+                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                         .addPreferredGap(
+                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                             .addComponent(this.address1TF,
+                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                      jPanel7Layout.createSequentialGroup().addComponent(
+                         this.address2Label, javax.swing.GroupLayout.PREFERRED_SIZE,
+                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                         .addPreferredGap(
+                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                             .addComponent(this.address2TF,
+                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                      jPanel7Layout.createSequentialGroup().addComponent(
+                             this.cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                             .addPreferredGap(
+                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                             .addComponent(this.cityTF,
+                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                      jPanel7Layout.createSequentialGroup().addComponent(
+                             this.postcodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                             .addPreferredGap(
+                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                             .addComponent(this.postcodeTF,
+                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                      jPanel7Layout.createSequentialGroup().addComponent(
+                             this.pinLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                             .addPreferredGap(
+                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                             .addComponent(this.pinTF,
+                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                     jPanel7Layout.createSequentialGroup().addComponent(
+                             this.telephoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                             .addPreferredGap(
+                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(this.telephoneTF,
+                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                              javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                   jPanel7Layout.createSequentialGroup().addComponent(
+                              this.mobileLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                              140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addPreferredGap(
+                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(this.mobileTF,
+                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                              javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                   jPanel7Layout.createSequentialGroup().addComponent(
+                              this.dobLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                              140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                              .addPreferredGap(
+                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                              .addComponent(this.dobTF,
+                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                              javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
         jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
@@ -306,14 +453,77 @@ public class MemberPopup extends JDialog {
             jPanel7Layout.createSequentialGroup().addContainerGap().addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                    this.pinLabel).addComponent(this.pinTF,
+                    this.membershipLabel).addComponent(this.membershipTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                 javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                    this.nameLabel).addComponent(this.nameTF,
+                    this.firstNameLabel).addComponent(this.firstNameTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.lastNameLabel).addComponent(this.lastNameTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                	javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.address1Label).addComponent(this.address1TF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.address2Label).addComponent(this.address2TF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+               javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+               jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.cityLabel).addComponent(this.cityTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+               javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+               jPanel7Layout.createParallelGroup(
+            		javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.postcodeLabel).addComponent(this.postcodeTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+              javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+              jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.pinLabel).addComponent(this.pinTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+              javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                    jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.telephoneLabel).addComponent(this.telephoneTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+             javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                    jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.mobileLabel).addComponent(this.mobileTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+             javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                    jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.dobLabel).addComponent(this.dobTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(
@@ -331,10 +541,10 @@ public class MemberPopup extends JDialog {
         });
         this.jPanel6.add(this.cleanButton);
 
-        this.searchButton.setIcon(new javax.swing.ImageIcon(this.getClass()
-            .getResource("/com/openbravo/images/launch.png"))); // NOI18N
+      //  this.searchButton.setIcon(new javax.swing.ImageIcon(this.getClass()
+           // .getResource("/com/openbravo/images/launch.png"))); // NOI18N
         this.searchButton
-            .setText(AppLocal.getIntString("button.executefilter")); // NOI18N
+            .setText("Create Membership"); // NOI18N
         this.searchButton.setFocusPainted(false);
         this.searchButton.setFocusable(false);
         this.searchButton.setRequestFocusEnabled(false);
@@ -377,7 +587,7 @@ public class MemberPopup extends JDialog {
             });
         this.jScrollPane1.setViewportView(this.customersList);
 
-        this.jPanel4.add(this.jScrollPane1, java.awt.BorderLayout.CENTER);
+        //this.jPanel4.add(this.jScrollPane1, java.awt.BorderLayout.CENTER);
 
         this.jPanel3.add(this.jPanel4, java.awt.BorderLayout.CENTER);
 
@@ -398,7 +608,7 @@ public class MemberPopup extends JDialog {
             	MemberPopup.this.ok();
             }
         });
-        this.jPanel1.add(this.okButton);
+       // this.jPanel1.add(this.okButton);
 
         this.cancelButton.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/button_cancel.png"))); // NOI18N
@@ -415,7 +625,7 @@ public class MemberPopup extends JDialog {
                 	MemberPopup.this.cancel();
                 }
             });
-        this.jPanel1.add(this.cancelButton);
+      //  this.jPanel1.add(this.cancelButton);
 
         this.jPanel8.add(this.jPanel1, java.awt.BorderLayout.LINE_END);
 
@@ -474,7 +684,16 @@ public class MemberPopup extends JDialog {
 
     private void clean() {
         this.pinTF.reset();
-        this.nameTF.reset();
+        this.firstNameTF.reset();
+        this.lastNameTF.reset();
+        this.address1TF.reset();
+        this.address2TF.reset();
+        this.cityTF.reset();
+        this.postcodeTF.reset();
+        this.telephoneTF.reset();
+        this.mobileTF.reset();
+        this.dobTF.reset();
+       // this.membershipTF.reset();
 
         this.cleanSearch();
     }
@@ -484,7 +703,16 @@ public class MemberPopup extends JDialog {
 
     private javax.swing.JButton searchButton;
 
-    private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel firstNameLabel;
+    private javax.swing.JLabel lastNameLabel;
+    private javax.swing.JLabel address1Label;
+    private javax.swing.JLabel address2Label;
+    private javax.swing.JLabel cityLabel;
+    private javax.swing.JLabel postcodeLabel;
+    private javax.swing.JLabel membershipLabel;
+    private javax.swing.JLabel telephoneLabel;
+    private javax.swing.JLabel mobileLabel;
+    private javax.swing.JLabel dobLabel;
 
     private javax.swing.JLabel pinLabel;
 
@@ -514,7 +742,16 @@ public class MemberPopup extends JDialog {
 
     private com.openbravo.editor.JEditorKeys editorKeys;
 
-    private com.openbravo.editor.JEditorString nameTF;
+    private com.openbravo.editor.JEditorString firstNameTF;
+    private com.openbravo.editor.JEditorString lastNameTF;
+    private com.openbravo.editor.JEditorString address1TF;
+    private com.openbravo.editor.JEditorString address2TF;
+    private com.openbravo.editor.JEditorString cityTF;
+    private com.openbravo.editor.JEditorString postcodeTF;
+    private com.openbravo.editor.JEditorString telephoneTF;
+    private com.openbravo.editor.JEditorString mobileTF;
+    private com.openbravo.editor.JEditorString dobTF;
+    private javax.swing.JComboBox membershipTF;
 
     private com.openbravo.editor.JEditorString pinTF;
 
