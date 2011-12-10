@@ -7,7 +7,7 @@ import com.openbravo.data.loader.SerializableRead;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,9 +69,6 @@ public class Member implements IKeyed, Serializable, SerializableRead {
      */
     private Timestamp registeredDate;
 
-    /**
-     */
-    private String pin;
 
     /**
 	 */
@@ -151,7 +148,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the firstName
 	 */
 	public String getFirstName() {
-		return firstName;
+		if(firstName == null){
+			return "";
+		}else{
+			return firstName;
+		}
 	}
 
 	/**
@@ -165,7 +166,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the lastName
 	 */
 	public String getLastName() {
-		return lastName;
+		if(lastName == null){
+			return "";
+		}else{
+			return lastName;
+		}
 	}
 
 	/**
@@ -179,7 +184,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the address1
 	 */
 	public String getAddress1() {
-		return address1;
+		if(address1 == null){
+			return "";
+		}else{
+			return address1;
+		}
 	}
 
 	/**
@@ -193,7 +202,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the address2
 	 */
 	public String getAddress2() {
-		return address2;
+		if(address2 == null){
+			return "";
+		}else{
+			return address2;
+		}
 	}
 
 	/**
@@ -207,7 +220,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the city
 	 */
 	public String getCity() {
-		return city;
+		if(city == null){
+			return "";
+		}else{
+			return city;
+		}
 	}
 
 	/**
@@ -221,7 +238,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the postcode
 	 */
 	public String getPostcode() {
-		return postcode;
+		if(postcode == null){
+			return "";
+		}else{
+			return postcode;
+		}
 	}
 
 	/**
@@ -251,7 +272,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the telephone
 	 */
 	public String getTelephone() {
-		return telephone;
+		if(telephone == null){
+			return "";
+		}else{
+			return telephone;
+		}
 	}
 
 	/**
@@ -279,7 +304,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the mobile
 	 */
 	public String getMobile() {
-		return mobile;
+		if(mobile == null){
+			return "";
+		}else{
+			return mobile;
+		}
 	}
 
 	/**
@@ -293,7 +322,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 * @return the dob
 	 */
 	public String getDob() {
-		return dob;
+		if(dob == null){
+			return "";
+		}else{
+			return dob;
+		}
 	}
 
 	/**
@@ -301,20 +334,6 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 */
 	public void setDob(String dob) {
 		this.dob = dob;
-	}
-
-	/**
-	 * @return the pin
-	 */
-	public String getPin() {
-		return pin;
-	}
-
-	/**
-	 * @param pin the pin to set
-	 */
-	public void setPin(String pin) {
-		this.pin = pin;
 	}
 
 	 /**
@@ -329,7 +348,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	public Boolean requiredFields()
 	{
 		if(this.firstName != null && this.lastName != null && this.memberShipType != null
-			&& this.address1 != null && (this.telephone != null || this.mobile != null)){
+			&& this.address1 != null && this.city != null && this.postcode != null && this.telephone != null && this.dob != null){
 			return true;
 		}else{
 			return false;
@@ -383,11 +402,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	/*
 	 * create the custom fields string
 	 */
-	public String createCustomFields()
+	private String createCustomFields()
 	{
-		
+		String pin = String.format("%012d", this.getId());
 		//TODO generate pin
-		String customFields = "a:12:{i:17;s:9:\"000000039\"; " +
+		String customFields = "a:12:{i:17;s:9:\""+ pin +"\"; " +
 							  "i:12;s:3:\""+ this.getFirstName() +"\";" +
 							  "i:13;s:3:\""+ this.getLastName() +"\";" +
 							  "i:4;s:10:\""+ this.getDob() +"\";" +
@@ -407,7 +426,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	/*
 	 * create the custom fields string
 	 */
-	public String createUserFields()
+	private String createUserFields()
 	{
 		
 		//TODO generate pin
@@ -416,7 +435,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 							"s:13:\"duration_type\";s:1:\"y\";" +
 							"s:6:\"amount\";s:4:\"0.10\";" +
 							"s:8:\"currency\";s:3:\"GBP\";" +
-							"s:13:\"last_pay_date\";s:10:\"2011-11-23\";" +
+							"s:13:\"last_pay_date\";s:10:\"" + this.getLastPayDate() + "\";" +
 							"s:11:\"expire_date\";s:16:\"2012-11-23 16:04\";" +
 							"s:12:\"account_type\";s:12:\"Gold Members\";" +
 							"s:10:\"status_str\";s:27:\"Last payment was successful\";" +
@@ -425,6 +444,16 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 							"s:9:\"ym_paypal\";}";
 		
 		return userFields;
+	}
+	
+	private String getLastPayDate()
+	{
+		java.text.SimpleDateFormat sdf = 
+		      new java.text.SimpleDateFormat("yyyy-mm-dd");
+		Calendar c1 = Calendar.getInstance(); 
+		c1.add(Calendar.YEAR,1);
+		
+		return sdf.format(c1.getTime());
 	}
     
     

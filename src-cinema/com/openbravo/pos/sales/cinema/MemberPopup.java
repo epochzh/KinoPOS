@@ -232,17 +232,17 @@ public class MemberPopup extends JDialog {
         newMember.setDob(this.dobTF.getText());
         final Integer id;
         LOGGER.info("New member: " + newMember.getFirstName() + newMember.getLastName());
-//        if(!newMember.requiredFields())
-//        {
-//        	JOptionPane.showMessageDialog(null, "Please fill in all required fields marked by '*'");
-//        }else{
+        if(!newMember.requiredFields())
+        {
+        	JOptionPane.showMessageDialog(null, "Please fill in all required fields marked by '*'");
+        }else{
         	try {
 				this.dao.createWpUser(newMember);
 			} catch (BasicException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-      //  }
+        }
         //id = this.dao.insertWpUser();
 
 //        final List<Customer> customers;
@@ -337,16 +337,16 @@ public class MemberPopup extends JDialog {
 
         this.jPanel5.setLayout(new java.awt.BorderLayout());
 
-        this.firstNameLabel.setText("First Name");
-        this.lastNameLabel.setText("Last Name");
-        this.address1Label.setText("Address Line 1");
+        this.firstNameLabel.setText("First Name *");
+        this.lastNameLabel.setText("Last Name *");
+        this.address1Label.setText("Address Line 1 *");
         this.address2Label.setText("Address Line 2");
-        this.cityLabel.setText("Town/City");
-        this.postcodeLabel.setText("Postcode");
+        this.cityLabel.setText("Town/City *");
+        this.postcodeLabel.setText("Postcode *");
         this.membershipLabel.setText("Membership Type");
-        this.telephoneLabel.setText("Telephone No.");
+        this.telephoneLabel.setText("Main Telephone *");
         this.mobileLabel.setText("Mobile No.");
-        this.dobLabel.setText("DOB (yyyy/mm/dd)");
+        this.dobLabel.setText("DOB (yyyy/mm/dd) *");
 
         this.pinLabel.setText("PIN");
 
