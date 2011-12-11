@@ -388,7 +388,9 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 		Map<String, String> meta = new HashMap<String, String>();
 		long timestamp = System.currentTimeMillis()/1000;
 		String time = String.valueOf(timestamp);
-				
+		
+		meta.put("ym_account_type_join_date", time);
+		meta.put("ym_account_type", this.getMemberShipType());
 		meta.put("wp_capabilities", "a:1:{s:10:\"subscriber\";s:1:\"1\";}");
 		meta.put("wp_user_level", "0");
 		meta.put("nickname", this.getNickname());
@@ -400,7 +402,6 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 		meta.put("show_admin_bar_front", "true");
 		meta.put("show_admin_bar_front", "true");
 		meta.put("ym_status", "Active");
-		meta.put("ym_account_type_join_date", time);
 		meta.put("ym_custom_fields", this.createCustomFields());
 		meta.put("ym_user", this.createUserFields());
 		
@@ -424,7 +425,8 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	 */
 	public String getNickname()
 	{
-		return this.firstName+this.lastName;
+		String concactName = this.firstName+this.lastName;
+		return concactName.replace(" ", "");
 	}
 	
 	/*
@@ -434,18 +436,19 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	{
 		String pin = String.format("%012d", this.getId());
 		//TODO generate pin
-		String customFields = "a:12:{i:17;s:9:\""+ pin +"\"; " +
-							  "i:12;s:3:\""+ this.getFirstName() +"\";" +
-							  "i:13;s:3:\""+ this.getLastName() +"\";" +
-							  "i:4;s:10:\""+ this.getDob() +"\";" +
+		String customFields = "a:12:{i:17;s:12:\""+ pin +"\";" +
+							  "i:12;s:"+ String.valueOf(this.getFirstName().length()) +":\""+ this.getFirstName() +"\";" +
+							  "i:13;s:"+ String.valueOf(this.getLastName().length()) +":\""+ this.getLastName() +"\";" +
+							  "i:4;s:"+ String.valueOf(this.getDob().length()) +":\""+ this.getDob() +"\";" +
 							  "i:15;s:2:\"No\";" +
-							  "i:7;s:19:\"" + this.getAddress1() + "\";" +
-							  "i:8;s:12:\"" + this.getAddress2() + "\";" +
-							  "i:9;s:7:\"" + this.getCity() + "\";" +
-							  "i:10;s:7:\"" + this.getPostcode() + "\";" +
-							  "i:11;s:10:\"" + this.getTelephone() + "\";" +
-							  "i:14;s:11:\"" + this.getMobile() + "\";" +
+							  "i:7;s:"+ String.valueOf(this.getAddress1().length()) +":\"" + this.getAddress1() + "\";" +
+							  "i:8;s:"+ String.valueOf(this.getAddress2().length()) +":\"" + this.getAddress2() + "\";" +
+							  "i:9;s:"+ String.valueOf(this.getCity().length()) +":\"" + this.getCity() + "\";" +
+							  "i:10;s:"+ String.valueOf(this.getPostcode().length()) +":\"" + this.getPostcode() + "\";" +
+							  "i:11;s:"+ String.valueOf(this.getTelephone().length()) +":\"" + this.getTelephone() + "\";" +
+							  "i:14;s:"+ String.valueOf(this.getMobile().length()) +":\"" + this.getMobile() + "\";" +
 							  "i:16;s:1:\"0\";}";
+		
 		
 		return customFields;
 	}
@@ -457,20 +460,21 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 	private String createUserFields()
 	{
 		
-		//TODO generate pin
-		String userFields = "O:15:\"YourMember_User\":11:{" +
-							"s:8:\"duration\";s:1:\"1\";" +
-							"s:13:\"duration_type\";s:1:\"y\";" +
-							"s:6:\"amount\";s:4:\"0.10\";" +
-							"s:8:\"currency\";s:3:\"GBP\";" +
-							"s:13:\"last_pay_date\";s:10:\"" + this.getMembershipDates("yyyy-MM-dd", 0) + "\";" +
-							"s:11:\"expire_date\";s:16:\"" + this.getMembershipDates("yyyy-MM-dd HH:mm", 1) + "\";" +
-							"s:12:\"account_type\";s:12:\""+ this.getMemberShipType() +"\";" +
-							"s:10:\"status_str\";s:27:\"Last payment was successful\";" +
-							"s:7:\"pack_id\";s:1:\""+ this.getPackId() +"\";" +
-							"s:12:\"gateway_used\";s:9:\"\";}";
 		
-		return userFields;
+		String userMemberFields = "O:8:\"stdClass\":11:{" +
+								  "s:6:\"scalar\";s:0:\"\";" +
+								  "s:8:\"duration\";s:1:\"1\";" +
+								  "s:13:\"duration_type\";s:1:\"y\";" +
+								  "s:6:\"amount\";s:1:\"0\";" +
+								  "s:8:\"currency\";s:3:\"GBP\";" +
+								  "s:12:\"account_type\";s:"+ String.valueOf(this.getMemberShipType().length()) +":\""+ this.getMemberShipType() +"\";" +
+								  "s:12:\"gateway_used\";s:7:\"GiftSub\";" +
+								  "s:10:\"status_str\";s:26:\"Gift Giving was Successful\";" +
+								  "s:7:\"pack_id\";s:1:\""+ this.getPackId() +"\";" +
+								  "s:13:\"last_pay_date\";s:10:\"" + this.getMembershipDates("yyyy-MM-dd", 0) + "\";" +
+								  "s:11:\"expire_date\";s:16:\"" + this.getMembershipDates("yyyy-MM-dd HH:mm", 1) + "\";}";
+		
+		return userMemberFields;
 	}
 	
 	private String getMembershipDates(String dateFormat, Integer years)

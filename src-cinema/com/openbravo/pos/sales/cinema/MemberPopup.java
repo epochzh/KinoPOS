@@ -108,7 +108,6 @@ public class MemberPopup extends JDialog {
         this.jScrollPane1.getVerticalScrollBar().setPreferredSize(
             new Dimension(35, 35));
 
-        this.pinTF.addEditorKeys(this.editorKeys);
         this.firstNameTF.addEditorKeys(this.editorKeys);
         this.lastNameTF.addEditorKeys(this.editorKeys);
         this.address1TF.addEditorKeys(this.editorKeys);
@@ -121,7 +120,6 @@ public class MemberPopup extends JDialog {
         this.membershipTF.addItem("gold membership");
         this.membershipTF.addItem("silver membership");
 
-        this.pinTF.reset();
         this.firstNameTF.reset();
         this.lastNameTF.reset();
         this.address1TF.reset();
@@ -161,16 +159,27 @@ public class MemberPopup extends JDialog {
         LOGGER.info("New member: " + newMember.getFirstName() + newMember.getLastName());
         if(!newMember.requiredFields())
         {
+        	// TODO data validation
         	JOptionPane.showMessageDialog(null, "Please fill in all required fields marked by '*'");
         }else{
-        	try {
-			this.dao.createWpUser(newMember);
+        	//try {
+			//this.dao.createWpUser(newMember);
         	this.okButton.setEnabled(true);
+        	this.firstNameTF.setEnabled(false);
+        	this.firstNameTF.setEnabled(false);
+            this.lastNameTF.setEnabled(false);
+            this.address1TF.setEnabled(false);
+            this.address2TF.setEnabled(false);
+            this.cityTF.setEnabled(false);
+            this.postcodeTF.setEnabled(false);
+            this.telephoneTF.setEnabled(false);
+            this.mobileTF.setEnabled(false);
+            this.dobTF.setEnabled(false);
 				
-			} catch (BasicException e) {
+			//} catch (BasicException e) {
 			// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				//e.printStackTrace();
+			//}
         }
     }
 
@@ -208,8 +217,6 @@ public class MemberPopup extends JDialog {
         this.dobTF = new com.openbravo.editor.JEditorString();
         this.membershipLabel = new javax.swing.JLabel();
         this.membershipTF = new javax.swing.JComboBox();
-        this.pinLabel = new javax.swing.JLabel();
-        this.pinTF = new com.openbravo.editor.JEditorString();
         this.jPanel6 = new javax.swing.JPanel();
         this.cleanButton = new javax.swing.JButton();
         this.searchButton = new javax.swing.JButton();
@@ -241,9 +248,7 @@ public class MemberPopup extends JDialog {
         this.membershipLabel.setText("Membership Type");
         this.telephoneLabel.setText("Main Telephone *");
         this.mobileLabel.setText("Mobile No.");
-        this.dobLabel.setText("DOB (yyyy/mm/dd) *");
-
-        this.pinLabel.setText("PIN");
+        this.dobLabel.setText("DOB (mm-dd-yyyy) *");
 
         final javax.swing.GroupLayout jPanel7Layout =
             new javax.swing.GroupLayout(this.jPanel7);
@@ -307,14 +312,6 @@ public class MemberPopup extends JDialog {
                              .addPreferredGap(
                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                              .addComponent(this.postcodeTF,
-                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                      jPanel7Layout.createSequentialGroup().addComponent(
-                             this.pinLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                             .addPreferredGap(
-                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                             .addComponent(this.pinTF,
                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                              javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                      jPanel7Layout.createSequentialGroup().addComponent(
@@ -391,13 +388,6 @@ public class MemberPopup extends JDialog {
                jPanel7Layout.createParallelGroup(
             		javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.postcodeLabel).addComponent(this.postcodeTF,
-                    javax.swing.GroupLayout.PREFERRED_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE,
-                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-              javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-              jPanel7Layout.createParallelGroup(
-                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                    this.pinLabel).addComponent(this.pinTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
@@ -542,7 +532,6 @@ public class MemberPopup extends JDialog {
 
 
     private void clean() {
-        this.pinTF.reset();
         this.firstNameTF.reset();
         this.lastNameTF.reset();
         this.address1TF.reset();
@@ -553,7 +542,7 @@ public class MemberPopup extends JDialog {
         this.mobileTF.reset();
         this.dobTF.reset();
        // this.membershipTF.reset();
-
+        this.okButton.setEnabled(false);
         this.dao.setMember(null);
     }
 
@@ -572,8 +561,6 @@ public class MemberPopup extends JDialog {
     private javax.swing.JLabel telephoneLabel;
     private javax.swing.JLabel mobileLabel;
     private javax.swing.JLabel dobLabel;
-
-    private javax.swing.JLabel pinLabel;
 
     private javax.swing.JPanel jPanel1;
 
@@ -610,7 +597,6 @@ public class MemberPopup extends JDialog {
     private com.openbravo.editor.JEditorString dobTF;
     private javax.swing.JComboBox membershipTF;
 
-    private com.openbravo.editor.JEditorString pinTF;
 
     // End of variables declaration//GEN-END:variables
 

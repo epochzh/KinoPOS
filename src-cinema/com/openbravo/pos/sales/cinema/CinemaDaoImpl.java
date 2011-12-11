@@ -224,8 +224,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         this.createWpUser =  new StaticSentence(this.session, "INSERT INTO wp_users "
                 + "(user_login, user_pass, user_nicename, user_email, "
                 + "user_url, user_registered, user_activation_key, user_status, display_name) "
-                + "VALUES ('', '', '', '', '', ?, '', 0, '') ",
-                new SerializerWriteBasic(Datas.TIMESTAMP));
+                + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
+                new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
         
         this.createUserMeta =  new StaticSentence(this.session, "INSERT INTO wp_usermeta "
                 + "(user_id, meta_key, meta_value) "
@@ -510,7 +510,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      // this.getMembershipPrice();
         
         
-      this.createWpUser.exec( this.member.getRegisteredDate(), null);
+      this.createWpUser.exec( this.member.getNickname(), this.member.getRegisteredDate());
       
       final Member lastMemberId =
               (Member) this.getLastInsertedMemberId.find(newMember.getRegisteredDate(), null);
