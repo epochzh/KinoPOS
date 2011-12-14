@@ -64,6 +64,8 @@ public class CreateBookingTransaction extends Transaction<Integer> {
         } else {
             customerId = this.booking.getCustomer().getId();
         }
+        
+   //     LOGGER.info("firstfilmprice inside if else: "+this.booking.getPriceType());
 
         return this.sentence.exec(this.booking.getBarcode(), this.booking
             .getCollected(), customerId, this.booking.getCustomerName(),

@@ -34,7 +34,14 @@ public enum PriceType {
 
     /**
      */
-    U16("u16");
+    U16("u16"),
+    
+    /**
+     * 
+     */
+    DOUBLE_BILL("double_bill");
+    
+
 
     /**
      * @param type

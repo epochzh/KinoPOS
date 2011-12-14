@@ -632,6 +632,7 @@ public class CinemaReservationMap extends JTicketsBag {
             final String barcode;
             final boolean isFirstFilmApplicable;
             boolean isSpecialEvent = false;
+            boolean isDoubleBillApplicable = false;
             final List<PriceMatrix> priceMatrixes;
             final PriceSpecial priceSpecial;
             final PriceMatrix specialEventPrice;
@@ -639,6 +640,7 @@ public class CinemaReservationMap extends JTicketsBag {
                 barcode = String.valueOf(this.dao.getBookingBarcodeMax() + 1);
                 isFirstFilmApplicable =
                     this.dao.isFirstFilmApplicable(this.venue, this.event);
+                LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
                 final String type = this.event.getTypeAsString();
                 // checks to see if the event is marked as a special event
                
@@ -650,6 +652,12 @@ public class CinemaReservationMap extends JTicketsBag {
                 }else{
                 	isSpecialEvent = false;
                 	specialEventPrice = null;
+                }
+                
+                LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
+                if(this.priceType != null && this.priceType.getType() == "double_bill")
+                {
+                	isDoubleBillApplicable = true;
                 }
                 priceMatrixes = this.dao.listPrice(this.venue, this.event);
                 priceSpecial = this.dao.getPriceFirstFilm(this.venue);
@@ -664,8 +672,19 @@ public class CinemaReservationMap extends JTicketsBag {
             	LOGGER.info("specialEventPrice inside if else: " + specialEventPrice.getPriceGold());
             	priceMatrix = specialEventPrice;
             	price = toPrice(priceMatrix, this.priceType);
-            } else if (isFirstFilmApplicable) {
+            }else if(isDoubleBillApplicable){
+            	priceMatrix = priceMatrixes.get(0);
+            	try {
+					price = this.dao.getDoubleBillPrice(this.venue);
+				} catch (BasicException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	LOGGER.info("double bill price: " + price);
+            }else if (isFirstFilmApplicable) {
+            	priceMatrix = priceMatrixes.get(0);
                 price = priceSpecial.getPrice();
+                LOGGER.info("firstfilmprice inside if else: " + price);
             } else if (priceMatrixes.size() == 1) {
                 priceMatrix = priceMatrixes.get(0);
                 price = toPrice(priceMatrix, this.priceType);

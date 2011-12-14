@@ -128,6 +128,15 @@ public class ButtonPanel extends JPanel {
         final JToggleButton studentButton = new JToggleButton("Student");
         studentButton.addActionListener(studentListener);
         studentButton.setMargin(insets);
+        
+        // STUDENT
+
+        final PriceTypeAl doubleBillListener =
+            new PriceTypeAl(this.panel, PriceType.DOUBLE_BILL);
+
+        final JToggleButton doubleBillButton = new JToggleButton("Double Bill");
+        doubleBillButton.addActionListener(doubleBillListener);
+        doubleBillButton.setMargin(insets);
 
         // U16
 
@@ -141,7 +150,7 @@ public class ButtonPanel extends JPanel {
         this.buttons =
             new JToggleButton[] {
                 goldButton, silverButton, seniorButton, u16Button,
-                studentButton, kinoFriendsButton, kinoStaffButton
+                studentButton, kinoFriendsButton, kinoStaffButton, doubleBillButton
             };
 
         this.group = new ButtonGroup();

@@ -108,6 +108,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getCustomerMetaByPin;
+   
 
     /**
      */
@@ -271,6 +272,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "FROM wp_usermeta " + "WHERE (meta_key = 'ym_pin') "
                     + "AND (meta_value = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(CustomerMeta.class));
+        
 
         this.getEvent =
             new StaticSentence(this.session,
@@ -329,8 +331,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 "SELECT id, special_name, special_price, venue_idfk "
                     + "FROM dd_specialprice " + "WHERE (venue_idfk = ?) "
                     // TODO: Should be "first_film" instead of "first film".
-                    + "AND (special_name = 'first film') ",
-                new SerializerWriteBasic(Datas.LONG), new SerializerReadClass(
+                    + "AND (special_name = ?) ",
+                new SerializerWriteBasic(Datas.LONG, Datas.STRING), new SerializerReadClass(
                     PriceSpecial.class));
 
         this.getScreenByNumber =
@@ -841,7 +843,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         }
 
         final PriceSpecial price =
-            (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(), null);
+            (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(), "first film");
 
         return price;
     }
@@ -1368,4 +1370,11 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         customer.setPin(ymCustom.get(17));
         customer.setStudent("Yes".equals(ymCustom.get(5)));
     }
+
+	public Double getDoubleBillPrice(final Venue venue) throws BasicException {
+		// TODO Auto-generated method stub
+        final PriceSpecial price =
+                (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(), "double_bill");
+		return price.getPrice();
+	}
 }
