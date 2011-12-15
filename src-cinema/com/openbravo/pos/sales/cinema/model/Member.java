@@ -42,11 +42,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String city;
-    
+
     /**
      */
     private String memberShipType;
-    
+
     /**
      */
     private String packId;
@@ -54,7 +54,6 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String postcode;
-
 
     /**
      */
@@ -67,12 +66,10 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String dob;
-    
-    
+
     /**
      */
     private Timestamp registeredDate;
-
 
     /**
 	 */
@@ -132,239 +129,231 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         return result;
     }
 
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return this.id;
+    }
 
+    /**
+     * @param id the id to set
+     */
+    public void setId(final Integer id) {
+        this.id = id;
+    }
 
-	/**
-	 * @return the id
-	 */
-	public Integer getId() {
-		return id;
-	}
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        if (this.firstName == null) {
+            return "";
+        } else {
+            return this.firstName;
+        }
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
 
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		if(firstName == null){
-			return "";
-		}else{
-			return firstName;
-		}
-	}
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        if (this.lastName == null) {
+            return "";
+        } else {
+            return this.lastName;
+        }
+    }
 
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
 
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		if(lastName == null){
-			return "";
-		}else{
-			return lastName;
-		}
-	}
+    /**
+     * @return the address1
+     */
+    public String getAddress1() {
+        if (this.address1 == null) {
+            return "";
+        } else {
+            return this.address1;
+        }
+    }
 
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    /**
+     * @param address1 the address1 to set
+     */
+    public void setAddress1(final String address1) {
+        this.address1 = address1;
+    }
 
-	/**
-	 * @return the address1
-	 */
-	public String getAddress1() {
-		if(address1 == null){
-			return "";
-		}else{
-			return address1;
-		}
-	}
+    /**
+     * @return the address2
+     */
+    public String getAddress2() {
+        if (this.address2 == null) {
+            return "";
+        } else {
+            return this.address2;
+        }
+    }
 
-	/**
-	 * @param address1 the address1 to set
-	 */
-	public void setAddress1(String address1) {
-		this.address1 = address1;
-	}
+    /**
+     * @param address2 the address2 to set
+     */
+    public void setAddress2(final String address2) {
+        this.address2 = address2;
+    }
 
-	/**
-	 * @return the address2
-	 */
-	public String getAddress2() {
-		if(address2 == null){
-			return "";
-		}else{
-			return address2;
-		}
-	}
+    /**
+     * @return the city
+     */
+    public String getCity() {
+        if (this.city == null) {
+            return "";
+        } else {
+            return this.city;
+        }
+    }
 
-	/**
-	 * @param address2 the address2 to set
-	 */
-	public void setAddress2(String address2) {
-		this.address2 = address2;
-	}
+    /**
+     * @param city the city to set
+     */
+    public void setCity(final String city) {
+        this.city = city;
+    }
 
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		if(city == null){
-			return "";
-		}else{
-			return city;
-		}
-	}
+    /**
+     * @return the packId
+     */
+    public String getPackId() {
+        return this.packId;
+    }
 
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
-	
-	
+    /**
+     * @param packId the packId to set
+     */
+    public void setPackId(final String packId) {
+        this.packId = packId;
+    }
 
-	/**
-	 * @return the packId
-	 */
-	public String getPackId() {
-		return packId;
-	}
+    /**
+     * @return the postcode
+     */
+    public String getPostcode() {
+        if (this.postcode == null) {
+            return "";
+        } else {
+            return this.postcode;
+        }
+    }
 
-	/**
-	 * @param packId the packId to set
-	 */
-	public void setPackId(String packId) {
-		this.packId = packId;
-	}
+    /**
+     * @param postcode the postcode to set
+     */
+    public void setPostcode(final String postcode) {
+        this.postcode = postcode;
+    }
 
-	/**
-	 * @return the postcode
-	 */
-	public String getPostcode() {
-		if(postcode == null){
-			return "";
-		}else{
-			return postcode;
-		}
-	}
+    /**
+     * @return the registeredDate
+     */
+    public Timestamp getRegisteredDate() {
+        return this.registeredDate;
+    }
 
-	/**
-	 * @param postcode the postcode to set
-	 */
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
-	
-	
+    /**
+     * @param registeredDate the registeredDate to set
+     */
+    public void setRegisteredDate(final Timestamp registeredDate) {
+        this.registeredDate = registeredDate;
+    }
 
-	/**
-	 * @return the registeredDate
-	 */
-	public Timestamp getRegisteredDate() {
-		return registeredDate;
-	}
+    /**
+     * @return the telephone
+     */
+    public String getTelephone() {
+        if (this.telephone == null) {
+            return "";
+        } else {
+            return this.telephone;
+        }
+    }
 
-	/**
-	 * @param registeredDate the registeredDate to set
-	 */
-	public void setRegisteredDate(Timestamp registeredDate) {
-		this.registeredDate = registeredDate;
-	}
+    /**
+     * @param telephone the telephone to set
+     */
+    public void setTelephone(final String telephone) {
+        this.telephone = telephone;
+    }
 
-	/**
-	 * @return the telephone
-	 */
-	public String getTelephone() {
-		if(telephone == null){
-			return "";
-		}else{
-			return telephone;
-		}
-	}
+    /**
+     * @return the memberShipType
+     */
+    public String getMemberShipType() {
+        return this.memberShipType;
+    }
 
-	/**
-	 * @param telephone the telephone to set
-	 */
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
+    /**
+     * @param memberShipType the memberShipType to set
+     */
+    public void setMemberShipType(final String memberShipType) {
+        if (memberShipType == "gold membership") {
+            this.memberShipType = "Gold Members";
+            this.setPackId("3");
+        } else if (memberShipType == "silver membership") {
+            this.memberShipType = "Silver Members";
+            this.setPackId("2");
+        }
+    }
 
-	/**
-	 * @return the memberShipType
-	 */
-	public String getMemberShipType() {
-		return memberShipType;
-	}
+    /**
+     * @return the mobile
+     */
+    public String getMobile() {
+        if (this.mobile == null) {
+            return "";
+        } else {
+            return this.mobile;
+        }
+    }
 
-	/**
-	 * @param memberShipType the memberShipType to set
-	 */
-	public void setMemberShipType(String memberShipType) {
-		if(memberShipType == "gold membership")
-		{
-			this.memberShipType = "Gold Members";
-			this.setPackId("3");
-		}else if(memberShipType == "silver membership")
-		{
-			this.memberShipType = "Silver Members";
-			this.setPackId("2");
-		}
-	}
+    /**
+     * @param mobile the mobile to set
+     */
+    public void setMobile(final String mobile) {
+        this.mobile = mobile;
+    }
 
-	/**
-	 * @return the mobile
-	 */
-	public String getMobile() {
-		if(mobile == null){
-			return "";
-		}else{
-			return mobile;
-		}
-	}
+    /**
+     * @return the dob
+     */
+    public String getDob() {
+        if (this.dob == null) {
+            return "";
+        } else {
+            return this.dob;
+        }
+    }
 
-	/**
-	 * @param mobile the mobile to set
-	 */
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    /**
+     * @param dob the dob to set
+     */
+    public void setDob(final String dob) {
+        this.dob = dob;
+    }
 
-	/**
-	 * @return the dob
-	 */
-	public String getDob() {
-		if(dob == null){
-			return "";
-		}else{
-			return dob;
-		}
-	}
-
-	/**
-	 * @param dob the dob to set
-	 */
-	public void setDob(String dob) {
-		this.dob = dob;
-	}
-
-	 /**
+    /**
      * @see com.openbravo.data.loader.SerializableRead#readValues(com.openbravo.data.loader.DataRead)
      */
     @Override
@@ -372,125 +361,118 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         int index = 0;
         this.id = dr.getInt(++index);
     }
-	
-	public Boolean requiredFields()
-	{
-		if(this.firstName != null && this.lastName != null && this.memberShipType != null
-			&& this.address1 != null && this.city != null && this.postcode != null && this.telephone != null && this.dob != null){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	public Map<String, String> populateMap()
-	{
-		Map<String, String> meta = new HashMap<String, String>();
-		long timestamp = System.currentTimeMillis()/1000;
-		String time = String.valueOf(timestamp);
-		
-		meta.put("ym_account_type_join_date", time);
-		meta.put("ym_account_type", this.getMemberShipType());
-		meta.put("wp_capabilities", "a:1:{s:10:\"subscriber\";s:1:\"1\";}");
-		meta.put("wp_user_level", "0");
-		meta.put("nickname", this.getNickname());
-		meta.put("description", "");
-		meta.put("rich_editing", "true");
-		meta.put("comment_shortcuts", "false");
-		meta.put("admin_color", "fresh");
-		meta.put("use_ssl", "0");
-		meta.put("show_admin_bar_front", "true");
-		meta.put("show_admin_bar_front", "true");
-		meta.put("ym_status", "Active");
-		meta.put("ym_custom_fields", this.createCustomFields());
-		meta.put("ym_user", this.createUserFields());
-		
-		
-		
-		
-		if(this.getFirstName() != null)
-		{
-			meta.put("first_name", this.getFirstName());
-		}
-		if(this.getLastName() != null)
-		{
-			meta.put("last_name", this.getLastName());
-		}
-		return meta;
-	}
-	
-	
-	/**
-	 * returns the nickname
-	 */
-	public String getNickname()
-	{
-		String concactName = this.firstName+this.lastName;
-		return concactName.replace(" ", "");
-	}
-	
-	/*
-	 * create the custom fields string
-	 */
-	private String createCustomFields()
-	{
-		String pin = String.format("%012d", this.getId());
-		//TODO generate pin
-		String customFields = "a:12:{i:17;s:12:\""+ pin +"\";" +
-							  "i:12;s:"+ String.valueOf(this.getFirstName().length()) +":\""+ this.getFirstName() +"\";" +
-							  "i:13;s:"+ String.valueOf(this.getLastName().length()) +":\""+ this.getLastName() +"\";" +
-							  "i:4;s:"+ String.valueOf(this.getDob().length()) +":\""+ this.getDob() +"\";" +
-							  "i:15;s:2:\"No\";" +
-							  "i:7;s:"+ String.valueOf(this.getAddress1().length()) +":\"" + this.getAddress1() + "\";" +
-							  "i:8;s:"+ String.valueOf(this.getAddress2().length()) +":\"" + this.getAddress2() + "\";" +
-							  "i:9;s:"+ String.valueOf(this.getCity().length()) +":\"" + this.getCity() + "\";" +
-							  "i:10;s:"+ String.valueOf(this.getPostcode().length()) +":\"" + this.getPostcode() + "\";" +
-							  "i:11;s:"+ String.valueOf(this.getTelephone().length()) +":\"" + this.getTelephone() + "\";" +
-							  "i:14;s:"+ String.valueOf(this.getMobile().length()) +":\"" + this.getMobile() + "\";" +
-							  "i:16;s:1:\"0\";}";
-		
-		
-		return customFields;
-	}
-	
-	
-	/*
-	 * create the custom fields string
-	 */
-	private String createUserFields()
-	{
-		
-		
-		String userMemberFields = "O:8:\"stdClass\":11:{" +
-								  "s:6:\"scalar\";s:0:\"\";" +
-								  "s:8:\"duration\";s:1:\"1\";" +
-								  "s:13:\"duration_type\";s:1:\"y\";" +
-								  "s:6:\"amount\";s:1:\"0\";" +
-								  "s:8:\"currency\";s:3:\"GBP\";" +
-								  "s:12:\"account_type\";s:"+ String.valueOf(this.getMemberShipType().length()) +":\""+ this.getMemberShipType() +"\";" +
-								  "s:12:\"gateway_used\";s:7:\"GiftSub\";" +
-								  "s:10:\"status_str\";s:26:\"Gift Giving was Successful\";" +
-								  "s:7:\"pack_id\";s:1:\""+ this.getPackId() +"\";" +
-								  "s:13:\"last_pay_date\";s:10:\"" + this.getMembershipDates("yyyy-MM-dd", 0) + "\";" +
-								  "s:11:\"expire_date\";s:16:\"" + this.getMembershipDates("yyyy-MM-dd HH:mm", 1) + "\";}";
-		
-		return userMemberFields;
-	}
-	
-	private String getMembershipDates(String dateFormat, Integer years)
-	{
-		java.text.SimpleDateFormat sdf = 
-		      new java.text.SimpleDateFormat(dateFormat);
-		Calendar c1 = Calendar.getInstance(); 
-		c1.add(Calendar.YEAR,years);
-		
-		return sdf.format(c1.getTime());
-	}
-    
-    
-    
-    
-    
 
-    
+    public Boolean requiredFields() {
+        if ((this.firstName != null) && (this.lastName != null)
+            && (this.memberShipType != null) && (this.address1 != null)
+            && (this.city != null) && (this.postcode != null)
+            && (this.telephone != null) && (this.dob != null)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Map<String, String> populateMap() {
+        final Map<String, String> meta = new HashMap<String, String>();
+        final long timestamp = System.currentTimeMillis() / 1000;
+        final String time = String.valueOf(timestamp);
+
+        meta.put("ym_account_type_join_date", time);
+        meta.put("ym_account_type", this.getMemberShipType());
+        meta.put("wp_capabilities", "a:1:{s:10:\"subscriber\";s:1:\"1\";}");
+        meta.put("wp_user_level", "0");
+        meta.put("nickname", this.getNickname());
+        meta.put("description", "");
+        meta.put("rich_editing", "true");
+        meta.put("comment_shortcuts", "false");
+        meta.put("admin_color", "fresh");
+        meta.put("use_ssl", "0");
+        meta.put("show_admin_bar_front", "true");
+        meta.put("show_admin_bar_front", "true");
+        meta.put("ym_status", "Active");
+        meta.put("ym_custom_fields", this.createCustomFields());
+        meta.put("ym_user", this.createUserFields());
+
+        if (this.getFirstName() != null) {
+            meta.put("first_name", this.getFirstName());
+        }
+        if (this.getLastName() != null) {
+            meta.put("last_name", this.getLastName());
+        }
+        return meta;
+    }
+
+    /**
+     * returns the nickname
+     */
+    public String getNickname() {
+        final String concactName = this.firstName + this.lastName;
+        return concactName.replace(" ", "");
+    }
+
+    /*
+     * create the custom fields string
+     */
+    private String createCustomFields() {
+        final String pin = String.format("%012d", this.getId());
+        // TODO generate pin
+        final String customFields =
+            "a:12:{i:17;s:12:\"" + pin + "\";" + "i:12;s:"
+                + String.valueOf(this.getFirstName().length()) + ":\""
+                + this.getFirstName() + "\";" + "i:13;s:"
+                + String.valueOf(this.getLastName().length()) + ":\""
+                + this.getLastName() + "\";" + "i:4;s:"
+                + String.valueOf(this.getDob().length()) + ":\""
+                + this.getDob() + "\";" + "i:15;s:2:\"No\";" + "i:7;s:"
+                + String.valueOf(this.getAddress1().length()) + ":\""
+                + this.getAddress1() + "\";" + "i:8;s:"
+                + String.valueOf(this.getAddress2().length()) + ":\""
+                + this.getAddress2() + "\";" + "i:9;s:"
+                + String.valueOf(this.getCity().length()) + ":\""
+                + this.getCity() + "\";" + "i:10;s:"
+                + String.valueOf(this.getPostcode().length()) + ":\""
+                + this.getPostcode() + "\";" + "i:11;s:"
+                + String.valueOf(this.getTelephone().length()) + ":\""
+                + this.getTelephone() + "\";" + "i:14;s:"
+                + String.valueOf(this.getMobile().length()) + ":\""
+                + this.getMobile() + "\";" + "i:16;s:1:\"0\";}";
+
+        return customFields;
+    }
+
+    /*
+     * create the custom fields string
+     */
+    private String createUserFields() {
+
+        final String userMemberFields =
+            "O:8:\"stdClass\":11:{" + "s:6:\"scalar\";s:0:\"\";"
+                + "s:8:\"duration\";s:1:\"1\";"
+                + "s:13:\"duration_type\";s:1:\"y\";"
+                + "s:6:\"amount\";s:1:\"0\";" + "s:8:\"currency\";s:3:\"GBP\";"
+                + "s:12:\"account_type\";s:"
+                + String.valueOf(this.getMemberShipType().length()) + ":\""
+                + this.getMemberShipType() + "\";"
+                + "s:12:\"gateway_used\";s:7:\"GiftSub\";"
+                + "s:10:\"status_str\";s:26:\"Gift Giving was Successful\";"
+                + "s:7:\"pack_id\";s:1:\"" + this.getPackId() + "\";"
+                + "s:13:\"last_pay_date\";s:10:\""
+                + this.getMembershipDates("yyyy-MM-dd", 0) + "\";"
+                + "s:11:\"expire_date\";s:16:\""
+                + this.getMembershipDates("yyyy-MM-dd HH:mm", 1) + "\";}";
+
+        return userMemberFields;
+    }
+
+    private String getMembershipDates(final String dateFormat,
+    final Integer years) {
+        final java.text.SimpleDateFormat sdf =
+            new java.text.SimpleDateFormat(dateFormat);
+        final Calendar c1 = Calendar.getInstance();
+        c1.add(Calendar.YEAR, years);
+
+        return sdf.format(c1.getTime());
+    }
+
 }

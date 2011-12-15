@@ -145,7 +145,7 @@ public class BookingPopup extends JDialog {
     /**
      */
     public void removeLocked() {
-    	this.panel.removeFromCart(this.booking);
+        this.panel.removeFromCart(this.booking);
         this.panel.cancelBooking(this.booking);
         this.dispose();
     }
@@ -304,9 +304,10 @@ public class BookingPopup extends JDialog {
 
             buttonPanel.add(cancelButton);
             buttonPanel.add(addToCartButton);
-        } else if(this.booking.getState() == BookingState.LOCKED){
-        	// TODO check if the seat was locked at the current venue
-        	final BookingCancelLockedAl cancelLocked = new BookingCancelLockedAl(this);
+        } else if (this.booking.getState() == BookingState.LOCKED) {
+            // TODO check if the seat was locked at the current venue
+            final BookingCancelLockedAl cancelLocked =
+                new BookingCancelLockedAl(this);
 
             final JButton printButton = new JButton();
             printButton.addActionListener(cancelLocked);
@@ -320,7 +321,7 @@ public class BookingPopup extends JDialog {
 
             buttonPanel.add(new JLabel());
             buttonPanel.add(printButton);
-        }else {
+        } else {
             // printButton
 
             final ActionListener listener = new BookedTicketDetailsAl(this);

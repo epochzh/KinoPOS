@@ -238,7 +238,6 @@ public class CustomerPopup extends JDialog {
     // <editor-fold defaultstate="collapsed"
     // desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         this.jPanel2 = new javax.swing.JPanel();
         this.editorKeys = new com.openbravo.editor.JEditorKeys();
         this.jPanel3 = new javax.swing.JPanel();

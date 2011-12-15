@@ -36,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +66,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private Session session;
-    
+
     /**
      */
     private Member member;
@@ -76,11 +74,11 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence createBooking;
-    
+
     /**
      */
     private BaseSentence createWpUser;
-    
+
     /**
      */
     private BaseSentence createUserMeta;
@@ -120,9 +118,9 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getFirstFilm;
-    
+
     /**
-     */ 
+     */
     private BaseSentence getLastInsertedMemberId;
 
     /**
@@ -132,7 +130,9 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getPostByName;
-    
+
+    /**
+     */
     private BaseSentence getPostMeta;
 
     /**
@@ -166,6 +166,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence listBookingByEvent;
+
+    /**
+     */
+    private BaseSentence listBookingByToday;
 
     /**
      */
@@ -227,16 +231,19 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.LONG, Datas.STRING, Datas.STRING, Datas.TIMESTAMP,
                     Datas.LONG, Datas.DOUBLE, Datas.LONG, Datas.STRING,
                     Datas.STRING, Datas.STRING, Datas.STRING));
-        
-        this.createWpUser =  new StaticSentence(this.session, "INSERT INTO wp_users "
-                + "(user_login, user_pass, user_nicename, user_email, "
-                + "user_url, user_registered, user_activation_key, user_status, display_name) "
-                + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
+
+        this.createWpUser =
+            new StaticSentence(
+                this.session,
+                "INSERT INTO wp_users "
+                    + "(user_login, user_pass, user_nicename, user_email, "
+                    + "user_url, user_registered, user_activation_key, user_status, display_name) "
+                    + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
                 new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
-        
-        this.createUserMeta =  new StaticSentence(this.session, "INSERT INTO wp_usermeta "
-                + "(user_id, meta_key, meta_value) "
-                + "VALUES (?, ?, ?) ",
+
+        this.createUserMeta =
+            new StaticSentence(this.session, "INSERT INTO wp_usermeta "
+                + "(user_id, meta_key, meta_value) " + "VALUES (?, ?, ?) ",
                 new SerializerWriteBasic(Datas.INT, Datas.STRING, Datas.STRING));
 
         this.deleteBooking =
@@ -280,16 +287,20 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.LONG), new SerializerReadClass(CustomerMeta.class));
 
         this.getEvent =
-            new StaticSentence(this.session,
+            new StaticSentence(
+                this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "FROM events "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (event_id = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(Event.class));
 
         this.getEventByName =
-            new StaticSentence(this.session,
+            new StaticSentence(
+                this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "FROM events "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (venue = ?) " + "AND (event_name = ?) "
                     + "AND (start_date = ?) ", new SerializerWriteBasic(
                     Datas.LONG, Datas.STRING, Datas.TIMESTAMP),
@@ -299,45 +310,47 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "FROM events "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (venue = ?) " + "AND (start_date >= ?) "
                     + "AND (end_date < ?) " + "ORDER BY start_date ASC LIMIT 1",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
                 new SerializerReadClass(Event.class));
-        
-        this.getLastInsertedMemberId =  new StaticSentence(this.session, "SELECT ID "
-                + "FROM wp_users " + "WHERE (user_registered = ?)", new SerializerWriteBasic(
-                 Datas.TIMESTAMP), new SerializerReadClass(
-                 Member.class));
+
+        this.getLastInsertedMemberId =
+            new StaticSentence(this.session, "SELECT ID " + "FROM wp_users "
+                + "WHERE (user_registered = ?)", new SerializerWriteBasic(
+                Datas.TIMESTAMP), new SerializerReadClass(Member.class));
 
         this.getNextAvailableFilm =
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
-                    + "AND (event_type = 'film' or event_type LIKE 'event%') " + "AND (start_date >= ?) "
-                    + "ORDER BY start_date ASC ", new SerializerWriteBasic(
-                    Datas.LONG, Datas.STRING), new SerializerReadClass(
-                    Event.class));
+                    + "AND (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND (start_date >= ?) " + "ORDER BY start_date ASC ",
+                new SerializerWriteBasic(Datas.LONG, Datas.STRING),
+                new SerializerReadClass(Event.class));
 
         this.getPostByName =
             new StaticSentence(this.session, "SELECT ID, post_title "
                 + "FROM wp_posts " + "WHERE (post_title = ?) "
                 + "AND (post_status = 'publish') ", new SerializerWriteBasic(
                 Datas.STRING), new SerializerReadClass(Post.class));
-        
+
         this.getPostMeta =
-                new StaticSentence(this.session, "SELECT meta_id, meta_key, meta_value "
-                    + "FROM wp_postmeta " + "WHERE (post_id = ?) "
-                    + "AND (meta_key = ?) ", new SerializerWriteBasic(
-                    Datas.INT, Datas.STRING), new SerializerReadClass(Postmeta.class));
+            new StaticSentence(this.session,
+                "SELECT meta_id, meta_key, meta_value " + "FROM wp_postmeta "
+                    + "WHERE (post_id = ?) " + "AND (meta_key = ?) ",
+                new SerializerWriteBasic(Datas.INT, Datas.STRING),
+                new SerializerReadClass(Postmeta.class));
 
         this.getPriceFirstFilm =
             new StaticSentence(this.session,
                 "SELECT id, special_name, special_price, venue_idfk "
                     + "FROM dd_specialprice " + "WHERE (venue_idfk = ?) "
                     // TODO: Should be "first_film" instead of "first film".
-                    + "AND (special_name = ?) ",
-                new SerializerWriteBasic(Datas.LONG, Datas.STRING), new SerializerReadClass(
+                    + "AND (special_name = ?) ", new SerializerWriteBasic(
+                    Datas.LONG, Datas.STRING), new SerializerReadClass(
                     PriceSpecial.class));
 
         this.getScreenByNumber =
@@ -347,15 +360,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "WHERE (venue_idfk = ?) " + "AND (screen_number = ?) ",
                 new SerializerWriteBasic(Datas.LONG, Datas.INT),
                 new SerializerReadClass(Screen.class));
-        
+
         this.getSpecialEventPrice =
-        		new StaticSentence(this.session,
-                        "SELECT day, id, name, full_price, gold, kino_friends, "
-                            + "kino_staff, senior, silver, student, u16, "
-                            + "ticketsForOffer, start_time, " + "end_time, venue_idfk "
-                            + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?)" + " AND (name = ?) ",
-                        new SerializerWriteBasic(Datas.LONG, Datas.STRING), 
-                        new SerializerReadClass(PriceMatrix.class));
+            new StaticSentence(this.session,
+                "SELECT day, id, name, full_price, gold, kino_friends, "
+                    + "kino_staff, senior, silver, student, u16, "
+                    + "ticketsForOffer, start_time, " + "end_time, venue_idfk "
+                    + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?)"
+                    + " AND (name = ?) ", new SerializerWriteBasic(Datas.LONG,
+                    Datas.STRING), new SerializerReadClass(PriceMatrix.class));
 
         this.getVenue =
             new StaticSentence(this.session,
@@ -371,7 +384,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "purchasefrom, seatnumber, state "
                     + "FROM dd_bookings, events " + "WHERE (barcode LIKE ?) "
                     + "AND (dd_bookings.eventsidfk = events.event_id) "
-                    + "AND (events.start_date >= NOW())",
+                    + "AND (events.start_date >= NOW()) "
+                    + "ORDER BY events.start_date ASC ",
                 new SerializerWriteBasic(Datas.STRING),
                 new SerializerReadClass(Booking.class));
 
@@ -389,9 +403,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 "SELECT barcode, collected, userid, purchasename, "
                     + "purchasetelephone, datepurchased, eventsidfk, id, "
                     + "price, pricingmatrixidfk, purchasedmethod, "
-                    + "purchasefrom, seatnumber, state " + "FROM dd_bookings "
-                    + "WHERE (purchasename LIKE ?) ", new SerializerWriteBasic(
-                    Datas.STRING), new SerializerReadClass(Booking.class));
+                    + "purchasefrom, seatnumber, state "
+                    + "FROM dd_bookings, events "
+                    + "WHERE (purchasename LIKE ?) "
+                    + "AND (dd_bookings.eventsidfk = events.event_id) "
+                    + "AND (events.start_date >= NOW()) "
+                    + "ORDER BY events.start_date ASC ",
+                new SerializerWriteBasic(Datas.STRING),
+                new SerializerReadClass(Booking.class));
 
         this.listBookingByEvent =
             new StaticSentence(this.session,
@@ -401,6 +420,18 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "purchasefrom, seatnumber, state " + "FROM dd_bookings "
                     + "WHERE (eventsidfk = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(Booking.class));
+
+        this.listBookingByToday =
+            new StaticSentence(this.session,
+                "SELECT barcode, collected, userid, purchasename, "
+                    + "purchasetelephone, datepurchased, eventsidfk, id, "
+                    + "price, pricingmatrixidfk, purchasedmethod, "
+                    + "purchasefrom, seatnumber, state "
+                    + "FROM dd_bookings, events "
+                    + "WHERE (dd_bookings.eventsidfk = events.event_id) "
+                    + "AND (events.start_date >= NOW()) "
+                    + "ORDER BY events.start_date ASC ", null,
+                new SerializerReadClass(Booking.class));
 
         this.listCustomer =
             new StaticSentence(this.session, "SELECT user_email, ID "
@@ -418,7 +449,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
-                    + "FROM events " + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "FROM events "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
                     + "AND (venue = ?) " + "AND (start_date >= ?) "
                     + "AND (end_date < ?) " + "ORDER BY event_name ASC ",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
@@ -428,20 +460,21 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
-                    + "AND (event_type = 'film' or event_type LIKE 'event%') " + "AND (event_name = ?) "
-                    + "AND (start_date >= ?) " + "AND (end_date < ?) "
-                    + "ORDER BY start_date ASC ", new SerializerWriteBasic(
-                    Datas.LONG, Datas.STRING, Datas.TIMESTAMP, Datas.STRING),
-                new SerializerReadClass(Event.class));
+                    + "AND (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND (event_name = ?) " + "AND (start_date >= ?) "
+                    + "AND (end_date < ?) " + "ORDER BY start_date ASC ",
+                new SerializerWriteBasic(Datas.LONG, Datas.STRING,
+                    Datas.TIMESTAMP, Datas.STRING), new SerializerReadClass(
+                    Event.class));
 
         this.listPrice =
             new StaticSentence(this.session,
                 "SELECT day, id, name, full_price, gold, kino_friends, "
                     + "kino_staff, senior, silver, student, u16, "
                     + "ticketsForOffer, start_time, " + "end_time, venue_idfk "
-                    + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?) " + "AND name NOT LIKE 'event%'",
-                new SerializerWriteBasic(Datas.LONG), new SerializerReadClass(
-                    PriceMatrix.class));
+                    + "FROM dd_pricematrix " + "WHERE (venue_idfk = ?) "
+                    + "AND name NOT LIKE 'event%'", new SerializerWriteBasic(
+                    Datas.LONG), new SerializerReadClass(PriceMatrix.class));
 
         this.listPriceByDate =
             new StaticSentence(this.session,
@@ -487,20 +520,20 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     }
 
     /**
-	 * @return the member
-	 */
-	public Member getMember() {
-		return member;
-	}
+     * @return the member
+     */
+    public Member getMember() {
+        return this.member;
+    }
 
-	/**
-	 * @param member the member to set
-	 */
-	public void setMember(Member member) {
-		this.member = member;
-	}
+    /**
+     * @param member the member to set
+     */
+    public void setMember(final Member member) {
+        this.member = member;
+    }
 
-	/**
+    /**
      * @param booking
      * @throws BasicException
      */
@@ -516,61 +549,52 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         transaction.execute();
     }
-    
-    
+
     /**
-     * @param booking
+     * @param newMember
      * @throws BasicException
      */
     public void createWpUser(final Member newMember) throws BasicException {
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("new member: " + newMember);
+            LOGGER.info("newMember: " + newMember);
         }
-        
+
         this.member = newMember;
-        final Date todaysDate= new Date();
-        long time = todaysDate.getTime();
+        final Date todaysDate = new Date();
+        final long time = todaysDate.getTime();
         this.member.setRegisteredDate(new Timestamp(time));
-      
-        // todo get the price of a membership
-     // this.getMembershipPrice();
-        
-        
-      this.createWpUser.exec( this.member.getNickname(), this.member.getRegisteredDate());
-      
-      final Member lastMemberId =
-              (Member) this.getLastInsertedMemberId.find(newMember.getRegisteredDate(), null);
-      this.member.setId(lastMemberId.getId());
-          
-          LOGGER.info("LAST ID: " + lastMemberId.getId());
-          
-      // create the wp_usermeta
-      //this.createUserMeta();
-      Map<String, String> meta = this.member.populateMap();
-      this.createUserMeta(meta);
-      
-      
-      
-      LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
-      
-          
-      
+
+        // TODO: get the price of a membership
+        // this.getMembershipPrice();
+
+        this.createWpUser.exec(this.member.getNickname(), this.member
+            .getRegisteredDate());
+
+        final Member lastMemberId =
+            (Member) this.getLastInsertedMemberId.find(newMember
+                .getRegisteredDate(), null);
+        this.member.setId(lastMemberId.getId());
+
+        LOGGER.info("LAST ID: " + lastMemberId.getId());
+
+        // create the wp_usermeta
+        // this.createUserMeta();
+        final Map<String, String> meta = this.member.populateMap();
+        this.createUserMeta(meta);
+
+        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
     }
-    
-    
-    public void createUserMeta(Map<String, String> meta )
-    {
-    	Set<String> set = meta.keySet();
-    	for(String key:set)
-    	{
-    		try {
-    			
-				this.createUserMeta.exec(this.member.getId(), key, meta.get(key));
-			} catch (BasicException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
+
+    /**
+     * @param meta
+     * @throws BasicException
+     */
+    public void createUserMeta(final Map<String, String> meta)
+    throws BasicException {
+        final Set<String> set = meta.keySet();
+        for (final String key : set) {
+            this.createUserMeta.exec(this.member.getId(), key, meta.get(key));
+        }
     }
 
     /**
@@ -846,10 +870,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      */
     public String getPostByName(final String name) throws BasicException {
         final Post post = (Post) this.getPostByName.find(name, null);
-        final Postmeta runTime = (Postmeta) this.getPostMeta.find(post.getId(),"runTime");
-        final Postmeta certificate = (Postmeta) this.getPostMeta.find(post.getId(),"certificate");
-        
-        final String status = runTime.getMetaValue() + " mins / " + "cert: " + certificate.getMetaValue();
+        final Postmeta runTime =
+            (Postmeta) this.getPostMeta.find(post.getId(), "runTime");
+        final Postmeta certificate =
+            (Postmeta) this.getPostMeta.find(post.getId(), "certificate");
+
+        final String status =
+            "run time: " + runTime.getMetaValue() + " mins / "
+                + "certificate: " + certificate.getMetaValue();
 
         return status;
     }
@@ -867,18 +895,20 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         }
 
         final PriceSpecial price =
-            (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(), "first film");
+            (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(),
+                "first film");
 
         return price;
     }
-    
+
     /**
      * @param venue
-     * @return the {@link PriceSpecial} of the first film for the specified
-     * {@link Venue}
+     * @param type
+     * @return
      * @throws BasicException
      */
-    public PriceMatrix getSpecialEventPrice(final Venue venue, final String type)
+    public PriceMatrix
+    getSpecialEventPrice(final Venue venue, final String type)
     throws BasicException {
         if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.info("venue: " + venue);
@@ -1038,6 +1068,25 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         @SuppressWarnings("unchecked")
         final List<Booking> bookings =
             this.listBookingByCustomerName.list(customerName, null);
+        for (final Booking booking : bookings) {
+            final Event event = this.getEvent(booking.getEvent().getId());
+            if (event == null) {
+                LOGGER.severe("booking: " + booking);
+                continue;
+            }
+            booking.setEvent(event);
+        }
+
+        return bookings;
+    }
+
+    /**
+     * @return the list of {@link Booking}
+     * @throws BasicException
+     */
+    public List<Booking> listBookingByToday() throws BasicException {
+        @SuppressWarnings("unchecked")
+        final List<Booking> bookings = this.listBookingByToday.list();
         for (final Booking booking : bookings) {
             final Event event = this.getEvent(booking.getEvent().getId());
             if (event == null) {
@@ -1441,10 +1490,16 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         customer.setStudent("Yes".equals(ymCustom.get(5)));
     }
 
-	public Double getDoubleBillPrice(final Venue venue) throws BasicException {
-		// TODO Auto-generated method stub
+    /**
+     * @param venue
+     * @return
+     * @throws BasicException
+     */
+    public Double getDoubleBillPrice(final Venue venue) throws BasicException {
         final PriceSpecial price =
-                (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(), "double_bill");
-		return price.getPrice();
-	}
+            (PriceSpecial) this.getPriceFirstFilm.find(venue.getId(),
+                "double_bill");
+
+        return price.getPrice();
+    }
 }

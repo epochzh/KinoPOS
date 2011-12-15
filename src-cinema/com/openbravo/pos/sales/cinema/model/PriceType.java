@@ -6,6 +6,10 @@ public enum PriceType {
 
     /**
      */
+    FIRST_FILM("first_film"),
+
+    /**
+     */
     FULL_PRICE("full_price"),
 
     /**
@@ -35,13 +39,10 @@ public enum PriceType {
     /**
      */
     U16("u16"),
-    
+
     /**
-     * 
      */
     DOUBLE_BILL("double_bill");
-    
-
 
     /**
      * @param type

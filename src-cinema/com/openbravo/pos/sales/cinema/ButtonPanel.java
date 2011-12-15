@@ -60,8 +60,6 @@ public class ButtonPanel extends JPanel {
 
         final Insets insets = new Insets(8, 14, 8, 14);
 
-       
-
         // MAP
 
         final CinemaReservationMapAl mapListener =
@@ -74,7 +72,7 @@ public class ButtonPanel extends JPanel {
         map.setIcon(ICON_MAP);
         map.setMargin(new Insets(8, 14, 8, 14));
         map.setRequestFocusEnabled(false);
-        
+
         // BOOKINGS
 
         final JButton bookings = new JButton();
@@ -148,7 +146,7 @@ public class ButtonPanel extends JPanel {
         final JToggleButton studentButton = new JToggleButton("Student");
         studentButton.addActionListener(studentListener);
         studentButton.setMargin(insets);
-        
+
         // STUDENT
 
         final PriceTypeAl doubleBillListener =
@@ -170,14 +168,14 @@ public class ButtonPanel extends JPanel {
         this.buttons =
             new JToggleButton[] {
                 goldButton, silverButton, seniorButton, u16Button,
-                studentButton, kinoFriendsButton, kinoStaffButton, doubleBillButton
+                studentButton, kinoFriendsButton, kinoStaffButton,
+                doubleBillButton
             };
 
         this.group = new ButtonGroup();
 
         this.setSize(700, 100);
 
-        
         this.add(map);
         this.add(bookings);
         this.add(delete);

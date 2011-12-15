@@ -5,22 +5,25 @@ import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.sales.cinema.model.Booking;
 
+import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JDialog;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -36,20 +39,6 @@ public class BookingsDatabasePopup extends JDialog {
      */
     private static final Logger LOGGER = Logger
         .getLogger(BookingsDatabasePopup.class.getName());
-
-    /**
-     */
-    static final String[] COLUMN_NAMES = {
-        "Film", "Start date / time", "Barcode", "Customer", "State",
-    };
-
-    /**
-     */
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MMM");
-
-    /**
-     */
-    private static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
     /**
      * @param panel
@@ -73,11 +62,59 @@ public class BookingsDatabasePopup extends JDialog {
 
     /**
      */
+    private static class BookingsTableCellRenderer extends
+    DefaultTableCellRenderer {
+
+        /**
+         */
+        private static final Font FONT = new Font("Arial", Font.PLAIN, 18);
+
+        /**
+         */
+        public BookingsTableCellRenderer() {
+            super();
+        }
+
+        /**
+         * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable,
+         * java.lang.Object, boolean, boolean, int, int)
+         */
+        @Override
+        public Component getTableCellRendererComponent(final JTable table,
+        final Object value, final boolean isSelected, final boolean hasFocus,
+        final int row, final int column) {
+            final Component component =
+                super.getTableCellRendererComponent(table, value, isSelected,
+                    hasFocus, row, column);
+            component.setFont(FONT);
+
+            return component;
+        }
+    }
+
+    /**
+     */
     private static class BookingsTableModel extends AbstractTableModel {
 
         /**
          */
         private static final long serialVersionUID = -5452136159812312751L;
+
+        /**
+         */
+        private static final String[] COLUMN_NAMES = {
+            "Film", "Start date / time", "Barcode", "Customer", "State",
+        };
+
+        /**
+         */
+        private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
+            "MMM");
+
+        /**
+         */
+        private static final DateFormat TIME_FORMAT = new SimpleDateFormat(
+            "HH:mm");
 
         /**
          */
@@ -216,9 +253,14 @@ public class BookingsDatabasePopup extends JDialog {
 
     /**
      */
-    private void executeSearch() {
+    public void executeSearch() {
         String barcode = this.barcodeTF.getText();
         String customerName = this.customerNameTF.getText();
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("barcode: " + barcode);
+            LOGGER.info("customerName: " + customerName);
+        }
 
         final List<Booking> bookings;
         try {
@@ -229,7 +271,7 @@ public class BookingsDatabasePopup extends JDialog {
                 customerName = "%" + customerName + "%";
                 bookings = this.dao.listBookingByCustomerName(customerName);
             } else {
-                bookings = Collections.emptyList();
+                bookings = this.dao.listBookingByToday();
             }
         } catch (final BasicException ex) {
             new MessageInf(ex).show(this);
@@ -269,7 +311,7 @@ public class BookingsDatabasePopup extends JDialog {
         this.okButton = new javax.swing.JButton();
 
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.setTitle("Bookings Database"); // NOI18N
+        this.setTitle("Bookings list");
 
         this.jPanel2.setLayout(new java.awt.BorderLayout());
         this.jPanel2.add(this.editorKeys, java.awt.BorderLayout.NORTH);
@@ -368,8 +410,11 @@ public class BookingsDatabasePopup extends JDialog {
             5, 5, 5));
         this.jPanel4.setLayout(new java.awt.BorderLayout());
 
+        // final TableCellRenderer renderer = new BookingsTableCellRenderer();
+        // this.bookingsTable.setDefaultRenderer(Object.class, renderer);
         this.bookingsTable.setFocusable(false);
         this.bookingsTable.setRequestFocusEnabled(false);
+        this.bookingsTable.setRowHeight(32);
         this.bookingsTable.addMouseListener(new java.awt.event.MouseAdapter() {
 
             @Override

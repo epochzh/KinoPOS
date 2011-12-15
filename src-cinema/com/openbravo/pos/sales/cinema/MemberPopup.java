@@ -1,6 +1,5 @@
 package com.openbravo.pos.sales.cinema;
 
-import com.openbravo.basic.BasicException;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.sales.cinema.model.Member;
@@ -28,8 +27,6 @@ public class MemberPopup extends JDialog {
      */
     private static final Logger LOGGER = Logger.getLogger(MemberPopup.class
         .getName());
-
-    
 
     /**
      * @param dao
@@ -69,11 +66,9 @@ public class MemberPopup extends JDialog {
     /**
      */
 
-
     /**
      */
     private final CinemaDaoImpl dao;
-
 
     /**
      * @param dao
@@ -97,12 +92,10 @@ public class MemberPopup extends JDialog {
         this.dao = dao;
     }
 
-
-
     /**
      */
     @SuppressWarnings("unchecked")
-	private void init() {
+    private void init() {
         this.initComponents();
 
         this.jScrollPane1.getVerticalScrollBar().setPreferredSize(
@@ -129,44 +122,43 @@ public class MemberPopup extends JDialog {
         this.telephoneTF.reset();
         this.mobileTF.reset();
         this.dobTF.reset();
-       // this.membershipTF.reset();
+        // this.membershipTF.reset();
 
         this.firstNameTF.activate();
-
 
         this.getRootPane().setDefaultButton(this.okButton);
 
         this.dao.setMember(null);
     }
 
-  
-
     /**
      */
     private void executeSearch() {
-    	final Member newMember = new Member();
+        final Member newMember = new Member();
         newMember.setFirstName(this.firstNameTF.getText());
         newMember.setLastName(this.lastNameTF.getText());
         newMember.setAddress1(this.address1TF.getText());
         newMember.setAddress2(this.address2TF.getText());
         newMember.setCity(this.cityTF.getText());
-        newMember.setMemberShipType((String) this.membershipTF.getSelectedItem());
+        newMember.setMemberShipType((String) this.membershipTF
+            .getSelectedItem());
         newMember.setPostcode(this.postcodeTF.getText());
         newMember.setTelephone(this.telephoneTF.getText());
         newMember.setMobile(this.mobileTF.getText());
         newMember.setDob(this.dobTF.getText());
 
-        LOGGER.info("New member: " + newMember.getFirstName() + newMember.getLastName());
-        if(!newMember.requiredFields())
-        {
-        	// TODO data validation
-        	JOptionPane.showMessageDialog(null, "Please fill in all required fields marked by '*'");
-        }else{
-        	//try {
-			//this.dao.createWpUser(newMember);
-        	this.okButton.setEnabled(true);
-        	this.firstNameTF.setEnabled(false);
-        	this.firstNameTF.setEnabled(false);
+        LOGGER.info("New member: " + newMember.getFirstName()
+            + newMember.getLastName());
+        if (!newMember.requiredFields()) {
+            // TODO data validation
+            JOptionPane.showMessageDialog(null,
+                "Please fill in all required fields marked by '*'");
+        } else {
+            // try {
+            // this.dao.createWpUser(newMember);
+            this.okButton.setEnabled(true);
+            this.firstNameTF.setEnabled(false);
+            this.firstNameTF.setEnabled(false);
             this.lastNameTF.setEnabled(false);
             this.address1TF.setEnabled(false);
             this.address2TF.setEnabled(false);
@@ -175,11 +167,11 @@ public class MemberPopup extends JDialog {
             this.telephoneTF.setEnabled(false);
             this.mobileTF.setEnabled(false);
             this.dobTF.setEnabled(false);
-				
-			//} catch (BasicException e) {
-			// TODO Auto-generated catch block
-				//e.printStackTrace();
-			//}
+
+            // } catch (BasicException e) {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+            // }
         }
     }
 
@@ -259,85 +251,93 @@ public class MemberPopup extends JDialog {
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
-                        this.firstNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                        140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        this.firstNameLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(this.firstNameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
-                        this.membershipLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                        140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        this.membershipLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(this.membershipTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 190,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                     jPanel7Layout.createSequentialGroup().addComponent(
-                         this.lastNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                         .addPreferredGap(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.lastNameLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                         .addComponent(this.lastNameTF,
+                        .addComponent(this.lastNameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                     jPanel7Layout.createSequentialGroup().addComponent(
-                         this.address1Label, javax.swing.GroupLayout.PREFERRED_SIZE,
-                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                         .addPreferredGap(
-                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                             .addComponent(this.address1TF,
-                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                      jPanel7Layout.createSequentialGroup().addComponent(
-                         this.address2Label, javax.swing.GroupLayout.PREFERRED_SIZE,
-                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                         .addPreferredGap(
-                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                             .addComponent(this.address2TF,
-                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                      jPanel7Layout.createSequentialGroup().addComponent(
-                             this.cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                             .addPreferredGap(
-                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                             .addComponent(this.cityTF,
-                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                      jPanel7Layout.createSequentialGroup().addComponent(
-                             this.postcodeLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                             .addPreferredGap(
-                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                             .addComponent(this.postcodeTF,
-                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                     jPanel7Layout.createSequentialGroup().addComponent(
-                             this.telephoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                             140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                             .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                              .addComponent(this.telephoneTF,
-                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                   jPanel7Layout.createSequentialGroup().addComponent(
-                              this.mobileLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                              140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                              .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                              .addComponent(this.mobileTF,
-                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                   jPanel7Layout.createSequentialGroup().addComponent(
-                              this.dobLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                              140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                              .addPreferredGap(
-                              javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                              .addComponent(this.dobTF,
-                              javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                              javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.address1Label,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.address1TF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.address2Label,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.address2TF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.cityLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.cityTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.postcodeLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.postcodeTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.telephoneLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.telephoneTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.mobileLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.mobileTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.dobLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.dobTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
         jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
@@ -365,7 +365,7 @@ public class MemberPopup extends JDialog {
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                 javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
                 jPanel7Layout.createParallelGroup(
-                	javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.address1Label).addComponent(this.address1TF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -377,36 +377,36 @@ public class MemberPopup extends JDialog {
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-               javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-               jPanel7Layout.createParallelGroup(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.cityLabel).addComponent(this.cityTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-               javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-               jPanel7Layout.createParallelGroup(
-            		javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.postcodeLabel).addComponent(this.postcodeTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-              javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel7Layout.createParallelGroup(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.telephoneLabel).addComponent(this.telephoneTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-             javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel7Layout.createParallelGroup(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.mobileLabel).addComponent(this.mobileTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-             javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel7Layout.createParallelGroup(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.dobLabel).addComponent(this.dobTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -421,15 +421,14 @@ public class MemberPopup extends JDialog {
 
             @Override
             public void actionPerformed(final java.awt.event.ActionEvent evt) {
-            	MemberPopup.this.clean();
+                MemberPopup.this.clean();
             }
         });
         this.jPanel6.add(this.cleanButton);
 
-      //  this.searchButton.setIcon(new javax.swing.ImageIcon(this.getClass()
-           // .getResource("/com/openbravo/images/launch.png"))); // NOI18N
-        this.searchButton
-            .setText("Create Membership"); // NOI18N
+        // this.searchButton.setIcon(new javax.swing.ImageIcon(this.getClass()
+        // .getResource("/com/openbravo/images/launch.png"))); // NOI18N
+        this.searchButton.setText("Create Membership"); // NOI18N
         this.searchButton.setFocusPainted(false);
         this.searchButton.setFocusable(false);
         this.searchButton.setRequestFocusEnabled(false);
@@ -439,7 +438,7 @@ public class MemberPopup extends JDialog {
                 @Override
                 public void
                 actionPerformed(final java.awt.event.ActionEvent evt) {
-                	MemberPopup.this.search();
+                    MemberPopup.this.search();
                 }
             });
         this.jPanel6.add(this.searchButton);
@@ -452,15 +451,9 @@ public class MemberPopup extends JDialog {
             5, 5, 5));
         this.jPanel4.setLayout(new java.awt.BorderLayout());
 
-        
-
-       
-
         this.jPanel3.add(this.jPanel4, java.awt.BorderLayout.CENTER);
 
         this.jPanel8.setLayout(new java.awt.BorderLayout());
-
-        
 
         this.cancelButton.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/button_cancel.png"))); // NOI18N
@@ -474,27 +467,27 @@ public class MemberPopup extends JDialog {
 
                 @Override
                 public void actionPerformed(final ActionEvent event) {
-                	MemberPopup.this.cancel();
+                    MemberPopup.this.cancel();
                 }
             });
         this.jPanel1.add(this.cancelButton);
-        
-        this.okButton.setIcon(new javax.swing.ImageIcon(this.getClass()
-                .getResource("/com/openbravo/images/button_ok.png"))); // NOI18N
-            this.okButton.setText("print"); // NOI18N
-            this.okButton.setEnabled(false);
-            this.okButton.setFocusPainted(false);
-            this.okButton.setFocusable(false);
-            this.okButton.setMargin(new java.awt.Insets(8, 30, 8, 30));
-            this.okButton.setRequestFocusEnabled(false);
-            this.okButton.addActionListener(new java.awt.event.ActionListener() {
 
-                @Override
-                public void actionPerformed(final ActionEvent event) {
-                	MemberPopup.this.print();
-                }
-            });
-            this.jPanel1.add(this.okButton);
+        this.okButton.setIcon(new javax.swing.ImageIcon(this.getClass()
+            .getResource("/com/openbravo/images/button_ok.png"))); // NOI18N
+        this.okButton.setText("print"); // NOI18N
+        this.okButton.setEnabled(false);
+        this.okButton.setFocusPainted(false);
+        this.okButton.setFocusable(false);
+        this.okButton.setMargin(new java.awt.Insets(8, 30, 8, 30));
+        this.okButton.setRequestFocusEnabled(false);
+        this.okButton.addActionListener(new java.awt.event.ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent event) {
+                MemberPopup.this.print();
+            }
+        });
+        this.jPanel1.add(this.okButton);
 
         this.jPanel8.add(this.jPanel1, java.awt.BorderLayout.LINE_END);
 
@@ -530,7 +523,6 @@ public class MemberPopup extends JDialog {
         this.executeSearch();
     }
 
-
     private void clean() {
         this.firstNameTF.reset();
         this.lastNameTF.reset();
@@ -541,7 +533,7 @@ public class MemberPopup extends JDialog {
         this.telephoneTF.reset();
         this.mobileTF.reset();
         this.dobTF.reset();
-       // this.membershipTF.reset();
+        // this.membershipTF.reset();
         this.okButton.setEnabled(false);
         this.dao.setMember(null);
     }
@@ -552,14 +544,23 @@ public class MemberPopup extends JDialog {
     private javax.swing.JButton searchButton;
 
     private javax.swing.JLabel firstNameLabel;
+
     private javax.swing.JLabel lastNameLabel;
+
     private javax.swing.JLabel address1Label;
+
     private javax.swing.JLabel address2Label;
+
     private javax.swing.JLabel cityLabel;
+
     private javax.swing.JLabel postcodeLabel;
+
     private javax.swing.JLabel membershipLabel;
+
     private javax.swing.JLabel telephoneLabel;
+
     private javax.swing.JLabel mobileLabel;
+
     private javax.swing.JLabel dobLabel;
 
     private javax.swing.JPanel jPanel1;
@@ -587,18 +588,25 @@ public class MemberPopup extends JDialog {
     private com.openbravo.editor.JEditorKeys editorKeys;
 
     private com.openbravo.editor.JEditorString firstNameTF;
-    private com.openbravo.editor.JEditorString lastNameTF;
-    private com.openbravo.editor.JEditorString address1TF;
-    private com.openbravo.editor.JEditorString address2TF;
-    private com.openbravo.editor.JEditorString cityTF;
-    private com.openbravo.editor.JEditorString postcodeTF;
-    private com.openbravo.editor.JEditorString telephoneTF;
-    private com.openbravo.editor.JEditorString mobileTF;
-    private com.openbravo.editor.JEditorString dobTF;
-    private javax.swing.JComboBox membershipTF;
 
+    private com.openbravo.editor.JEditorString lastNameTF;
+
+    private com.openbravo.editor.JEditorString address1TF;
+
+    private com.openbravo.editor.JEditorString address2TF;
+
+    private com.openbravo.editor.JEditorString cityTF;
+
+    private com.openbravo.editor.JEditorString postcodeTF;
+
+    private com.openbravo.editor.JEditorString telephoneTF;
+
+    private com.openbravo.editor.JEditorString mobileTF;
+
+    private com.openbravo.editor.JEditorString dobTF;
+
+    private javax.swing.JComboBox membershipTF;
 
     // End of variables declaration//GEN-END:variables
 
- 
 }

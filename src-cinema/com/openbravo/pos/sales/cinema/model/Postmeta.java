@@ -26,8 +26,7 @@ public class Postmeta implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String meta_value;
-    
-    
+
     /**
      */
     public Postmeta() {
@@ -61,7 +60,7 @@ public class Postmeta implements IKeyed, Serializable, SerializableRead {
     public void setMetaKey(final String key) {
         this.meta_key = key;
     }
-    
+
     /**
      * @return the meta value
      */

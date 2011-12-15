@@ -74,8 +74,6 @@ import javax.swing.border.Border;
  */
 public class CinemaReservationMap extends JTicketsBag {
 
-    // TODO: Handle the price type buttons.
-
     /**
      */
     private static final long serialVersionUID = -2612013319133912992L;
@@ -430,28 +428,26 @@ public class CinemaReservationMap extends JTicketsBag {
             this.priceType = PriceType.SILVER;
         }
     }
-    
-    
+
     /**
      */
     public void doMembershipAdd() {
-        final MemberPopup popup =
-        		MemberPopup.getMemberPopup(this.dao, this);
+        final MemberPopup popup = MemberPopup.getMemberPopup(this.dao, this);
         popup.setVisible(true);
 
-//        this.customer = popup.getSelectedCustomer();
-//
-//        if (LOGGER.isLoggable(Level.INFO)) {
-//            LOGGER.info("customer: " + this.customer);
-//        }
-//
-//        if (this.customer == null) {
-//            // Nothing to do.
-//        } else if (this.customer.getMsType() == MembershipType.GOLD) {
-//            this.priceType = PriceType.GOLD;
-//        } else if (this.customer.getMsType() == MembershipType.SILVER) {
-//            this.priceType = PriceType.SILVER;
-//        }
+        // this.customer = popup.getSelectedCustomer();
+        //
+        // if (LOGGER.isLoggable(Level.INFO)) {
+        // LOGGER.info("customer: " + this.customer);
+        // }
+        //
+        // if (this.customer == null) {
+        // // Nothing to do.
+        // } else if (this.customer.getMsType() == MembershipType.GOLD) {
+        // this.priceType = PriceType.GOLD;
+        // } else if (this.customer.getMsType() == MembershipType.SILVER) {
+        // this.priceType = PriceType.SILVER;
+        // }
     }
 
     /**
@@ -663,21 +659,22 @@ public class CinemaReservationMap extends JTicketsBag {
                 LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
                 final String type = this.event.getTypeAsString();
                 // checks to see if the event is marked as a special event
-               
-                if(type.contains("event"))
-                {
-                	isSpecialEvent = true;
-                	specialEventPrice = this.dao.getSpecialEventPrice(this.venue, type);
-                	LOGGER.info("specialEventPrice: " + specialEventPrice.getPriceGold());
-                }else{
-                	isSpecialEvent = false;
-                	specialEventPrice = null;
+
+                if (type.contains("event")) {
+                    isSpecialEvent = true;
+                    specialEventPrice =
+                        this.dao.getSpecialEventPrice(this.venue, type);
+                    LOGGER.info("specialEventPrice: "
+                        + specialEventPrice.getPriceGold());
+                } else {
+                    isSpecialEvent = false;
+                    specialEventPrice = null;
                 }
-                
+
                 LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
-                if(this.priceType != null && this.priceType.getType() == "double_bill")
-                {
-                	isDoubleBillApplicable = true;
+                if ((this.priceType != null)
+                    && (this.priceType.getType() == "double_bill")) {
+                    isDoubleBillApplicable = true;
                 }
                 priceMatrixes = this.dao.listPrice(this.venue, this.event);
                 priceSpecial = this.dao.getPriceFirstFilm(this.venue);
@@ -688,21 +685,22 @@ public class CinemaReservationMap extends JTicketsBag {
 
             Double price = null;
             PriceMatrix priceMatrix = null;
-            if(isSpecialEvent){
-            	LOGGER.info("specialEventPrice inside if else: " + specialEventPrice.getPriceGold());
-            	priceMatrix = specialEventPrice;
-            	price = toPrice(priceMatrix, this.priceType);
-            }else if(isDoubleBillApplicable){
-            	priceMatrix = priceMatrixes.get(0);
-            	try {
-					price = this.dao.getDoubleBillPrice(this.venue);
-				} catch (BasicException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	LOGGER.info("double bill price: " + price);
-            }else if (isFirstFilmApplicable) {
-            	priceMatrix = priceMatrixes.get(0);
+            if (isSpecialEvent) {
+                LOGGER.info("specialEventPrice inside if else: "
+                    + specialEventPrice.getPriceGold());
+                priceMatrix = specialEventPrice;
+                price = toPrice(priceMatrix, this.priceType);
+            } else if (isDoubleBillApplicable) {
+                priceMatrix = priceMatrixes.get(0);
+                try {
+                    price = this.dao.getDoubleBillPrice(this.venue);
+                } catch (final BasicException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                LOGGER.info("double bill price: " + price);
+            } else if (isFirstFilmApplicable) {
+                priceMatrix = priceMatrixes.get(0);
                 price = priceSpecial.getPrice();
                 LOGGER.info("firstfilmprice inside if else: " + price);
             } else if (priceMatrixes.size() == 1) {
@@ -806,13 +804,11 @@ public class CinemaReservationMap extends JTicketsBag {
     public void removeFromCart(final Booking booking) {
         this.bookingsCart.remove(booking);
         this.cartPanel.updateCart(this.bookingsCart);
-        if(this.bookingsCart.isEmpty())
-        {
+        if (this.bookingsCart.isEmpty()) {
             // Redirect to the ticket screen.
             final TicketInfo ticket = super.m_panelticket.getActiveTicket();
             super.m_panelticket.setActiveTicket(ticket, null);
         }
-        
 
         // Refresh the map.
         this.onTimeAction();
@@ -953,6 +949,7 @@ public class CinemaReservationMap extends JTicketsBag {
     public void showBookingsDatabase() {
         final BookingsDatabasePopup popup =
             BookingsDatabasePopup.getPopup(this);
+        popup.executeSearch();
         popup.setVisible(true);
     }
 
