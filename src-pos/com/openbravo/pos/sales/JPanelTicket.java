@@ -1460,7 +1460,7 @@ BeanFactoryApp, TicketsEditor {
                 JPanelTicket.this.btnCustomerActionPerformed(evt);
             }
         });
-        this.m_jButtons.add(this.btnCustomer);
+        this.jPanel2.add(this.btnCustomer);
         
         this.btnMembership.setIcon(new javax.swing.ImageIcon(this.getClass()
                 .getResource("/com/openbravo/images/colorize.png"))); // NOI18N
@@ -1475,7 +1475,7 @@ BeanFactoryApp, TicketsEditor {
                     JPanelTicket.this.btnMembershipActionPerformed(evt);
                 }
             });
-            this.m_jButtons.add(this.btnMembership);
+            this.jPanel2.add(this.btnMembership);
 
         this.btnSplit.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/editcut.png"))); // NOI18N
@@ -1629,7 +1629,7 @@ BeanFactoryApp, TicketsEditor {
                     JPanelTicket.this.jEditAttributesActionPerformed(evt);
                 }
             });
-       // this.jPanel2.add(this.jEditAttributes);
+      // this.jPanel2.add(this.jEditAttributes);
 
         this.jPanel5.add(this.jPanel2, java.awt.BorderLayout.NORTH);
 

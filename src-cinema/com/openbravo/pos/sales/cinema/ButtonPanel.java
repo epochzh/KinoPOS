@@ -60,15 +60,7 @@ public class ButtonPanel extends JPanel {
 
         final Insets insets = new Insets(8, 14, 8, 14);
 
-        // BOOKINGS
-
-        final JButton bookings = new JButton();
-        bookings.addActionListener(new BookingsDatabaseAl(this.panel));
-        bookings.setFocusPainted(false);
-        bookings.setFocusable(false);
-        bookings.setIcon(ICON_BOOKINGS);
-        bookings.setMargin(new Insets(8, 14, 8, 14));
-        bookings.setRequestFocusEnabled(false);
+       
 
         // MAP
 
@@ -82,6 +74,16 @@ public class ButtonPanel extends JPanel {
         map.setIcon(ICON_MAP);
         map.setMargin(new Insets(8, 14, 8, 14));
         map.setRequestFocusEnabled(false);
+        
+        // BOOKINGS
+
+        final JButton bookings = new JButton();
+        bookings.addActionListener(new BookingsDatabaseAl(this.panel));
+        bookings.setFocusPainted(false);
+        bookings.setFocusable(false);
+        bookings.setIcon(ICON_BOOKINGS);
+        bookings.setMargin(new Insets(8, 14, 8, 14));
+        bookings.setRequestFocusEnabled(false);
 
         // DELETE
 
@@ -175,8 +177,9 @@ public class ButtonPanel extends JPanel {
 
         this.setSize(700, 100);
 
-        this.add(bookings);
+        
         this.add(map);
+        this.add(bookings);
         this.add(delete);
         for (final JToggleButton button : this.buttons) {
             this.group.add(button);
