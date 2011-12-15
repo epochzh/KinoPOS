@@ -2,6 +2,7 @@ package com.openbravo.pos.sales.cinema;
 
 import com.openbravo.pos.sales.cinema.listener.BookedTicketDetailsAl;
 import com.openbravo.pos.sales.cinema.listener.BookingAddToCartAl;
+import com.openbravo.pos.sales.cinema.listener.BookingAddToTicketAl;
 import com.openbravo.pos.sales.cinema.listener.BookingCancelAl;
 import com.openbravo.pos.sales.cinema.listener.BookingCancelLockedAl;
 import com.openbravo.pos.sales.cinema.model.Booking;
@@ -21,6 +22,7 @@ import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -29,7 +31,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -75,45 +76,11 @@ public class BookingPopup extends JDialog {
     private static final int POPUP_WIDTH = 380;
 
     /**
-     * @param day
-     * @return the suffix of the specified day of the month
-     */
-    private static String getDayOfMonthSuffix(final int day) {
-        if ((day >= 11) && (day <= 13)) {
-            return day + "th";
-        }
-        switch (day % 10) {
-            case 1:
-                return day + "st";
-            case 2:
-                return day + "nd";
-            case 3:
-                return day + "rd";
-            default:
-                return day + "th";
-        }
-    }
-
-    /**
-     * @param parent
-     * @return the Window containing the specified Component
-     */
-    private static Window getWindow(final Component parent) {
-        if (parent == null) {
-            return new JFrame();
-        } else if ((parent instanceof Dialog) || (parent instanceof Frame)) {
-            return (Window) parent;
-        } else {
-            return getWindow(parent.getParent());
-        }
-    }
-
-    /**
      * @param parent
      * @return a new BookedTicketDetailsPopup
      */
     public static BookingPopup getPopup(final Component parent) {
-        final Window window = getWindow(parent);
+        final Window window = CinemaReservationMap.getWindow(parent);
 
         BookingPopup popup;
         if (window instanceof Dialog) {
@@ -125,6 +92,10 @@ public class BookingPopup extends JDialog {
 
         return popup;
     }
+
+    /**
+     */
+    private boolean addToTicket;
 
     /**
      */
@@ -159,11 +130,18 @@ public class BookingPopup extends JDialog {
 
     /**
      */
+    public void addToReceipt() {
+        this.panel.addToReceipt(Arrays.asList(this.booking));
+        this.dispose();
+    }
+
+    /**
+     */
     public void cancel() {
         this.panel.cancelBooking(this.booking);
         this.dispose();
     }
-    
+
     /**
      */
     public void removeLocked() {
@@ -226,8 +204,9 @@ public class BookingPopup extends JDialog {
 
         @SuppressWarnings("deprecation")
         final String date =
-            getDayOfMonthSuffix(this.booking.getDate().getDate()) + " "
-                + DATE_FORMAT.format(this.booking.getDate());
+            CinemaReservationMap.getDayOfMonthSuffix(this.booking.getDate()
+                .getDate())
+                + " " + DATE_FORMAT.format(this.booking.getDate());
 
         final JLabel purchaseDateLabel = new JLabel("Purchase date");
         purchaseDateLabel.setFont(FONT);
@@ -243,8 +222,6 @@ public class BookingPopup extends JDialog {
         } else {
             rows = 6;
         }
-        
-       
 
         final JPanel bookingPanel = new JPanel();
         bookingPanel.setBorder(BORDER);
@@ -309,7 +286,12 @@ public class BookingPopup extends JDialog {
 
             // addToCart
 
-            final BookingAddToCartAl addToCartAl = new BookingAddToCartAl(this);
+            final ActionListener addToCartAl;
+            if (this.addToTicket) {
+                addToCartAl = new BookingAddToTicketAl(this);
+            } else {
+                addToCartAl = new BookingAddToCartAl(this);
+            }
 
             final JButton addToCartButton = new JButton();
             addToCartButton.addActionListener(addToCartAl);
@@ -394,6 +376,20 @@ public class BookingPopup extends JDialog {
     public void print() {
         PrintableDocument.printComponent(this);
         this.dispose();
+    }
+
+    /**
+     * @return the addToTicket
+     */
+    public boolean isAddToTicket() {
+        return this.addToTicket;
+    }
+
+    /**
+     * @param addToTicket the addToTicket to set
+     */
+    public void setAddToTicket(final boolean addToTicket) {
+        this.addToTicket = addToTicket;
     }
 
     /**

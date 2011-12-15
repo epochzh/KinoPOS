@@ -108,7 +108,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getCustomerMetaByPin;
-   
 
     /**
      */
@@ -143,7 +142,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getScreenByNumber;
-    
+
     /**
      */
     private BaseSentence getSpecialEventPrice;
@@ -151,11 +150,18 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getVenue;
-    
+
+    /**
+     */
+    private BaseSentence listBookingByBarcode;
 
     /**
      */
     private BaseSentence listBookingByCustomer;
+
+    /**
+     */
+    private BaseSentence listBookingByCustomerName;
 
     /**
      */
@@ -272,7 +278,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "FROM wp_usermeta " + "WHERE (meta_key = 'ym_pin') "
                     + "AND (meta_value = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(CustomerMeta.class));
-        
 
         this.getEvent =
             new StaticSentence(this.session,
@@ -358,6 +363,18 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "WHERE (venue_name = ?) ", new SerializerWriteBasic(
                     Datas.STRING), new SerializerReadClass(Venue.class));
 
+        this.listBookingByBarcode =
+            new StaticSentence(this.session,
+                "SELECT barcode, collected, userid, purchasename, "
+                    + "purchasetelephone, datepurchased, eventsidfk, id, "
+                    + "price, pricingmatrixidfk, purchasedmethod, "
+                    + "purchasefrom, seatnumber, state "
+                    + "FROM dd_bookings, events " + "WHERE (barcode LIKE ?) "
+                    + "AND (dd_bookings.eventsidfk = events.event_id) "
+                    + "AND (events.start_date >= NOW())",
+                new SerializerWriteBasic(Datas.STRING),
+                new SerializerReadClass(Booking.class));
+
         this.listBookingByCustomer =
             new StaticSentence(this.session,
                 "SELECT barcode, collected, userid, purchasename, "
@@ -366,6 +383,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "purchasefrom, seatnumber, state " + "FROM dd_bookings "
                     + "WHERE (userid = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(Booking.class));
+
+        this.listBookingByCustomerName =
+            new StaticSentence(this.session,
+                "SELECT barcode, collected, userid, purchasename, "
+                    + "purchasetelephone, datepurchased, eventsidfk, id, "
+                    + "price, pricingmatrixidfk, purchasedmethod, "
+                    + "purchasefrom, seatnumber, state " + "FROM dd_bookings "
+                    + "WHERE (purchasename LIKE ?) ", new SerializerWriteBasic(
+                    Datas.STRING), new SerializerReadClass(Booking.class));
 
         this.listBookingByEvent =
             new StaticSentence(this.session,
@@ -459,8 +485,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.STRING, Datas.STRING, Datas.STRING, Datas.STRING,
                     Datas.LONG));
     }
-    
-    
 
     /**
 	 * @return the member
@@ -817,7 +841,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
     /**
      * @param name
-     * @return
+     * @return the {@link Post} associated to the specified name
      * @throws BasicException
      */
     public String getPostByName(final String name) throws BasicException {
@@ -951,9 +975,28 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         return isFirstFilmApplicable;
     }
 
+    /**
+     * @param barcode
+     * @return the list of {@link Booking} matching the specified barcode
+     * @throws BasicException
+     */
+    public List<Booking> listBookingByBarcode(final String barcode)
+    throws BasicException {
+        @SuppressWarnings("unchecked")
+        final List<Booking> bookings =
+            this.listBookingByBarcode.list(barcode, null);
+        for (final Booking booking : bookings) {
+            final Event event = this.getEvent(booking.getEvent().getId());
+            if (event == null) {
+                LOGGER.severe("booking: " + booking);
+                continue;
+            }
+            booking.setEvent(event);
+        }
 
-    
-    
+        return bookings;
+    }
+
     /**
      * @param customer
      * @return the list of {@link Booking} associated to the specified
@@ -972,6 +1015,33 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         for (final Booking booking : bookings) {
             final Event event = this.getEvent(booking.getEvent().getId());
             if (event == null) {
+                LOGGER.severe("booking: " + booking);
+                continue;
+            }
+            booking.setEvent(event);
+        }
+
+        return bookings;
+    }
+
+    /**
+     * @param customerName
+     * @return the list of {@link Booking} matching the specified customerName
+     * @throws BasicException
+     */
+    public List<Booking> listBookingByCustomerName(final String customerName)
+    throws BasicException {
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("customerName: " + customerName);
+        }
+
+        @SuppressWarnings("unchecked")
+        final List<Booking> bookings =
+            this.listBookingByCustomerName.list(customerName, null);
+        for (final Booking booking : bookings) {
+            final Event event = this.getEvent(booking.getEvent().getId());
+            if (event == null) {
+                LOGGER.severe("booking: " + booking);
                 continue;
             }
             booking.setEvent(event);

@@ -118,6 +118,26 @@ public class CinemaReservationMap extends JTicketsBag {
             .getResource("/com/openbravo/images/button_cancel.png"));
 
     /**
+     * @param day
+     * @return the suffix of the specified day of the month
+     */
+    public static String getDayOfMonthSuffix(final int day) {
+        if ((day >= 11) && (day <= 13)) {
+            return day + "th";
+        }
+        switch (day % 10) {
+            case 1:
+                return day + "st";
+            case 2:
+                return day + "nd";
+            case 3:
+                return day + "rd";
+            default:
+                return day + "th";
+        }
+    }
+
+    /**
      * @param component
      * @return the {@link Window} containing the specified {@link Component}
      */
@@ -736,29 +756,7 @@ public class CinemaReservationMap extends JTicketsBag {
             return;
         }
 
-        final BookingState bookingState = booking.getState();
-        if (bookingState == BookingState.LOCKED) {
-            // Nothing to do.
-        	 final BookingPopup popup = BookingPopup.getPopup(this);
-        	 popup.setBooking(booking);
-             popup.setPanel(this);
-             popup.init();
-             popup.setVisible(true);
-        } else if (bookingState == BookingState.RESERVED) {
-            final BookingPopup popup = BookingPopup.getPopup(this);
-            popup.setBooking(booking);
-            popup.setPanel(this);
-            popup.init();
-            popup.setVisible(true);
-        } else if (bookingState == BookingState.TAKEN) {
-            final BookingPopup popup = BookingPopup.getPopup(this);
-            popup.setBooking(booking);
-            popup.setPanel(this);
-            popup.init();
-            popup.setVisible(true);
-        } else {
-            throw new IllegalArgumentException("bookingState: " + bookingState);
-        }
+        this.showBookingPopup(false, booking);
     }
 
     /**
@@ -801,7 +799,7 @@ public class CinemaReservationMap extends JTicketsBag {
         // Refresh the map.
         this.onTimeAction();
     }
-    
+
     /**
      * @param booking
      */
@@ -819,14 +817,28 @@ public class CinemaReservationMap extends JTicketsBag {
         // Refresh the map.
         this.onTimeAction();
     }
-    
-    
 
     /**
      */
     public void addToReceipt() {
         if (this.bookingsCart.isEmpty()) {
             return;
+        }
+
+        this.addToReceipt(this.bookingsCart);
+    }
+
+    /**
+     * @param bookings
+     */
+    public void addToReceipt(final List<Booking> bookings) {
+        if (this.customer == null) {
+            this.customer = bookings.get(0).getCustomer();
+        }
+        if (this.customer == null) {
+            this.customer = new Customer();
+            this.customer.setLastName(bookings.get(0).getCustomerName());
+            this.customer.setPhoneNumber(bookings.get(0).getCustomerPhone());
         }
 
         final CustomerInfoExt customerInfoExt = new CustomerInfoExt(null);
@@ -836,7 +848,7 @@ public class CinemaReservationMap extends JTicketsBag {
         final TicketInfo ticket = super.m_panelticket.getActiveTicket();
         ticket.setCustomer(customerInfoExt);
 
-        for (final Booking booking : this.bookingsCart) {
+        for (final Booking booking : bookings) {
             final TicketLineInfo line = toLine(booking);
 
             ticket.addLine(line);
@@ -938,6 +950,42 @@ public class CinemaReservationMap extends JTicketsBag {
 
     /**
      */
+    public void showBookingsDatabase() {
+        final BookingsDatabasePopup popup =
+            BookingsDatabasePopup.getPopup(this);
+        popup.setVisible(true);
+    }
+
+    /**
+     * @param addToTicket
+     * @param booking
+     */
+    public void showBookingPopup(final boolean addToTicket,
+    final Booking booking) {
+        final BookingState bookingState = booking.getState();
+        if (bookingState == BookingState.LOCKED) {
+            // Nothing to do.
+        } else if (bookingState == BookingState.RESERVED) {
+            final BookingPopup popup = BookingPopup.getPopup(this);
+            popup.setAddToTicket(addToTicket);
+            popup.setBooking(booking);
+            popup.setPanel(this);
+            popup.init();
+            popup.setVisible(true);
+        } else if (bookingState == BookingState.TAKEN) {
+            final BookingPopup popup = BookingPopup.getPopup(this);
+            popup.setAddToTicket(addToTicket);
+            popup.setBooking(booking);
+            popup.setPanel(this);
+            popup.init();
+            popup.setVisible(true);
+        } else {
+            throw new IllegalArgumentException("bookingState: " + bookingState);
+        }
+    }
+
+    /**
+     */
     public void showMap() {
         LOGGER.info("showMap");
 
@@ -952,6 +1000,13 @@ public class CinemaReservationMap extends JTicketsBag {
         this.cartPanel.updateCart(this.bookingsCart);
 
         this.enableDisableComboBoxes();
+    }
+
+    /**
+     * @return the dao
+     */
+    public CinemaDaoImpl getDao() {
+        return this.dao;
     }
 
     /**

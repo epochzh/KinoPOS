@@ -1,5 +1,6 @@
 package com.openbravo.pos.sales.cinema;
 
+import com.openbravo.pos.sales.cinema.listener.BookingsDatabaseAl;
 import com.openbravo.pos.sales.cinema.listener.CancelTicketAl;
 import com.openbravo.pos.sales.cinema.listener.CinemaReservationMapAl;
 import com.openbravo.pos.sales.cinema.listener.PriceTypeAl;
@@ -21,6 +22,11 @@ public class ButtonPanel extends JPanel {
     /**
 	 */
     private static final long serialVersionUID = 4455753454080990706L;
+
+    /**
+     */
+    private static final Icon ICON_BOOKINGS = new ImageIcon(ButtonPanel.class
+        .getResource("/com/openbravo/images/unsortedList.png"));
 
     /**
      */
@@ -54,6 +60,16 @@ public class ButtonPanel extends JPanel {
 
         final Insets insets = new Insets(8, 14, 8, 14);
 
+        // BOOKINGS
+
+        final JButton bookings = new JButton();
+        bookings.addActionListener(new BookingsDatabaseAl(this.panel));
+        bookings.setFocusPainted(false);
+        bookings.setFocusable(false);
+        bookings.setIcon(ICON_BOOKINGS);
+        bookings.setMargin(new Insets(8, 14, 8, 14));
+        bookings.setRequestFocusEnabled(false);
+
         // MAP
 
         final CinemaReservationMapAl mapListener =
@@ -67,8 +83,10 @@ public class ButtonPanel extends JPanel {
         map.setMargin(new Insets(8, 14, 8, 14));
         map.setRequestFocusEnabled(false);
 
+        // DELETE
+
         final JButton delete = new JButton();
-        delete.addActionListener(new CancelTicketAl(panel));
+        delete.addActionListener(new CancelTicketAl(this.panel));
         delete.setFocusPainted(false);
         delete.setFocusable(false);
         delete.setIcon(ICON_DELETE);
@@ -157,6 +175,7 @@ public class ButtonPanel extends JPanel {
 
         this.setSize(700, 100);
 
+        this.add(bookings);
         this.add(map);
         this.add(delete);
         for (final JToggleButton button : this.buttons) {
