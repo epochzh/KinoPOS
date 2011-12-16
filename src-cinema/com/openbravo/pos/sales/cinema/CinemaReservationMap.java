@@ -972,7 +972,11 @@ public class CinemaReservationMap extends JTicketsBag {
     final Booking booking) {
         final BookingState bookingState = booking.getState();
         if (bookingState == BookingState.LOCKED) {
-            // Nothing to do.
+            final BookingPopup popup = BookingPopup.getPopup(this);
+            popup.setBooking(booking);
+            popup.setPanel(this);
+            popup.init();
+            popup.setVisible(true);
         } else if (bookingState == BookingState.RESERVED) {
             final BookingPopup popup = BookingPopup.getPopup(this);
             popup.setAddToTicket(addToTicket);
@@ -1027,8 +1031,7 @@ public class CinemaReservationMap extends JTicketsBag {
         final List<String> dateStrings = new ArrayList<String>(21);
 
         // TODO: Remove the static values.
-        final List<Date> dates =
-            this.dao.listDateThreeWeeks(new Date());
+        final List<Date> dates = this.dao.listDateThreeWeeks(new Date());
         for (final Date date : dates) {
             dateStrings.add(DATE_FORMAT.format(date));
         }
