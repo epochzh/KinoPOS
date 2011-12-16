@@ -876,8 +876,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             (Postmeta) this.getPostMeta.find(post.getId(), "certificate");
 
         final String status =
-            "run time: " + runTime.getMetaValue() + " mins / "
-                + "certificate: " + certificate.getMetaValue();
+            runTime.getMetaValue() + " mins / cert: " + certificate.getMetaValue();
 
         return status;
     }

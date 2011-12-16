@@ -311,7 +311,7 @@ public class BookingsDatabasePopup extends JDialog {
         this.okButton = new javax.swing.JButton();
 
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.setTitle("Bookings list");
+        this.setTitle("Bookings Database");
 
         this.jPanel2.setLayout(new java.awt.BorderLayout());
         this.jPanel2.add(this.editorKeys, java.awt.BorderLayout.NORTH);
