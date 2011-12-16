@@ -1079,6 +1079,25 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         return bookings;
     }
+    
+    /**
+     * @return the list of {@link Booking}
+     * @throws BasicException
+     */
+    public List<Booking> listBookingByEvent(final Long evId) throws BasicException {
+        @SuppressWarnings("unchecked")
+        final List<Booking> bookings = this.listBookingByEvent.list(evId, null);
+        for (final Booking booking : bookings) {
+            final Event event = this.getEvent(booking.getEvent().getId());
+            if (event == null) {
+                LOGGER.severe("booking: " + booking);
+                continue;
+            }
+            booking.setEvent(event);
+        }
+
+        return bookings;
+    }
 
     /**
      * @return the list of {@link Booking}

@@ -8,6 +8,8 @@ import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.sales.JPanelTicket;
 import com.openbravo.pos.sales.JTicketsBag;
 import com.openbravo.pos.sales.TicketsEditor;
+import com.openbravo.pos.sales.cinema.listener.BookingDatabaseEventAl;
+import com.openbravo.pos.sales.cinema.listener.BookingsDatabaseAl;
 import com.openbravo.pos.sales.cinema.listener.CancelReservedAl;
 import com.openbravo.pos.sales.cinema.listener.CartCancelAl;
 import com.openbravo.pos.sales.cinema.listener.DateCbAl;
@@ -952,6 +954,15 @@ public class CinemaReservationMap extends JTicketsBag {
         popup.executeSearch();
         popup.setVisible(true);
     }
+    
+    /**
+     */
+    public void showBookingsDatabaseEvent() {
+        final BookingsDatabasePopup popup =
+            BookingsDatabasePopup.getPopup(this);
+        popup.executeSearchEvent(this.event.getId());
+        popup.setVisible(true);
+    }
 
     /**
      * @param addToTicket
@@ -1074,7 +1085,7 @@ public class CinemaReservationMap extends JTicketsBag {
          * this film
          */
         final JButton bookingsButton = new JButton();
-        // ticketBookingsButton.addActionListener(new CancelReservedAl(this));
+        bookingsButton.addActionListener(new BookingDatabaseEventAl(this));
         bookingsButton.setFocusable(false);
         bookingsButton.setFocusPainted(false);
         bookingsButton.setMargin(new Insets(6, 6, 6, 6));

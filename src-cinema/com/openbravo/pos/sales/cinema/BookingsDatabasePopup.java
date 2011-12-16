@@ -4,6 +4,7 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.sales.cinema.model.Booking;
+import com.openbravo.pos.sales.cinema.model.Event;
 
 import java.awt.Component;
 import java.awt.Dialog;
@@ -272,6 +273,38 @@ public class BookingsDatabasePopup extends JDialog {
                 bookings = this.dao.listBookingByCustomerName(customerName);
             } else {
                 bookings = this.dao.listBookingByToday();
+            }
+        } catch (final BasicException ex) {
+            new MessageInf(ex).show(this);
+            return;
+        }
+
+        this.bookingsTable.setModel(new BookingsTableModel(bookings));
+
+        this.jScrollPane1.setViewportView(this.bookingsTable);
+    }
+    
+    /**
+     */
+    public void executeSearchEvent(final Long evId) {
+        String barcode = this.barcodeTF.getText();
+        String customerName = this.customerNameTF.getText();
+
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("barcode: " + barcode);
+            LOGGER.info("customerName: " + customerName);
+        }
+
+        final List<Booking> bookings;
+        try {
+            if (StringUtils.isNotEmpty(barcode)) {
+                barcode = "%" + barcode + "%";
+                bookings = this.dao.listBookingByBarcode(barcode);
+            } else if (StringUtils.isNotEmpty(customerName)) {
+                customerName = "%" + customerName + "%";
+                bookings = this.dao.listBookingByCustomerName(customerName);
+            } else {
+                bookings = this.dao.listBookingByEvent(evId);
             }
         } catch (final BasicException ex) {
             new MessageInf(ex).show(this);
