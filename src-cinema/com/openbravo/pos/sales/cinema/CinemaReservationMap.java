@@ -960,6 +960,7 @@ public class CinemaReservationMap extends JTicketsBag {
     public void showBookingsDatabaseEvent() {
         final BookingsDatabasePopup popup =
             BookingsDatabasePopup.getPopup(this);
+        popup.setEvent(true);
         popup.executeSearchEvent(this.event.getId());
         popup.setVisible(true);
     }
