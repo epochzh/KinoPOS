@@ -291,7 +291,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "  + "AND details='published' "
                     + "AND (event_id = ?) ", new SerializerWriteBasic(
                     Datas.LONG), new SerializerReadClass(Event.class));
 
@@ -300,7 +300,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
                     + "AND (venue = ?) " + "AND (event_name = ?) "
                     + "AND (start_date = ?) ", new SerializerWriteBasic(
                     Datas.LONG, Datas.STRING, Datas.TIMESTAMP),
@@ -311,7 +311,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
                     + "AND (venue = ?) " + "AND (start_date >= ?) "
                     + "AND (end_date < ?) " + "ORDER BY start_date ASC LIMIT 1",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
@@ -326,7 +326,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
-                    + "AND (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
                     + "AND (start_date >= ?) " + "ORDER BY start_date ASC ",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING),
                 new SerializerReadClass(Event.class));
@@ -450,7 +450,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
                     + "AND (venue = ?) " + "AND (start_date >= ?) "
                     + "AND (end_date < ?) " + "ORDER BY event_name ASC ",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
@@ -461,7 +461,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
                     + "AND (event_type = 'film' or event_type LIKE 'event%') "
-                    + "AND (event_name = ?) " + "AND (start_date >= ?) "
+                    + "AND (event_name = ?) " + "AND (start_date >= ?) " + "AND details='published' "
                     + "AND (end_date < ?) " + "ORDER BY start_date ASC ",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING,
                     Datas.TIMESTAMP, Datas.STRING), new SerializerReadClass(
