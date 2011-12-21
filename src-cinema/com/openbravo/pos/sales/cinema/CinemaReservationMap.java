@@ -164,10 +164,22 @@ public class CinemaReservationMap extends JTicketsBag {
         final double dMultiply = 1.0;
         final double dPrice = booking.getPrice();
         final TaxInfo tax = null;
-
+        final String barcode = booking.getBarcode();
+        final Date bookingDate = booking.getEvent().getDateBegin();
+        final Date todaysDate = new Date();
+        final SimpleDateFormat filmDate = new SimpleDateFormat("E MM MMM yyyy");
+        final SimpleDateFormat filmTime = new SimpleDateFormat("HH:mm");
+        final SimpleDateFormat today = new SimpleDateFormat("dd MMM yyyy HH:mm");
+		String bookingDatePart = filmDate.format(bookingDate);
+		String bookingTimePart = filmTime.format(bookingDate);
+		String printTodaysDate = today.format(todaysDate);
+		String seat = booking.getSeatCoordinates();
+		Byte screen = booking.getEvent().getScreen().getNumber();
+		final String venue = "Hawkhurst";
         final TicketLineInfo line =
             new TicketLineInfo(productname, producttaxcategory, dMultiply,
-                dPrice, tax);
+                dPrice, tax, barcode, bookingDatePart, bookingTimePart, Byte.toString(screen), venue, printTodaysDate,
+                seat);
         // final TicketLineInfo line =
         // new TicketLineInfo(productid, productname, producttaxcategory,
         // dMultiply, dPrice, tax);
