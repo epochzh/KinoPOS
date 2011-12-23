@@ -115,10 +115,6 @@ public class BookingsDatabasePopup extends JDialog {
 
     /**
      */
-    /**
-     * @author Jordan Carlile
-     *
-     */
     private static class BookingsTableModel extends AbstractTableModel {
 
         /**
@@ -144,8 +140,6 @@ public class BookingsDatabasePopup extends JDialog {
         /**
          */
         private final List<Booking> bookings;
-        
-        
 
         /**
          * @param bookings
@@ -177,9 +171,8 @@ public class BookingsDatabasePopup extends JDialog {
         public String getColumnName(final int column) {
             return COLUMN_NAMES[column];
         }
-        
 
-		/**
+        /**
          * @see javax.swing.table.TableModel#getValueAt(int, int)
          */
         @Override
@@ -219,7 +212,7 @@ public class BookingsDatabasePopup extends JDialog {
         public List<Booking> getBookings() {
             return this.bookings;
         }
-    } // end of class
+    }
 
     /**
      */
@@ -476,11 +469,10 @@ public class BookingsDatabasePopup extends JDialog {
         this.bookingsTable.setRowHeight(32);
         if(this.isEvent()){
         this.bookingsTable.addMouseListener(new java.awt.event.MouseAdapter() {
-		
+
             @Override
             public void mouseClicked(final java.awt.event.MouseEvent evt) {
-            
-                BookingsDatabasePopup.this.bookingsTableMouseClickedEvent();
+                BookingsDatabasePopup.this.bookingsTableMouseClicked();
             }
         });
         }else{

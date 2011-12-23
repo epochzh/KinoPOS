@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<output>
+  <ticket>
+    <line></line>
+    <line>
+      <text align="left" length="15">Date:</text>
+      <text>${booking.getDate()}</text>
+    </line>
+    #if ($booking.getCustomer().getId())
+    <line>
+      <text align="left" length="15">Customer:</text>
+      <text>${booking.getCustomer().getLastName()}</text>
+    </line>
+    #end
+    <line>
+      <text>------------------------------------------</text>
+    </line>
+    <line>
+      <text align="left" length="15">Barcode:</text>
+      <text>${booking.getBarcode()}</text>
+    </line>
+    <line></line>
+    <barcode type="EAN13">${booking.getBarcode()}</barcode>
+    <line></line>
+    <line>
+      <text align="left" length="15">Collected:</text>
+      <text>${booking.getCollected()}</text>
+    </line>
+  </ticket>
+</output>

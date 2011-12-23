@@ -155,6 +155,20 @@ public class Booking implements IKeyed, Serializable, SerializableRead {
     }
 
     /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[");
+        sb.append(" id=").append(this.id);
+        sb.append(" barcode=").append(this.barcode);
+        sb.append(" collected=").append(this.collected);
+        sb.append(" date=").append(this.date);
+        sb.append(" ]");
+        return sb.toString();
+    }
+
+    /**
      * @return the barcode
      */
     public String getBarcode() {

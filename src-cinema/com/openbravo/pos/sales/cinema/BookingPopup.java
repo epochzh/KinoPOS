@@ -1,5 +1,11 @@
 package com.openbravo.pos.sales.cinema;
 
+import com.openbravo.data.gui.MessageInf;
+import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.AppView;
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.pos.printer.TicketParser;
+import com.openbravo.pos.printer.TicketPrinterException;
 import com.openbravo.pos.sales.cinema.listener.BookedTicketDetailsAl;
 import com.openbravo.pos.sales.cinema.listener.BookingAddToCartAl;
 import com.openbravo.pos.sales.cinema.listener.BookingAddToTicketAl;
@@ -7,6 +13,9 @@ import com.openbravo.pos.sales.cinema.listener.BookingCancelAl;
 import com.openbravo.pos.sales.cinema.listener.BookingCancelLockedAl;
 import com.openbravo.pos.sales.cinema.model.Booking;
 import com.openbravo.pos.sales.cinema.model.BookingState;
+import com.openbravo.pos.scripting.ScriptEngine;
+import com.openbravo.pos.scripting.ScriptException;
+import com.openbravo.pos.scripting.ScriptFactory;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -23,6 +32,8 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,6 +54,11 @@ public class BookingPopup extends JDialog {
     /**
 	 */
     private static final long serialVersionUID = 8769824653070686584L;
+
+    /**
+     */
+    private static final Logger LOGGER = Logger.getLogger(BookingPopup.class
+        .getName());
 
     /**
      */
@@ -96,6 +112,10 @@ public class BookingPopup extends JDialog {
     /**
      */
     private boolean addToTicket;
+
+    /**
+     */
+    private AppView appView;
 
     /**
      */
@@ -375,7 +395,33 @@ public class BookingPopup extends JDialog {
     /**
      */
     public void print() {
-        PrintableDocument.printComponent(this);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("booking: " + this.booking);
+        }
+
+        final DataLogicSystem dlSystem =
+            (DataLogicSystem) this.appView
+                .getBean("com.openbravo.pos.forms.DataLogicSystem");
+        final TicketParser parser =
+            new TicketParser(this.appView.getDeviceTicket(), dlSystem);
+        final String sresource = dlSystem.getResourceAsXML("Printer.Booking");
+        try {
+            final ScriptEngine script =
+                ScriptFactory.getScriptEngine(ScriptFactory.VELOCITY);
+            script.put("booking", this.booking);
+            parser.printTicket(script.eval(sresource).toString());
+        } catch (final ScriptException e) {
+            final MessageInf msg =
+                new MessageInf(MessageInf.SGN_WARNING, AppLocal
+                    .getIntString("message.cannotprintticket"), e);
+            msg.show(this);
+        } catch (final TicketPrinterException e) {
+            final MessageInf msg =
+                new MessageInf(MessageInf.SGN_WARNING, AppLocal
+                    .getIntString("message.cannotprintticket"), e);
+            msg.show(this);
+        }
+        // PrintableDocument.printComponent(this);
         this.dispose();
     }
 
@@ -391,6 +437,20 @@ public class BookingPopup extends JDialog {
      */
     public void setAddToTicket(final boolean addToTicket) {
         this.addToTicket = addToTicket;
+    }
+
+    /**
+     * @return the appView
+     */
+    public AppView getAppView() {
+        return this.appView;
+    }
+
+    /**
+     * @param appView the appView to set
+     */
+    public void setAppView(final AppView appView) {
+        this.appView = appView;
     }
 
     /**

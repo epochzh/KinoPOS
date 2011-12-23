@@ -9,7 +9,6 @@ import com.openbravo.pos.sales.JPanelTicket;
 import com.openbravo.pos.sales.JTicketsBag;
 import com.openbravo.pos.sales.TicketsEditor;
 import com.openbravo.pos.sales.cinema.listener.BookingDatabaseEventAl;
-import com.openbravo.pos.sales.cinema.listener.BookingsDatabaseAl;
 import com.openbravo.pos.sales.cinema.listener.CancelReservedAl;
 import com.openbravo.pos.sales.cinema.listener.CartCancelAl;
 import com.openbravo.pos.sales.cinema.listener.DateCbAl;
@@ -169,17 +168,18 @@ public class CinemaReservationMap extends JTicketsBag {
         final Date todaysDate = new Date();
         final SimpleDateFormat filmDate = new SimpleDateFormat("E MM MMM yyyy");
         final SimpleDateFormat filmTime = new SimpleDateFormat("HH:mm");
-        final SimpleDateFormat today = new SimpleDateFormat("dd MMM yyyy HH:mm");
-		String bookingDatePart = filmDate.format(bookingDate);
-		String bookingTimePart = filmTime.format(bookingDate);
-		String printTodaysDate = today.format(todaysDate);
-		String seat = booking.getSeatCoordinates();
-		Byte screen = booking.getEvent().getScreen().getNumber();
-		final String venue = "Hawkhurst";
+        final SimpleDateFormat today =
+            new SimpleDateFormat("dd MMM yyyy HH:mm");
+        final String bookingDatePart = filmDate.format(bookingDate);
+        final String bookingTimePart = filmTime.format(bookingDate);
+        final String printTodaysDate = today.format(todaysDate);
+        final String seat = booking.getSeatCoordinates();
+        final Byte screen = booking.getEvent().getScreen().getNumber();
+        final String venue = "Hawkhurst";
         final TicketLineInfo line =
             new TicketLineInfo(productname, producttaxcategory, dMultiply,
-                dPrice, tax, barcode, bookingDatePart, bookingTimePart, Byte.toString(screen), venue, printTodaysDate,
-                seat);
+                dPrice, tax, barcode, bookingDatePart, bookingTimePart, Byte
+                    .toString(screen), venue, printTodaysDate, seat);
         // final TicketLineInfo line =
         // new TicketLineInfo(productid, productname, producttaxcategory,
         // dMultiply, dPrice, tax);
@@ -966,7 +966,7 @@ public class CinemaReservationMap extends JTicketsBag {
         popup.executeSearch();
         popup.setVisible(true);
     }
-    
+
     /**
      */
     public void showBookingsDatabaseEvent() {
@@ -986,6 +986,7 @@ public class CinemaReservationMap extends JTicketsBag {
         final BookingState bookingState = booking.getState();
         if (bookingState == BookingState.LOCKED) {
             final BookingPopup popup = BookingPopup.getPopup(this);
+            popup.setAppView(this.m_App);
             popup.setBooking(booking);
             popup.setPanel(this);
             popup.init();
@@ -993,6 +994,7 @@ public class CinemaReservationMap extends JTicketsBag {
         } else if (bookingState == BookingState.RESERVED) {
             final BookingPopup popup = BookingPopup.getPopup(this);
             popup.setAddToTicket(addToTicket);
+            popup.setAppView(this.m_App);
             popup.setBooking(booking);
             popup.setPanel(this);
             popup.init();
@@ -1000,6 +1002,7 @@ public class CinemaReservationMap extends JTicketsBag {
         } else if (bookingState == BookingState.TAKEN) {
             final BookingPopup popup = BookingPopup.getPopup(this);
             popup.setAddToTicket(addToTicket);
+            popup.setAppView(this.m_App);
             popup.setBooking(booking);
             popup.setPanel(this);
             popup.init();
