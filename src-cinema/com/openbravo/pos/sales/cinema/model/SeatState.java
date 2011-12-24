@@ -22,7 +22,12 @@ public enum SeatState {
     /**
      * A bookable seat which can be removed for a wheelchair.
      */
-    WHEELCHAIR((byte) 2);
+    WHEELCHAIR((byte) 2),
+    
+    /**
+     * A bookable seat which can be removed for a wheelchair.
+     */
+    GAP((byte) 4);
 
     /**
      * @param state

@@ -66,6 +66,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -617,21 +618,35 @@ public class CinemaReservationMap extends JTicketsBag {
         }
 
         final byte rows = this.event.getScreen().getNbOfRows();
-        final byte cols = this.event.getScreen().getNbOfCols();
-
+        final int cols = this.event.getScreen().getNbOfCols().intValue();
+        int newCols;
         LOGGER.info("rows: " + rows + ", cols: " + cols);
 
         final JPanel seatPanel = new JPanel();
         seatPanel.setLayout(new GridLayout(rows, cols));
         seatPanel.setBackground(COLOR_BACKGROUND);
-
+        
+        String lastSeat = "";
+        
         for (int i = 0; i < rows; ++i) {
             final char row = (char) (i + 65);
-
-            for (int j = 1; j <= cols; ++j) {
+            newCols = cols;
+            for (int j = 1; j <= newCols; ++j) {
+            	
                 final String key = row + String.valueOf(j);
                 final Seat seat = map.get(key);
                 seatPanel.add(this.toComponent(seat));
+                lastSeat = row + String.valueOf(j);
+                
+                if(lastSeat.equals("E2") || lastSeat.equals("F2") || lastSeat.equals("G2") || lastSeat.equals("H2"))
+            	{
+            		Integer seatValue = 4;
+            		SeatState seatState = SeatState.fromState(seatValue.byteValue());
+            		final Seat seatGap = new Seat();
+            		seatGap.setState(seatState);
+            		seatPanel.add(this.toComponent(seatGap));
+            		newCols--;
+            	}
             }
         }
 
@@ -1259,6 +1274,10 @@ public class CinemaReservationMap extends JTicketsBag {
             label.setHorizontalAlignment(SwingConstants.CENTER);
 
             component = label;
+        } else if (seatState == SeatState.GAP) {
+        	final JLabel label = new JLabel();
+
+            component = label;
         } else if (seatState == SeatState.NO_SEAT) {
             final JLabel label = new JLabel();
 
@@ -1271,4 +1290,6 @@ public class CinemaReservationMap extends JTicketsBag {
 
         return component;
     }
+    
+    
 }
