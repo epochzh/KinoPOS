@@ -65,6 +65,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.print.PrintService;
 import javax.swing.JComponent;
@@ -105,6 +107,11 @@ BeanFactoryApp, TicketsEditor {
     private final static int NUMBER_PORINT = 6;
 
     private final static int NUMBER_PORDEC = 7;
+
+    /**
+     */
+    private static final Logger LOGGER = Logger.getLogger(JPanelTicket.class
+        .getName());
 
     protected JTicketLines m_ticketlines;
 
@@ -1265,6 +1272,9 @@ BeanFactoryApp, TicketsEditor {
     final Object ticketext, final String eventkey, final ScriptArg... args) {
 
         final String resource = this.m_jbtnconfig.getEvent(eventkey);
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("eventkey: " + eventkey + ", resource: " + resource);
+        }
         if (resource == null) {
             return null;
         } else {
@@ -1461,21 +1471,23 @@ BeanFactoryApp, TicketsEditor {
             }
         });
         this.jPanel2.add(this.btnCustomer);
-        
+
         this.btnMembership.setIcon(new javax.swing.ImageIcon(this.getClass()
-                .getResource("/com/openbravo/images/colorize.png"))); // NOI18N
-            this.btnMembership.setFocusPainted(false);
-            this.btnMembership.setFocusable(false);
-            this.btnMembership.setMargin(new java.awt.Insets(8, 14, 8, 14));
-            this.btnMembership.setRequestFocusEnabled(false);
-            this.btnMembership.addActionListener(new java.awt.event.ActionListener() {
+            .getResource("/com/openbravo/images/colorize.png"))); // NOI18N
+        this.btnMembership.setFocusPainted(false);
+        this.btnMembership.setFocusable(false);
+        this.btnMembership.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        this.btnMembership.setRequestFocusEnabled(false);
+        this.btnMembership
+            .addActionListener(new java.awt.event.ActionListener() {
 
                 @Override
-                public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                public void
+                actionPerformed(final java.awt.event.ActionEvent evt) {
                     JPanelTicket.this.btnMembershipActionPerformed(evt);
                 }
             });
-            this.jPanel2.add(this.btnMembership);
+        this.jPanel2.add(this.btnMembership);
 
         this.btnSplit.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/editcut.png"))); // NOI18N
@@ -1597,7 +1609,7 @@ BeanFactoryApp, TicketsEditor {
                 JPanelTicket.this.m_jListActionPerformed(evt);
             }
         });
-        //this.jPanel2.add(this.m_jList);
+        // this.jPanel2.add(this.m_jList);
 
         this.m_jEditLine.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/color_line.png"))); // NOI18N
@@ -1612,7 +1624,7 @@ BeanFactoryApp, TicketsEditor {
                 JPanelTicket.this.m_jEditLineActionPerformed(evt);
             }
         });
-        //this.jPanel2.add(this.m_jEditLine);
+        // this.jPanel2.add(this.m_jEditLine);
 
         this.jEditAttributes.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/colorize.png"))); // NOI18N
@@ -1629,7 +1641,7 @@ BeanFactoryApp, TicketsEditor {
                     JPanelTicket.this.jEditAttributesActionPerformed(evt);
                 }
             });
-      // this.jPanel2.add(this.jEditAttributes);
+        // this.jPanel2.add(this.jEditAttributes);
 
         this.jPanel5.add(this.jPanel2, java.awt.BorderLayout.NORTH);
 
@@ -1780,7 +1792,7 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-       // this.jPanel9.add(this.m_jPrice, gridBagConstraints);
+        // this.jPanel9.add(this.m_jPrice, gridBagConstraints);
 
         this.m_jPor.setBackground(java.awt.Color.white);
         this.m_jPor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -1798,7 +1810,7 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-       // this.jPanel9.add(this.m_jPor, gridBagConstraints);
+        // this.jPanel9.add(this.m_jPor, gridBagConstraints);
 
         this.m_jEnter.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/barcode.png"))); // NOI18N
@@ -1820,7 +1832,7 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-        //this.jPanel9.add(this.m_jEnter, gridBagConstraints);
+        // this.jPanel9.add(this.m_jEnter, gridBagConstraints);
 
         this.m_jTax.setFocusable(false);
         this.m_jTax.setRequestFocusEnabled(false);
@@ -1993,11 +2005,11 @@ BeanFactoryApp, TicketsEditor {
         this.refreshTicket();
 
     }// GEN-LAST:event_btnCustomerActionPerformed
-    
-    private void
-    btnMembershipActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCustomerActionPerformed
+
+    private void btnMembershipActionPerformed(
+    final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCustomerActionPerformed
         // XXX: CINEMA
-    	// XXX: CINEMA
+        // XXX: CINEMA
         final String ticketsbag =
             this.m_App.getProperties().getProperty("machine.ticketsbag");
         if ("cinema".equals(ticketsbag)) {
@@ -2052,7 +2064,6 @@ BeanFactoryApp, TicketsEditor {
         }
 
     }// GEN-LAST:event_btnSplitActionPerformed
-    
 
     private void jEditAttributesActionPerformed(
     final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jEditAttributesActionPerformed
@@ -2090,7 +2101,7 @@ BeanFactoryApp, TicketsEditor {
     private javax.swing.JButton btnCustomer;
 
     private javax.swing.JButton btnSplit;
-    
+
     private javax.swing.JButton btnMembership;
 
     private javax.swing.JPanel catcontainer;

@@ -157,6 +157,9 @@ public class JPanelButtons extends javax.swing.JPanel {
                 add(btn);
                 
             } else if ("event".equals(qName)) {
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.info("event: " + attributes.getValue("key") + ", code: " + attributes.getValue("code"));
+                }
                 events.put(attributes.getValue("key"), attributes.getValue("code"));
             } else {
                 String value = attributes.getValue("value");
