@@ -317,9 +317,9 @@ public class MemberPopup extends JDialog {
         this.jPanel5.setLayout(new java.awt.BorderLayout());
 
         this.firstNameLabel.setText("First Name *");
-        this.firstName2Label.setText("First Name 2 *");
+        this.firstName2Label.setText("2nd Person First Name *");
         this.lastNameLabel.setText("Last Name *");
-        this.lastName2Label.setText("Last Name 2 *");
+        this.lastName2Label.setText("2nd Person Last Name 2 *");
         this.address1Label.setText("Address Line 1 *");
         this.address2Label.setText("Address Line 2");
         this.cityLabel.setText("Town/City *");
@@ -328,7 +328,7 @@ public class MemberPopup extends JDialog {
         this.telephoneLabel.setText("Main Telephone *");
         this.mobileLabel.setText("Mobile No.");
         this.dobLabel.setText("DOB (mm-dd-yyyy) *");
-        this.dob2Label.setText("DOB 2 (mm-dd-yyyy) *");
+        this.dob2Label.setText("2nd Person  DOB 2 (mm-dd-yyyy) *");
         
         this.firstName2TF.setEnabled(false);
         this.lastName2TF.setEnabled(false);

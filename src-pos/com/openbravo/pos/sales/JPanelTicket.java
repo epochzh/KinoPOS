@@ -1461,7 +1461,7 @@ BeanFactoryApp, TicketsEditor {
             .getResource("/com/openbravo/images/kuser.png"))); // NOI18N
         this.btnCustomer.setFocusPainted(false);
         this.btnCustomer.setFocusable(false);
-        this.btnCustomer.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        this.btnCustomer.setMargin(new java.awt.Insets(20, 26, 20, 26));
         this.btnCustomer.setRequestFocusEnabled(false);
         this.btnCustomer.addActionListener(new java.awt.event.ActionListener() {
 

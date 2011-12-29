@@ -58,7 +58,7 @@ public class ButtonPanel extends JPanel {
 
         this.panel = panel;
 
-        final Insets insets = new Insets(8, 14, 8, 14);
+        final Insets insets = new Insets(15, 18, 15, 18);
 
         // MAP
 
@@ -70,7 +70,7 @@ public class ButtonPanel extends JPanel {
         map.setFocusPainted(false);
         map.setFocusable(false);
         map.setIcon(ICON_MAP);
-        map.setMargin(new Insets(8, 14, 8, 14));
+        map.setMargin(new Insets(15, 18, 15, 18));
         map.setRequestFocusEnabled(false);
 
         // BOOKINGS
@@ -80,7 +80,7 @@ public class ButtonPanel extends JPanel {
         bookings.setFocusPainted(false);
         bookings.setFocusable(false);
         bookings.setIcon(ICON_BOOKINGS);
-        bookings.setMargin(new Insets(8, 14, 8, 14));
+        bookings.setMargin(new Insets(15, 18, 15, 18));
         bookings.setRequestFocusEnabled(false);
 
         // DELETE
@@ -90,7 +90,7 @@ public class ButtonPanel extends JPanel {
         delete.setFocusPainted(false);
         delete.setFocusable(false);
         delete.setIcon(ICON_DELETE);
-        delete.setMargin(new Insets(8, 14, 8, 14));
+        delete.setMargin(new Insets(15, 18, 15, 18));
         delete.setRequestFocusEnabled(false);
 
         // GOLD
