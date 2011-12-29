@@ -584,6 +584,49 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
     }
+    
+    /**
+     * create 2 silver users
+     * @param newMember
+     * @throws BasicException 
+     */
+    public void createWpJointUsers(Member newMember) throws BasicException {
+    	if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("newMember: " + newMember);
+        }
+    	
+    	for(int i=1; i<=2; i++){
+    		
+    		// create the 2 users
+    		
+	        this.member = this.splitJointMembers(newMember, i);
+	        final Date todaysDate = new Date();
+	        final long time = todaysDate.getTime();
+	        this.member.setRegisteredDate(new Timestamp(time));
+	        this.member.setMemberShipType("silver membership");
+	
+	        // TODO: get the price of a membership
+	        // this.getMembershipPrice();
+	
+	        this.createWpUser.exec(this.member.getNickname(), this.member
+	            .getRegisteredDate());
+	
+	        final Member lastMemberId =
+	            (Member) this.getLastInsertedMemberId.find(this.member
+	                .getRegisteredDate(), null);
+	        this.member.setId(lastMemberId.getId());
+	
+	        LOGGER.info("LAST ID: " + lastMemberId.getId());
+	
+	        // create the wp_usermeta
+	        // this.createUserMeta();
+	        final Map<String, String> meta = this.member.populateMap();
+	        this.createUserMeta(meta);
+	
+	        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+    	}
+		
+	}
 
     /**
      * @param meta
@@ -595,6 +638,43 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         for (final String key : set) {
             this.createUserMeta.exec(this.member.getId(), key, meta.get(key));
         }
+    }
+    
+    /**
+     * takes the joint memberships and creates 2 accounts
+     */
+    private Member splitJointMembers(Member newMember, int oneOrTwo){
+    	if(oneOrTwo == 1){
+    		// first member
+    		Member firstMember = new Member();
+    		firstMember.setFirstName(newMember.getFirstName());
+    		firstMember.setLastName(newMember.getLastName());
+    		firstMember.setAddress1(newMember.getAddress1());
+    		firstMember.setAddress2(newMember.getAddress2());
+    		firstMember.setCity(newMember.getCity());
+    		firstMember.setMemberShipType("silver membership");
+    		firstMember.setPostcode(newMember.getPostcode());
+    		firstMember.setTelephone(newMember.getTelephone());
+    		firstMember.setMobile(newMember.getMobile());
+    		firstMember.setDob(newMember.getDob());
+    		
+    		return firstMember;
+    	}else{
+    		// second member
+    		Member secondMember = new Member();
+    		secondMember.setFirstName(newMember.getFirstName2());
+    		secondMember.setLastName(newMember.getLastName2());
+    		secondMember.setAddress1(newMember.getAddress1());
+    		secondMember.setAddress2(newMember.getAddress2());
+    		secondMember.setCity(newMember.getCity());
+    		secondMember.setMemberShipType("silver members");
+    		secondMember.setPostcode(newMember.getPostcode());
+    		secondMember.setTelephone(newMember.getTelephone());
+    		secondMember.setMobile(newMember.getMobile());
+    		secondMember.setDob(newMember.getDob2());
+    		
+    		return secondMember;
+    	}
     }
 
     /**
@@ -1520,4 +1600,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         return price.getPrice();
     }
+
+	
 }

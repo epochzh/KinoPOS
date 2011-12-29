@@ -1,5 +1,6 @@
 package com.openbravo.pos.sales.cinema;
 
+import com.openbravo.basic.BasicException;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.sales.cinema.model.Member;
@@ -65,6 +66,26 @@ public class MemberPopup extends JDialog {
 
     /**
      */
+    private java.awt.event.ActionListener membershipAction = new java.awt.event.ActionListener() {
+
+        @Override
+        public void
+        actionPerformed(final java.awt.event.ActionEvent evt) {
+            MemberPopup.this.search();
+        }
+    };
+    
+    /**
+     * 
+     */
+    private java.awt.event.ActionListener jointMembershipAction = new java.awt.event.ActionListener() {
+
+        @Override
+        public void
+        actionPerformed(final java.awt.event.ActionEvent evt) {
+            MemberPopup.this.jointMembership();
+        };
+    };
 
     /**
      */
@@ -102,7 +123,10 @@ public class MemberPopup extends JDialog {
             new Dimension(35, 35));
 
         this.firstNameTF.addEditorKeys(this.editorKeys);
+        this.firstName2TF.addEditorKeys(this.editorKeys);
         this.lastNameTF.addEditorKeys(this.editorKeys);
+        this.dob2TF.addEditorKeys(this.editorKeys);
+        this.lastName2TF.addEditorKeys(this.editorKeys);
         this.address1TF.addEditorKeys(this.editorKeys);
         this.address2TF.addEditorKeys(this.editorKeys);
         this.cityTF.addEditorKeys(this.editorKeys);
@@ -110,11 +134,14 @@ public class MemberPopup extends JDialog {
         this.telephoneTF.addEditorKeys(this.editorKeys);
         this.mobileTF.addEditorKeys(this.editorKeys);
         this.dobTF.addEditorKeys(this.editorKeys);
-        this.membershipTF.addItem("gold membership");
+       // this.membershipTF.addItem("gold membership");
         this.membershipTF.addItem("silver membership");
+        this.membershipTF.addItem("joint membership");
 
         this.firstNameTF.reset();
+        this.firstName2TF.reset();
         this.lastNameTF.reset();
+        this.lastName2TF.reset();
         this.address1TF.reset();
         this.address2TF.reset();
         this.cityTF.reset();
@@ -122,6 +149,7 @@ public class MemberPopup extends JDialog {
         this.telephoneTF.reset();
         this.mobileTF.reset();
         this.dobTF.reset();
+        this.dob2TF.reset();
         // this.membershipTF.reset();
 
         this.firstNameTF.activate();
@@ -155,11 +183,13 @@ public class MemberPopup extends JDialog {
                 "Please fill in all required fields marked by '*'");
         } else {
             // try {
-            // this.dao.createWpUser(newMember);
+            try {
+				this.dao.createWpUser(newMember);
             this.okButton.setEnabled(true);
             this.firstNameTF.setEnabled(false);
-            this.firstNameTF.setEnabled(false);
+            this.firstName2TF.setEnabled(false);
             this.lastNameTF.setEnabled(false);
+            this.lastName2TF.setEnabled(false);
             this.address1TF.setEnabled(false);
             this.address2TF.setEnabled(false);
             this.cityTF.setEnabled(false);
@@ -167,11 +197,60 @@ public class MemberPopup extends JDialog {
             this.telephoneTF.setEnabled(false);
             this.mobileTF.setEnabled(false);
             this.dobTF.setEnabled(false);
+            this.dob2TF.setEnabled(false);
 
-            // } catch (BasicException e) {
+             } catch (BasicException e) {
             // TODO Auto-generated catch block
-            // e.printStackTrace();
-            // }
+            e.printStackTrace();
+             }
+        }
+    }
+    
+    
+    /**
+     */
+    private void executeJointMembership(){
+    	final Member newMember = new Member();
+        newMember.setFirstName(this.firstNameTF.getText());
+        newMember.setFirstName2(this.firstName2TF.getText());
+        newMember.setLastName(this.lastNameTF.getText());
+        newMember.setLastName2(this.lastName2TF.getText());
+        newMember.setAddress1(this.address1TF.getText());
+        newMember.setAddress2(this.address2TF.getText());
+        newMember.setCity(this.cityTF.getText());
+        newMember.setPostcode(this.postcodeTF.getText());
+        newMember.setTelephone(this.telephoneTF.getText());
+        newMember.setMobile(this.mobileTF.getText());
+        newMember.setDob(this.dobTF.getText());
+        newMember.setDob2(this.dob2TF.getText());
+
+        LOGGER.info("New member: " + newMember.getFirstName()
+            + newMember.getLastName());
+        if (!newMember.requiredFields()) {
+            // TODO data validation
+            JOptionPane.showMessageDialog(null,
+                "Please fill in all required fields marked by '*'");
+        } else {
+             try {
+            this.dao.createWpJointUsers(newMember);
+            this.okButton.setEnabled(true);
+            this.firstNameTF.setEnabled(false);
+            this.firstName2TF.setEnabled(false);
+            this.lastNameTF.setEnabled(false);
+            this.lastName2TF.setEnabled(false);
+            this.address1TF.setEnabled(false);
+            this.address2TF.setEnabled(false);
+            this.cityTF.setEnabled(false);
+            this.postcodeTF.setEnabled(false);
+            this.telephoneTF.setEnabled(false);
+            this.mobileTF.setEnabled(false);
+            this.dobTF.setEnabled(false);
+            this.dob2TF.setEnabled(false);
+
+            } catch (BasicException e) {
+            // TODO Auto-generated catch block
+            	e.printStackTrace();
+            }
         }
     }
 
@@ -190,9 +269,13 @@ public class MemberPopup extends JDialog {
         this.jPanel5 = new javax.swing.JPanel();
         this.jPanel7 = new javax.swing.JPanel();
         this.firstNameLabel = new javax.swing.JLabel();
+        this.firstName2Label = new javax.swing.JLabel();
         this.firstNameTF = new com.openbravo.editor.JEditorString();
+        this.firstName2TF = new com.openbravo.editor.JEditorString();
         this.lastNameLabel = new javax.swing.JLabel();
         this.lastNameTF = new com.openbravo.editor.JEditorString();
+        this.lastName2Label = new javax.swing.JLabel();
+        this.lastName2TF = new com.openbravo.editor.JEditorString();
         this.address1Label = new javax.swing.JLabel();
         this.address1TF = new com.openbravo.editor.JEditorString();
         this.address2Label = new javax.swing.JLabel();
@@ -207,6 +290,8 @@ public class MemberPopup extends JDialog {
         this.mobileTF = new com.openbravo.editor.JEditorString();
         this.dobLabel = new javax.swing.JLabel();
         this.dobTF = new com.openbravo.editor.JEditorString();
+        this.dob2Label = new javax.swing.JLabel();
+        this.dob2TF = new com.openbravo.editor.JEditorString();
         this.membershipLabel = new javax.swing.JLabel();
         this.membershipTF = new javax.swing.JComboBox();
         this.jPanel6 = new javax.swing.JPanel();
@@ -232,7 +317,9 @@ public class MemberPopup extends JDialog {
         this.jPanel5.setLayout(new java.awt.BorderLayout());
 
         this.firstNameLabel.setText("First Name *");
+        this.firstName2Label.setText("First Name 2 *");
         this.lastNameLabel.setText("Last Name *");
+        this.lastName2Label.setText("Last Name 2 *");
         this.address1Label.setText("Address Line 1 *");
         this.address2Label.setText("Address Line 2");
         this.cityLabel.setText("Town/City *");
@@ -241,6 +328,22 @@ public class MemberPopup extends JDialog {
         this.telephoneLabel.setText("Main Telephone *");
         this.mobileLabel.setText("Mobile No.");
         this.dobLabel.setText("DOB (mm-dd-yyyy) *");
+        this.dob2Label.setText("DOB 2 (mm-dd-yyyy) *");
+        
+        this.firstName2TF.setEnabled(false);
+        this.lastName2TF.setEnabled(false);
+        this.dob2TF.setEnabled(false);
+        
+        this.membershipTF.addActionListener(new java.awt.event.ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent event) {
+            	MemberPopup.this.addExtraFields();
+            }
+
+        });
+        
+       
 
         final javax.swing.GroupLayout jPanel7Layout =
             new javax.swing.GroupLayout(this.jPanel7);
@@ -250,6 +353,15 @@ public class MemberPopup extends JDialog {
             jPanel7Layout.createSequentialGroup().addContainerGap().addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+            jPanel7Layout.createSequentialGroup().addComponent(
+                    this.membershipLabel,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(
+                    		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(this.membershipTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE, 190,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
                         this.firstNameLabel,
                         javax.swing.GroupLayout.PREFERRED_SIZE, 140,
@@ -260,15 +372,6 @@ public class MemberPopup extends JDialog {
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
-                        this.membershipLabel,
-                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(
-                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(this.membershipTF,
-                            javax.swing.GroupLayout.PREFERRED_SIZE, 190,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                    jPanel7Layout.createSequentialGroup().addComponent(
                         this.lastNameLabel,
                         javax.swing.GroupLayout.PREFERRED_SIZE, 140,
                         javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -277,6 +380,24 @@ public class MemberPopup extends JDialog {
                         .addComponent(this.lastNameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.firstName2Label,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.firstName2TF,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                     jPanel7Layout.createSequentialGroup().addComponent(
+                        this.lastName2Label,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                        		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.lastName2TF,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
                         this.address1Label,
                         javax.swing.GroupLayout.PREFERRED_SIZE, 140,
@@ -337,7 +458,15 @@ public class MemberPopup extends JDialog {
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(this.dobTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.dob2Label, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
+                        		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(this.dob2TF,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
         jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
@@ -363,7 +492,21 @@ public class MemberPopup extends JDialog {
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.firstName2Label).addComponent(this.firstName2TF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                 javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.lastName2Label).addComponent(this.lastName2TF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.address1Label).addComponent(this.address1TF,
@@ -411,6 +554,13 @@ public class MemberPopup extends JDialog {
                     this.dobLabel).addComponent(this.dobTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                    jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.dob2Label).addComponent(this.dob2TF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(
                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
@@ -433,14 +583,7 @@ public class MemberPopup extends JDialog {
         this.searchButton.setFocusable(false);
         this.searchButton.setRequestFocusEnabled(false);
         this.searchButton
-            .addActionListener(new java.awt.event.ActionListener() {
-
-                @Override
-                public void
-                actionPerformed(final java.awt.event.ActionEvent evt) {
-                    MemberPopup.this.search();
-                }
-            });
+            .addActionListener(this.membershipAction);
         this.jPanel6.add(this.searchButton);
 
         this.jPanel5.add(this.jPanel6, java.awt.BorderLayout.SOUTH);
@@ -508,6 +651,29 @@ public class MemberPopup extends JDialog {
 
         this.dispose();
     }
+    
+    /**
+     * if the drop down is equal to joint membership add the extra fields and change the function 
+     * else revert back to normal
+     */
+    public void addExtraFields(){
+    	if(this.membershipTF.getSelectedItem().equals("joint membership"))
+    	{
+    		this.firstName2TF.setEnabled(true);
+    		this.lastName2TF.setEnabled(true);
+    		this.dob2TF.setEnabled(true);
+    		this.searchButton.removeActionListener(this.membershipAction);
+    		this.searchButton.removeActionListener(this.jointMembershipAction);
+    		this.searchButton.addActionListener(this.jointMembershipAction);
+    	}else if(this.membershipTF.getSelectedItem().equals("silver membership")){
+    		this.searchButton.removeActionListener(this.jointMembershipAction);
+    		this.searchButton.removeActionListener(this.membershipAction);
+    		this.searchButton.addActionListener(this.membershipAction);
+    		this.firstName2TF.setEnabled(false);
+    		this.lastName2TF.setEnabled(false);
+    		this.dob2TF.setEnabled(false);
+    	}
+    }
 
     /**
      */
@@ -522,10 +688,18 @@ public class MemberPopup extends JDialog {
     private void search() {
         this.executeSearch();
     }
+    
+    /**
+     */
+    private void jointMembership() {
+        this.executeJointMembership();
+    }
 
     private void clean() {
         this.firstNameTF.reset();
+        this.firstName2TF.reset();
         this.lastNameTF.reset();
+        this.lastName2TF.reset();
         this.address1TF.reset();
         this.address2TF.reset();
         this.cityTF.reset();
@@ -533,6 +707,7 @@ public class MemberPopup extends JDialog {
         this.telephoneTF.reset();
         this.mobileTF.reset();
         this.dobTF.reset();
+        this.dob2TF.reset();
         // this.membershipTF.reset();
         this.okButton.setEnabled(false);
         this.dao.setMember(null);
@@ -544,8 +719,12 @@ public class MemberPopup extends JDialog {
     private javax.swing.JButton searchButton;
 
     private javax.swing.JLabel firstNameLabel;
+    
+    private javax.swing.JLabel firstName2Label;
 
     private javax.swing.JLabel lastNameLabel;
+    
+    private javax.swing.JLabel lastName2Label;
 
     private javax.swing.JLabel address1Label;
 
@@ -562,6 +741,8 @@ public class MemberPopup extends JDialog {
     private javax.swing.JLabel mobileLabel;
 
     private javax.swing.JLabel dobLabel;
+    
+    private javax.swing.JLabel dob2Label;
 
     private javax.swing.JPanel jPanel1;
 
@@ -588,8 +769,12 @@ public class MemberPopup extends JDialog {
     private com.openbravo.editor.JEditorKeys editorKeys;
 
     private com.openbravo.editor.JEditorString firstNameTF;
+    
+    private com.openbravo.editor.JEditorString firstName2TF;
 
     private com.openbravo.editor.JEditorString lastNameTF;
+    
+    private com.openbravo.editor.JEditorString lastName2TF;
 
     private com.openbravo.editor.JEditorString address1TF;
 
@@ -604,6 +789,8 @@ public class MemberPopup extends JDialog {
     private com.openbravo.editor.JEditorString mobileTF;
 
     private com.openbravo.editor.JEditorString dobTF;
+    
+    private com.openbravo.editor.JEditorString dob2TF;
 
     private javax.swing.JComboBox membershipTF;
 

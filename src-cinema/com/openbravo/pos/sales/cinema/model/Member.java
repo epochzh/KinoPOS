@@ -4,12 +4,14 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.data.loader.DataRead;
 import com.openbravo.data.loader.IKeyed;
 import com.openbravo.data.loader.SerializableRead;
+import com.openbravo.pos.sales.cinema.CinemaDaoImpl;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  */
@@ -18,6 +20,11 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private static final long serialVersionUID = -881663203933608241L;
+    
+    /**
+     */
+    private static final Logger LOGGER = Logger.getLogger(CinemaDaoImpl.class
+        .getName());
 
     /**
      */
@@ -26,10 +33,18 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String firstName;
+    
+    /**
+     */
+    private String firstName2;
 
     /**
      */
     private String lastName;
+    
+    /**
+     */
+    private String lastName2;
 
     /**
      */
@@ -66,6 +81,10 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String dob;
+    
+    /**
+     */
+    private String dob2;
 
     /**
      */
@@ -153,13 +172,34 @@ public class Member implements IKeyed, Serializable, SerializableRead {
             return this.firstName;
         }
     }
-
+    
+    
     /**
      * @param firstName the firstName to set
      */
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName2(final String firstName2) {
+        this.firstName2 = firstName2;
+    }
+    
+    
+    /**
+     * @return the firstName
+     */
+    public String getFirstName2() {
+        if (this.firstName2 == null) {
+            return "";
+        } else {
+            return this.firstName2;
+        }
+    }
+
 
     /**
      * @return the lastName
@@ -177,6 +217,25 @@ public class Member implements IKeyed, Serializable, SerializableRead {
      */
     public void setLastName(final String lastName) {
         this.lastName = lastName;
+    }
+    
+    
+    /**
+     * @return the lastName
+     */
+    public String getLastName2() {
+        if (this.lastName2 == null) {
+            return "";
+        } else {
+            return this.lastName2;
+        }
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName2(final String lastName2) {
+        this.lastName2 = lastName2;
     }
 
     /**
@@ -349,6 +408,24 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      * @param dob the dob to set
      */
+    public void setDob2(final String dob2) {
+        this.dob2 = dob2;
+    }
+    
+    /**
+     * @return the dob
+     */
+    public String getDob2() {
+        if (this.dob2 == null) {
+            return "";
+        } else {
+            return this.dob2;
+        }
+    }
+
+    /**
+     * @param dob the dob to set
+     */
     public void setDob(final String dob) {
         this.dob = dob;
     }
@@ -364,7 +441,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 
     public Boolean requiredFields() {
         if ((this.firstName != null) && (this.lastName != null)
-            && (this.memberShipType != null) && (this.address1 != null)
+            && (this.address1 != null)
             && (this.city != null) && (this.postcode != null)
             && (this.telephone != null) && (this.dob != null)) {
             return true;
@@ -392,6 +469,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         meta.put("show_admin_bar_front", "true");
         meta.put("ym_status", "Active");
         meta.put("ym_custom_fields", this.createCustomFields());
+        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
         meta.put("ym_user", this.createUserFields());
 
         if (this.getFirstName() != null) {
@@ -445,7 +523,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
      * create the custom fields string
      */
     private String createUserFields() {
-
+    	LOGGER.info("Userfields: " + this.getMemberShipType() + this.getPackId());
         final String userMemberFields =
             "O:8:\"stdClass\":11:{" + "s:6:\"scalar\";s:0:\"\";"
                 + "s:8:\"duration\";s:1:\"1\";"
@@ -462,6 +540,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
                 + "s:11:\"expire_date\";s:16:\""
                 + this.getMembershipDates("yyyy-MM-dd HH:mm", 1) + "\";}";
 
+        LOGGER.info("Userfields complete: " + userMemberFields);
         return userMemberFields;
     }
 
@@ -475,4 +554,5 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         return sdf.format(c1.getTime());
     }
 
+	
 }
