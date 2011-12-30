@@ -9,6 +9,7 @@ import com.openbravo.pos.sales.cinema.CinemaDaoImpl;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -29,6 +30,10 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private Integer id;
+    
+    /**
+     */
+    private String association = "0";
 
     /**
      */
@@ -57,6 +62,10 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String city;
+    
+    /**
+     */
+    private String freeTickets ="2";
 
     /**
      */
@@ -161,6 +170,22 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     public void setId(final Integer id) {
         this.id = id;
     }
+    
+    /**
+     * @return the firstName
+     */
+    public String getAssociation() {
+        return this.association;
+    }
+    
+    
+    /**
+     * @param association of joint membership
+     */
+    public void setAssociation(final String association) {
+        this.association = association;
+    }
+
 
     /**
      * @return the firstName
@@ -198,6 +223,21 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         } else {
             return this.firstName2;
         }
+    }
+    
+    /**
+     * @return the firstName
+     */
+    public String getFreeTickets() {
+            return this.freeTickets;
+    }
+    
+    
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFreeTickets(final String freeTickets) {
+        this.freeTickets = freeTickets;
     }
 
 
@@ -514,7 +554,10 @@ public class Member implements IKeyed, Serializable, SerializableRead {
                 + String.valueOf(this.getTelephone().length()) + ":\""
                 + this.getTelephone() + "\";" + "i:14;s:"
                 + String.valueOf(this.getMobile().length()) + ":\""
-                + this.getMobile() + "\";" + "i:16;s:1:\"0\";}";
+                + this.getMobile() + "\";" + "i:16;s:1:\"0\";" 
+                + "i:19;s:1:\""+ this.getFreeTickets() + "\";"
+                + "i:20;s:"+ String.valueOf(this.getAssociation().length()) +
+                ":\""+ this.getAssociation() + "\";}";
 
         return customFields;
     }
@@ -552,6 +595,32 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         c1.add(Calendar.YEAR, years);
 
         return sdf.format(c1.getTime());
+    }
+    
+    public Boolean isSenior(){
+    	
+    	 String[] temp;
+    	 
+    	  /* delimiter */
+    	  String delimiter = "-";
+    	  temp = this.getDob().split(delimiter);
+    	  
+    	  int year = Integer.parseInt(temp[2]);
+    	  int month = Integer.parseInt(temp[0]);
+    	  int day = Integer.parseInt(temp[1]);
+    	  
+    	  // turn the age string into a time stamp
+      	  Calendar dateOfBirth = new GregorianCalendar(year, month, day);
+      	  Calendar today = Calendar.getInstance();
+      	  
+      	  int age = today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
+      	  
+      	  if(age <= 60){
+      		  return true;
+      	  }else{
+      		  return false;
+      	  }
+    	
     }
 
 	

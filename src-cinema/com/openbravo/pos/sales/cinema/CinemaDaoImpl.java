@@ -574,6 +574,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             (Member) this.getLastInsertedMemberId.find(newMember
                 .getRegisteredDate(), null);
         this.member.setId(lastMemberId.getId());
+        
+        if(this.member.isSenior()){
+        		this.member.setFreeTickets("3");
+        }
 
         LOGGER.info("LAST ID: " + lastMemberId.getId());
 
@@ -595,6 +599,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             LOGGER.info("newMember: " + newMember);
         }
     	
+    	Boolean secondSenior = false;
     	for(int i=1; i<=2; i++){
     		
     		// create the 2 users
@@ -615,6 +620,24 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 	            (Member) this.getLastInsertedMemberId.find(this.member
 	                .getRegisteredDate(), null);
 	        this.member.setId(lastMemberId.getId());
+	        
+	        if(i==1){
+	        	Integer memberId = this.member.getId() + 1;
+	        	this.member.setAssociation(memberId.toString());
+	        }else{
+	        	Integer memberId = this.member.getId() - 1;
+	        	this.member.setAssociation(memberId.toString());
+	        }
+	        
+	        if(this.member.isSenior()){
+	        	if(!secondSenior){
+	        		this.member.setFreeTickets("3");
+	        	}else{
+	        		this.member.setFreeTickets("2");
+	        	}
+	        }
+	        
+	        
 	
 	        LOGGER.info("LAST ID: " + lastMemberId.getId());
 	
