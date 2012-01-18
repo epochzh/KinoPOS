@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  */
-public class Member implements IKeyed, Serializable, SerializableRead {
+public class OldMember implements IKeyed, Serializable, SerializableRead {
 
     /**
      */
@@ -46,6 +46,17 @@ public class Member implements IKeyed, Serializable, SerializableRead {
     /**
      */
     private String lastName;
+    
+    /**
+     */
+    private String oldPin;
+    /**
+     */
+    private String oldPin2;
+    
+    /**
+     */
+    private String expiry;
     
     /**
      */
@@ -101,14 +112,14 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 
     /**
 	 */
-    public Member() {
+    public OldMember() {
         super();
     }
 
     /**
      * @param id
      */
-    public Member(final Integer id) {
+    public OldMember(final Integer id) {
         this.id = id;
     }
 
@@ -126,7 +137,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        final Member other = (Member) obj;
+        final OldMember other = (OldMember) obj;
         if (this.id == null) {
             if (other.id != null) {
                 return false;
@@ -484,9 +495,7 @@ public class Member implements IKeyed, Serializable, SerializableRead {
 
     public Boolean requiredFields() {
         if ((this.firstName != null) && (this.lastName != null)
-            && (this.address1 != null)
-            && (this.city != null) && (this.postcode != null)
-            && (this.telephone != null) && (this.dob != null)) {
+            && (this.oldPin != null) && (this.expiry != null)) {
             return true;
         } else {
             return false;
@@ -625,6 +634,49 @@ public class Member implements IKeyed, Serializable, SerializableRead {
       	  }
     	
     }
+
+	/**
+	 * @return the oldPin
+	 */
+	public String getOldPin() {
+		return oldPin;
+	}
+
+	/**
+	 * @param oldPin the oldPin to set
+	 */
+	public void setOldPin(String oldPin) {
+		this.oldPin = oldPin;
+	}
+
+	/**
+	 * @return the oldPin2
+	 */
+	public String getOldPin2() {
+		return oldPin2;
+	}
+
+	/**
+	 * @param oldPin2 the oldPin2 to set
+	 */
+	public void setOldPin2(String oldPin2) {
+		this.oldPin2 = oldPin2;
+	}
+
+	/**
+	 * @return the expiry
+	 */
+	public String getExpiry() {
+		return expiry;
+	}
+
+	/**
+	 * @param expiry the expiry to set
+	 */
+	public void setExpiry(String expiry) {
+		this.expiry = expiry;
+	}
+
 
 	
 }

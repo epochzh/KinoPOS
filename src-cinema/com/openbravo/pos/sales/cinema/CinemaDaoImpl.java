@@ -17,6 +17,7 @@ import com.openbravo.pos.sales.cinema.model.Day;
 import com.openbravo.pos.sales.cinema.model.Event;
 import com.openbravo.pos.sales.cinema.model.Member;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
+import com.openbravo.pos.sales.cinema.model.OldMember;
 import com.openbravo.pos.sales.cinema.model.Post;
 import com.openbravo.pos.sales.cinema.model.Postmeta;
 import com.openbravo.pos.sales.cinema.model.PriceMatrix;
@@ -70,6 +71,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private Member member;
+    
+    /**
+     */
+    private OldMember oldMember;
 
     /**
      */
@@ -78,6 +83,9 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence createWpUser;
+    /**
+     */
+    private BaseSentence createOldWpUser;
 
     /**
      */
@@ -240,6 +248,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "user_url, user_registered, user_activation_key, user_status, display_name) "
                     + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
                 new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
+        
+        this.createOldWpUser =
+                new StaticSentence(
+                    this.session,
+                    "INSERT INTO wp_users "
+                        + "(user_login, user_pass, user_nicename, user_email, "
+                        + "user_url, user_registered, user_activation_key, user_status, display_name) "
+                        + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
+                    new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
 
         this.createUserMeta =
             new StaticSentence(this.session, "INSERT INTO wp_usermeta "
@@ -608,7 +625,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 	        final Date todaysDate = new Date();
 	        final long time = todaysDate.getTime();
 	        this.member.setRegisteredDate(new Timestamp(time));
-	        this.member.setMemberShipType("silver membership");
+	        this.member.setMemberShipType("Joint Silver Membership");
 	
 	        // TODO: get the price of a membership
 	        // this.getMembershipPrice();
@@ -650,6 +667,51 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     	}
 		
 	}
+    
+    
+    /**
+     * @param newMember
+     * @throws BasicException
+     */
+    public void createOldWpUser(final OldMember newMember) throws BasicException {
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("newMember: " + newMember);
+        }
+
+        this.oldMember = newMember;
+        final Date todaysDate = new Date();
+        final long time = todaysDate.getTime();
+        this.oldMember.setRegisteredDate(new Timestamp(time));
+
+        // TODO: get the price of a membership
+        // this.getMembershipPrice();
+
+        this.createOldWpUser.exec(this.oldMember.getNickname(), this.oldMember
+            .getRegisteredDate());
+
+        final OldMember lastMemberId =
+            (OldMember) this.getLastInsertedMemberId.find(newMember
+                .getRegisteredDate(), null);
+        this.oldMember.setId(lastMemberId.getId());
+        
+        if(this.oldMember.isSenior()){
+        		this.oldMember.setFreeTickets("3");
+        }
+
+        LOGGER.info("LAST ID: " + lastMemberId.getId());
+
+        // create the wp_usermeta
+        // this.createUserMeta();
+        final Map<String, String> meta = this.oldMember.populateMap();
+        this.createUserMeta(meta);
+
+        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+    }
+    
+    
+    
+    
+    
 
     /**
      * @param meta
@@ -675,7 +737,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     		firstMember.setAddress1(newMember.getAddress1());
     		firstMember.setAddress2(newMember.getAddress2());
     		firstMember.setCity(newMember.getCity());
-    		firstMember.setMemberShipType("silver membership");
+    		firstMember.setMemberShipType("Joint Silver Membership");
     		firstMember.setPostcode(newMember.getPostcode());
     		firstMember.setTelephone(newMember.getTelephone());
     		firstMember.setMobile(newMember.getMobile());
@@ -690,7 +752,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     		secondMember.setAddress1(newMember.getAddress1());
     		secondMember.setAddress2(newMember.getAddress2());
     		secondMember.setCity(newMember.getCity());
-    		secondMember.setMemberShipType("silver members");
+    		secondMember.setMemberShipType("Joint Silver Membership");
     		secondMember.setPostcode(newMember.getPostcode());
     		secondMember.setTelephone(newMember.getTelephone());
     		secondMember.setMobile(newMember.getMobile());
@@ -1623,6 +1685,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         return price.getPrice();
     }
+
+	
 
 	
 }

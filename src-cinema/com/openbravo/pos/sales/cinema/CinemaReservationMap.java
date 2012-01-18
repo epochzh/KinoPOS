@@ -450,19 +450,14 @@ public class CinemaReservationMap extends JTicketsBag {
         final MemberPopup popup = MemberPopup.getMemberPopup(this.dao, this);
         popup.setVisible(true);
 
-        // this.customer = popup.getSelectedCustomer();
-        //
-        // if (LOGGER.isLoggable(Level.INFO)) {
-        // LOGGER.info("customer: " + this.customer);
-        // }
-        //
-        // if (this.customer == null) {
-        // // Nothing to do.
-        // } else if (this.customer.getMsType() == MembershipType.GOLD) {
-        // this.priceType = PriceType.GOLD;
-        // } else if (this.customer.getMsType() == MembershipType.SILVER) {
-        // this.priceType = PriceType.SILVER;
-        // }
+    }
+    
+    /**
+     */
+    public void doOldMembershipAdd() {
+        final OldMemberPopup popup = OldMemberPopup.getOldMemberPopup(this.dao, this);
+        popup.setVisible(true);
+
     }
 
     /**
