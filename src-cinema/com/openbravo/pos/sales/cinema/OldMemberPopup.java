@@ -161,7 +161,7 @@ public class OldMemberPopup extends JDialog {
             .getSelectedItem());
      //   newMember.setExpiry(this.expiryTF.getText());
 
-        LOGGER.info("New member: " + newMember.getFirstName()
+        LOGGER.info("expiry date: " + newMember.getRegisteredDate()
             + newMember.getLastName());
         if (!newMember.requiredFields()) {
             // TODO data validation
@@ -179,6 +179,9 @@ public class OldMemberPopup extends JDialog {
             this.oldPinTF.setEnabled(false);
             this.oldPin2TF.setEnabled(false);
             this.expiryTF.setEnabled(false);
+            
+            JOptionPane.showMessageDialog(null,
+            		newMember.getPin());
 
              } catch (BasicException e) {
             // TODO Auto-generated catch block
@@ -198,23 +201,27 @@ public class OldMemberPopup extends JDialog {
         newMember.setLastName2(this.lastName2TF.getText());
         newMember.setOldPin(this.oldPinTF.getText());
         newMember.setOldPin2(this.oldPin2TF.getText());
-       newMember.setExpiry(this.expiryTF.getText());
+        newMember.setExpiry(this.expiryTF.getText());
 
-        LOGGER.info("New member: " + newMember.getFirstName()
-            + newMember.getLastName());
+        LOGGER.info("registered date: " + newMember.getRegisteredDate());
         if (!newMember.requiredFields()) {
             // TODO data validation
             JOptionPane.showMessageDialog(null,
                 "Please fill in all required fields marked by '*'");
         } else {
              try {
-            this.dao.createWpJointUsers(newMember);
+            this.dao.createOldWpJointUsers(newMember);
             this.okButton.setEnabled(true);
             this.firstNameTF.setEnabled(false);
             this.firstName2TF.setEnabled(false);
             this.lastNameTF.setEnabled(false);
+            this.lastName2TF.setEnabled(false);
             this.oldPinTF.setEnabled(false);
+            this.oldPin2TF.setEnabled(false);
             this.expiryTF.setEnabled(false);
+            
+            JOptionPane.showMessageDialog(null,
+            		newMember.getPin());
 
             } catch (BasicException e) {
             // TODO Auto-generated catch block

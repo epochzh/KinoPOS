@@ -130,6 +130,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getLastInsertedMemberId;
+    
+    /**
+     */
+    private BaseSentence getLastInsertedOldMemberId;
 
     /**
      */
@@ -338,6 +342,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(this.session, "SELECT ID " + "FROM wp_users "
                 + "WHERE (user_registered = ?)", new SerializerWriteBasic(
                 Datas.TIMESTAMP), new SerializerReadClass(Member.class));
+        
+        this.getLastInsertedOldMemberId =
+                new StaticSentence(this.session, "SELECT ID " + "FROM wp_users "
+                	+ "ORDER BY ID DESC LIMIT 1");
 
         this.getNextAvailableFilm =
             new StaticSentence(this.session,
@@ -674,39 +682,90 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      * @throws BasicException
      */
     public void createOldWpUser(final OldMember newMember) throws BasicException {
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("newMember: " + newMember);
-        }
 
         this.oldMember = newMember;
-        final Date todaysDate = new Date();
-        final long time = todaysDate.getTime();
-        this.oldMember.setRegisteredDate(new Timestamp(time));
-
-        // TODO: get the price of a membership
-        // this.getMembershipPrice();
 
         this.createOldWpUser.exec(this.oldMember.getNickname(), this.oldMember
             .getRegisteredDate());
 
-        final OldMember lastMemberId =
-            (OldMember) this.getLastInsertedMemberId.find(newMember
-                .getRegisteredDate(), null);
-        this.oldMember.setId(lastMemberId.getId());
-        
-        if(this.oldMember.isSenior()){
-        		this.oldMember.setFreeTickets("3");
-        }
+        final DataResultSet resultSet =
+        		this.getLastInsertedOldMemberId.openExec(null);
+            resultSet.next();
+            final int lastMemberId = resultSet.getInt(1);
+            resultSet.close();
+            this.getLastInsertedOldMemberId.closeExec();
 
-        LOGGER.info("LAST ID: " + lastMemberId.getId());
+        LOGGER.info("LAST ID: " + lastMemberId);
+        
+        this.oldMember.setId(lastMemberId);
+        
+        LOGGER.info("LAST ID 2: " + lastMemberId);
+        
+        
+        		this.oldMember.setFreeTickets("2");
+        LOGGER.info("LAST ID 3: " + lastMemberId);
+      //  LOGGER.info("LAST ID: " + lastMemberId.getId());
 
         // create the wp_usermeta
-        // this.createUserMeta();
         final Map<String, String> meta = this.oldMember.populateMap();
+        LOGGER.info("run createUserMeta");
         this.createUserMeta(meta);
 
         LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
     }
+    
+    
+    /**
+     * create 2 silver users
+     * @param newMember
+     * @throws BasicException 
+     */
+    public void createOldWpJointUsers(OldMember newMember) throws BasicException {
+    	
+    	for(int i=1; i<=2; i++){
+    		
+    		// create the 2 users
+    		//this.oldMember = newMember;
+	        this.oldMember = this.splitOldJointMembers(newMember, i);
+    		
+	        this.oldMember.setMemberShipType("Joint Silver Membership");
+	
+	        // TODO: fix line below
+	
+	        this.createOldWpUser.exec(this.oldMember.getNickname(), this.oldMember.getRegisteredDate());
+	        
+	        final DataResultSet resultSet =
+	        		this.getLastInsertedOldMemberId.openExec(null);
+	            resultSet.next();
+	            final int lastMemberId = resultSet.getInt(1);
+	            resultSet.close();
+	            this.getLastInsertedOldMemberId.closeExec();
+
+	        
+	        this.oldMember.setId(lastMemberId);
+	        
+	        
+	        if(i==1){
+	        	Integer memberId = this.oldMember.getId() + 1;
+	        	this.oldMember.setAssociation(memberId.toString());
+	        }else{
+	        	Integer memberId = this.oldMember.getId() - 1;
+	        	this.oldMember.setAssociation(memberId.toString());
+	        }
+	        		
+	        	this.oldMember.setFreeTickets("3");
+	       
+	        
+	
+	        // create the wp_usermeta
+	        // this.createUserMeta();
+	        final Map<String, String> meta = this.oldMember.populateMap();
+	        this.createUserMeta(meta);
+	
+	        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+    	}
+		
+	}
     
     
     
@@ -721,7 +780,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     throws BasicException {
         final Set<String> set = meta.keySet();
         for (final String key : set) {
-            this.createUserMeta.exec(this.member.getId(), key, meta.get(key));
+        	LOGGER.info("ID: " + this.oldMember.getId() +" key: "+ key+" value: "+meta.get(key));
+            this.createUserMeta.exec(this.oldMember.getId(), key, meta.get(key));
         }
     }
     
@@ -761,6 +821,33 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     		return secondMember;
     	}
     }
+    
+    
+    /**
+     * takes the joint memberships and creates 2 accounts
+     */
+    private OldMember splitOldJointMembers(OldMember newMember, int oneOrTwo){
+    	if(oneOrTwo == 1){
+    		// first member
+    		OldMember firstMember = newMember;
+    		firstMember.setFirstName(newMember.getFirstName());
+    		firstMember.setLastName(newMember.getLastName());
+    		firstMember.setMemberShipType("Joint Silver Membership");
+    		
+    		return firstMember;
+    	}else{
+    		// second member
+    		OldMember secondMember = newMember;
+    		secondMember.setFirstName(newMember.getFirstName2());
+    		secondMember.setLastName(newMember.getLastName2());
+    		secondMember.setMemberShipType("Joint Silver Membership");
+    		
+    		return secondMember;
+    	}
+    }
+
+    
+    
 
     /**
      * @param booking
