@@ -66,7 +66,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -290,6 +289,10 @@ public class CinemaReservationMap extends JTicketsBag {
 
     /**
      */
+    private PriceTypePanel priceTypePanel;
+
+    /**
+     */
     private JScrollPane seatScrollPane;
 
     /**
@@ -354,9 +357,8 @@ public class CinemaReservationMap extends JTicketsBag {
         this.bookingsTicket = new ArrayList<Booking>();
         this.customer = null;
         this.event = null;
-        this.priceType = null;
 
-        this.buttonPanel.enablePriceType();
+        this.priceTypePanel.selectPriceType(PriceType.FULL_PRICE);
 
         final TicketInfo ticket = new TicketInfo();
         this.m_panelticket.setActiveTicket(ticket, null);
@@ -438,9 +440,9 @@ public class CinemaReservationMap extends JTicketsBag {
         if (this.customer == null) {
             // Nothing to do.
         } else if (this.customer.getMsType() == MembershipType.GOLD) {
-            this.priceType = PriceType.GOLD;
+            this.priceTypePanel.selectPriceType(PriceType.GOLD);
         } else if (this.customer.getMsType() == MembershipType.SILVER) {
-            this.priceType = PriceType.SILVER;
+            this.priceTypePanel.selectPriceType(PriceType.SILVER);
         }
     }
 
@@ -449,13 +451,13 @@ public class CinemaReservationMap extends JTicketsBag {
     public void doMembershipAdd() {
         final MemberPopup popup = MemberPopup.getMemberPopup(this.dao, this);
         popup.setVisible(true);
-
     }
-    
+
     /**
      */
     public void doOldMembershipAdd() {
-        final OldMemberPopup popup = OldMemberPopup.getOldMemberPopup(this.dao, this);
+        final OldMemberPopup popup =
+            OldMemberPopup.getOldMemberPopup(this.dao, this);
         popup.setVisible(true);
 
     }
@@ -620,28 +622,29 @@ public class CinemaReservationMap extends JTicketsBag {
         final JPanel seatPanel = new JPanel();
         seatPanel.setLayout(new GridLayout(rows, cols));
         seatPanel.setBackground(COLOR_BACKGROUND);
-        
+
         String lastSeat = "";
-        
+
         for (int i = 0; i < rows; ++i) {
             final char row = (char) (i + 65);
             newCols = cols;
             for (int j = 1; j <= newCols; ++j) {
-            	
+
                 final String key = row + String.valueOf(j);
                 final Seat seat = map.get(key);
                 seatPanel.add(this.toComponent(seat));
                 lastSeat = row + String.valueOf(j);
-                
-                if(lastSeat.equals("E2") || lastSeat.equals("F2") || lastSeat.equals("G2") || lastSeat.equals("H2"))
-            	{
-            		Integer seatValue = 4;
-            		SeatState seatState = SeatState.fromState(seatValue.byteValue());
-            		final Seat seatGap = new Seat();
-            		seatGap.setState(seatState);
-            		seatPanel.add(this.toComponent(seatGap));
-            		newCols--;
-            	}
+
+                if (lastSeat.equals("E2") || lastSeat.equals("F2")
+                    || lastSeat.equals("G2") || lastSeat.equals("H2")) {
+                    final Integer seatValue = 4;
+                    final SeatState seatState =
+                        SeatState.fromState(seatValue.byteValue());
+                    final Seat seatGap = new Seat();
+                    seatGap.setState(seatState);
+                    seatPanel.add(this.toComponent(seatGap));
+                    newCols--;
+                }
             }
         }
 
@@ -654,6 +657,7 @@ public class CinemaReservationMap extends JTicketsBag {
     /**
      * @param seat
      */
+    @SuppressWarnings("null")
     public void onSeatAction(final Seat seat) {
         LOGGER.info("seat: " + seat);
 
@@ -682,8 +686,8 @@ public class CinemaReservationMap extends JTicketsBag {
                     this.dao.isFirstFilmApplicable(this.venue, this.event);
                 LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
                 final String type = this.event.getTypeAsString();
-                // checks to see if the event is marked as a special event
 
+                // checks to see if the event is marked as a special event
                 if (type.contains("event")) {
                     isSpecialEvent = true;
                     specialEventPrice =
@@ -696,8 +700,9 @@ public class CinemaReservationMap extends JTicketsBag {
                 }
 
                 LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
+
                 if ((this.priceType != null)
-                    && (this.priceType.getType() == "double_bill")) {
+                    && (this.priceType == PriceType.DOUBLE_BILL)) {
                     isDoubleBillApplicable = true;
                 }
                 priceMatrixes = this.dao.listPrice(this.venue, this.event);
@@ -718,9 +723,9 @@ public class CinemaReservationMap extends JTicketsBag {
                 priceMatrix = priceMatrixes.get(0);
                 try {
                     price = this.dao.getDoubleBillPrice(this.venue);
-                } catch (final BasicException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (final BasicException ex) {
+                    new MessageInf(ex).show(this);
+                    return;
                 }
                 LOGGER.info("double bill price: " + price);
             } else if (isFirstFilmApplicable) {
@@ -877,8 +882,6 @@ public class CinemaReservationMap extends JTicketsBag {
         this.bookingsTicket.addAll(this.bookingsCart);
         this.bookingsCart.clear();
 
-        this.buttonPanel.disablePriceType();
-
         // Redirect to the ticket screen.
         super.m_panelticket.setActiveTicket(ticket, null);
     }
@@ -1033,6 +1036,7 @@ public class CinemaReservationMap extends JTicketsBag {
 
         this.event = null;
         this.dateCb.setSelectedIndex(0);
+        this.priceTypePanel.selectPriceType(PriceType.FULL_PRICE);
 
         this.bookingsCart = new ArrayList<Booking>();
         this.cartPanel.updateCart(this.bookingsCart);
@@ -1056,7 +1060,6 @@ public class CinemaReservationMap extends JTicketsBag {
 
         final List<String> dateStrings = new ArrayList<String>(21);
 
-        // TODO: Remove the static values.
         final List<Date> dates = this.dao.listDateThreeWeeks(new Date());
         for (final Date date : dates) {
             dateStrings.add(DATE_FORMAT.format(date));
@@ -1134,6 +1137,10 @@ public class CinemaReservationMap extends JTicketsBag {
         comboBoxesPanel.add(bookingsButton);
         comboBoxesPanel.add(this.ticketStatusLabel);
 
+        // priceTypePanel
+
+        this.priceTypePanel = new PriceTypePanel(this);
+
         // seatScrollPane
 
         this.seatScrollPane = new JScrollPane();
@@ -1178,6 +1185,7 @@ public class CinemaReservationMap extends JTicketsBag {
         mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.Y_AXIS));
 
         mapPanel.add(comboBoxesPanel);
+        mapPanel.add(this.priceTypePanel);
         mapPanel.add(mainPanel);
 
         this.setLayout(new CardLayout());
@@ -1270,7 +1278,7 @@ public class CinemaReservationMap extends JTicketsBag {
 
             component = label;
         } else if (seatState == SeatState.GAP) {
-        	final JLabel label = new JLabel();
+            final JLabel label = new JLabel();
 
             component = label;
         } else if (seatState == SeatState.NO_SEAT) {
@@ -1285,6 +1293,4 @@ public class CinemaReservationMap extends JTicketsBag {
 
         return component;
     }
-    
-    
 }

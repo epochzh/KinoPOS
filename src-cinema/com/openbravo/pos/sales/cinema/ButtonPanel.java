@@ -3,17 +3,13 @@ package com.openbravo.pos.sales.cinema;
 import com.openbravo.pos.sales.cinema.listener.BookingsDatabaseAl;
 import com.openbravo.pos.sales.cinema.listener.CancelTicketAl;
 import com.openbravo.pos.sales.cinema.listener.CinemaReservationMapAl;
-import com.openbravo.pos.sales.cinema.listener.PriceTypeAl;
-import com.openbravo.pos.sales.cinema.model.PriceType;
 
 import java.awt.Insets;
 
-import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 
 /**
  */
@@ -43,22 +39,12 @@ public class ButtonPanel extends JPanel {
     private final CinemaReservationMap panel;
 
     /**
-     */
-    private final JToggleButton[] buttons;
-
-    /**
-     */
-    private final ButtonGroup group;
-
-    /**
      * @param panel
      */
     public ButtonPanel(final CinemaReservationMap panel) {
         super();
 
         this.panel = panel;
-
-        final Insets insets = new Insets(15, 18, 15, 18);
 
         // MAP
 
@@ -93,112 +79,10 @@ public class ButtonPanel extends JPanel {
         delete.setMargin(new Insets(15, 18, 15, 18));
         delete.setRequestFocusEnabled(false);
 
-        // GOLD
-
-        final PriceTypeAl goldListener =
-            new PriceTypeAl(this.panel, PriceType.GOLD);
-
-        final JToggleButton goldButton = new JToggleButton("Gold");
-        goldButton.addActionListener(goldListener);
-        goldButton.setMargin(insets);
-
-        // KINO_FRIENDS
-
-        final PriceTypeAl kinoFriendsListener =
-            new PriceTypeAl(this.panel, PriceType.KINO_FRIENDS);
-
-        final JToggleButton kinoFriendsButton = new JToggleButton("Friend");
-        kinoFriendsButton.addActionListener(kinoFriendsListener);
-        kinoFriendsButton.setMargin(insets);
-
-        // KINO_STAFF
-
-        final PriceTypeAl kinoStaffListener =
-            new PriceTypeAl(this.panel, PriceType.KINO_STAFF);
-
-        final JToggleButton kinoStaffButton = new JToggleButton("Staff");
-        kinoStaffButton.addActionListener(kinoStaffListener);
-        kinoStaffButton.setMargin(insets);
-
-        // SENIOR
-
-        final PriceTypeAl seniorListener =
-            new PriceTypeAl(this.panel, PriceType.SENIOR);
-
-        final JToggleButton seniorButton = new JToggleButton("Senior");
-        seniorButton.addActionListener(seniorListener);
-        seniorButton.setMargin(insets);
-
-        // SILVER
-
-        final PriceTypeAl silverListener =
-            new PriceTypeAl(this.panel, PriceType.SILVER);
-
-        final JToggleButton silverButton = new JToggleButton("Silver");
-        silverButton.addActionListener(silverListener);
-        silverButton.setMargin(insets);
-
-        // STUDENT
-
-        final PriceTypeAl studentListener =
-            new PriceTypeAl(this.panel, PriceType.STUDENT);
-
-        final JToggleButton studentButton = new JToggleButton("Student");
-        studentButton.addActionListener(studentListener);
-        studentButton.setMargin(insets);
-
-        // STUDENT
-
-        final PriceTypeAl doubleBillListener =
-            new PriceTypeAl(this.panel, PriceType.DOUBLE_BILL);
-
-        final JToggleButton doubleBillButton = new JToggleButton("Double Bill");
-        doubleBillButton.addActionListener(doubleBillListener);
-        doubleBillButton.setMargin(insets);
-
-        // U16
-
-        final PriceTypeAl u16Listener =
-            new PriceTypeAl(this.panel, PriceType.U16);
-
-        final JToggleButton u16Button = new JToggleButton("U16");
-        u16Button.addActionListener(u16Listener);
-        u16Button.setMargin(insets);
-
-        this.buttons =
-            new JToggleButton[] {
-                goldButton, silverButton, seniorButton, u16Button,
-                studentButton, kinoFriendsButton, kinoStaffButton,
-                doubleBillButton
-            };
-
-        this.group = new ButtonGroup();
-
         this.setSize(700, 100);
 
         this.add(map);
         this.add(bookings);
         this.add(delete);
-        for (final JToggleButton button : this.buttons) {
-            this.group.add(button);
-            this.add(button);
-        }
-    }
-
-    /**
-     */
-    public void disablePriceType() {
-        for (final JToggleButton button : this.buttons) {
-            button.setEnabled(false);
-        }
-    }
-
-    /**
-     */
-    public void enablePriceType() {
-        for (final JToggleButton button : this.buttons) {
-            button.setEnabled(true);
-        }
-        this.group.clearSelection();
     }
 }
