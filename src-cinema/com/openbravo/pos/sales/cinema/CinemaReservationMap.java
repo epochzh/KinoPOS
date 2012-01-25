@@ -91,12 +91,12 @@ public class CinemaReservationMap extends JTicketsBag {
     /**
      */
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
-        "yyyy-MM-dd");
+        "yyyy-MM-dd E");
 
     /**
      */
     private static final DateFormat DATE_BEGIN_FORMAT = new SimpleDateFormat(
-        "yyyy-MM-dd HH:mm");
+        "yyyy-MM-dd E HH:mm");
 
     /**
      */
@@ -207,7 +207,12 @@ public class CinemaReservationMap extends JTicketsBag {
             } else if (bookingState == BookingState.RESERVED) {
                 seatColor = ColorPanel.COLOR_RESERVED;
             } else if (bookingState == BookingState.TAKEN) {
-                seatColor = ColorPanel.COLOR_TAKEN;
+                final Boolean collected = seat.getBooking().getCollected();
+                if (collected) {
+                    seatColor = ColorPanel.COLOR_COLLECTED;
+                } else {
+                    seatColor = ColorPanel.COLOR_TAKEN;
+                }
             } else {
                 throw new IllegalArgumentException("bookingState: "
                     + bookingState);
@@ -1151,13 +1156,13 @@ public class CinemaReservationMap extends JTicketsBag {
 
         final ColorPanel colorPanel = new ColorPanel();
         colorPanel.setBackground(COLOR_BACKGROUND);
-        colorPanel.setPreferredSize(new Dimension(275, 240));
+        colorPanel.setPreferredSize(new Dimension(275, 180));
 
         // cartPanel
 
         this.cartPanel = new CartPanel(this);
         this.cartPanel.setBackground(COLOR_BACKGROUND);
-        this.cartPanel.setPreferredSize(new Dimension(275, 440));
+        this.cartPanel.setPreferredSize(new Dimension(275, 500));
 
         // eastPanel
 

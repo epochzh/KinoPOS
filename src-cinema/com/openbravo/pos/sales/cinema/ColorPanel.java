@@ -44,7 +44,7 @@ public class ColorPanel extends JPanel {
 
     /**
      */
-    static final Color COLOR_SELECTED = Color.ORANGE;
+    static final Color COLOR_COLLECTED = Color.ORANGE;
 
     /**
      */
@@ -62,14 +62,14 @@ public class ColorPanel extends JPanel {
     /**
      */
     private static final Color[] COLORS = {
-        COLOR_AVAILABLE, COLOR_REMOVABLE, COLOR_SELECTED, COLOR_LOCKED,
-        COLOR_RESERVED, COLOR_TAKEN,
+        COLOR_AVAILABLE, COLOR_REMOVABLE, COLOR_LOCKED, COLOR_RESERVED,
+        COLOR_TAKEN, COLOR_COLLECTED,
     };
 
     /**
      */
     private static final String[] TEXTS = {
-        "AVAILABLE", "REMOVABLE", "SELECTED", "LOCKED", "RESERVED", "TAKEN",
+        "AVAILABLE", "REMOVABLE", "LOCKED", "RESERVED", "TAKEN", "COLLECTED",
     };
 
     /**
