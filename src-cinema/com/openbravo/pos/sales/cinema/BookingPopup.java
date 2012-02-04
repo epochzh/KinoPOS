@@ -290,7 +290,7 @@ public class BookingPopup extends JDialog {
         buttonPanel.setLayout(new GridLayout(1, 2, 20, 20));
 
         if (this.booking.getState() == BookingState.RESERVED) {
-            // cancelButton
+            // cancel
 
             final BookingCancelAl cancelAl = new BookingCancelAl(this);
 
@@ -342,7 +342,21 @@ public class BookingPopup extends JDialog {
             buttonPanel.add(new JLabel());
             buttonPanel.add(printButton);
         } else {
-            // printButton
+            // cancel
+
+            final BookingCancelAl cancelAl = new BookingCancelAl(this);
+
+            final JButton cancelButton = new JButton();
+            cancelButton.addActionListener(cancelAl);
+            cancelButton.setBackground(new Color(1, 47, 204));
+            cancelButton.setFocusable(false);
+            cancelButton.setFocusPainted(false);
+            cancelButton.setForeground(Color.white);
+            cancelButton.setPreferredSize(new Dimension(40, 30));
+            cancelButton.setRequestFocusEnabled(false);
+            cancelButton.setText("Cancel");
+
+            // print
 
             final ActionListener listener = new BookedTicketDetailsAl(this);
 
@@ -357,7 +371,7 @@ public class BookingPopup extends JDialog {
             printButton.setRequestFocusEnabled(false);
             printButton.setText("Print");
 
-            buttonPanel.add(new JLabel());
+            buttonPanel.add(cancelButton);
             buttonPanel.add(printButton);
         }
 

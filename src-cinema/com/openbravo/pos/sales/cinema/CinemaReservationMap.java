@@ -892,6 +892,18 @@ public class CinemaReservationMap extends JTicketsBag {
     }
 
     /**
+     * @param barcode
+     */
+    public void cancelBooking(final String barcode) {
+        try {
+            final Booking booking = this.dao.getBookingByBarcode(barcode);
+            this.cancelBooking(booking);
+        } catch (final BasicException ex) {
+            new MessageInf(ex).show(this);
+        }
+    }
+
+    /**
      * @param booking
      */
     public void cancelBooking(final Booking booking) {
@@ -1213,14 +1225,14 @@ public class CinemaReservationMap extends JTicketsBag {
     }
 
     /**
-     * @param ev
+     * @param event
      * @return
      */
-    private String getStatus(final Event ev) {
+    private String getStatus(final Event event) {
         String status;
 
         try {
-            final String runTime = this.dao.getPostByName(ev.getName());
+            final String runTime = this.dao.getPostByName(event.getName());
 
             if (runTime == null) {
                 status = "null";

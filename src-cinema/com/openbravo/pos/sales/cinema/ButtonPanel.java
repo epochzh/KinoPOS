@@ -3,6 +3,9 @@ package com.openbravo.pos.sales.cinema;
 import com.openbravo.pos.sales.cinema.listener.BookingsDatabaseAl;
 import com.openbravo.pos.sales.cinema.listener.CancelTicketAl;
 import com.openbravo.pos.sales.cinema.listener.CinemaReservationMapAl;
+import com.openbravo.pos.sales.cinema.listener.CustomerFinderAl;
+import com.openbravo.pos.sales.cinema.listener.MembershipAl;
+import com.openbravo.pos.sales.cinema.listener.OldMembershipAl;
 
 import java.awt.Insets;
 
@@ -79,10 +82,46 @@ public class ButtonPanel extends JPanel {
         delete.setMargin(new Insets(15, 18, 15, 18));
         delete.setRequestFocusEnabled(false);
 
+        // CUSTOMER
+
+        final JButton customer = new JButton();
+        customer.setIcon(new ImageIcon(this.getClass().getResource(
+            "/com/openbravo/images/kuser.png")));
+        customer.setFocusPainted(false);
+        customer.setFocusable(false);
+        customer.setMargin(new Insets(15, 18, 15, 18));
+        customer.setRequestFocusEnabled(false);
+        customer.addActionListener(new CustomerFinderAl(panel));
+
+        // MEMBERSHIP
+
+        final JButton membership = new JButton();
+        membership.setIcon(new ImageIcon(this.getClass().getResource(
+            "/com/openbravo/images/colorize.png")));
+        membership.setFocusPainted(false);
+        membership.setFocusable(false);
+        membership.setMargin(new Insets(15, 17, 15, 17));
+        membership.setRequestFocusEnabled(false);
+        membership.addActionListener(new MembershipAl(panel));
+
+        // OLDMEMBERSHIP
+
+        final JButton oldMembership = new JButton();
+        oldMembership.setIcon(new ImageIcon(this.getClass().getResource(
+            "/com/openbravo/images/contents.png")));
+        oldMembership.setFocusPainted(false);
+        oldMembership.setFocusable(false);
+        oldMembership.setMargin(new Insets(12, 14, 12, 14));
+        oldMembership.setRequestFocusEnabled(false);
+        oldMembership.addActionListener(new OldMembershipAl(panel));
+
         this.setSize(700, 100);
 
         this.add(map);
         this.add(bookings);
         this.add(delete);
+        this.add(customer);
+        this.add(membership);
+        this.add(oldMembership);
     }
 }
