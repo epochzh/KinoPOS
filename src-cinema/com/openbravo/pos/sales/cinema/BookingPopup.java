@@ -178,8 +178,13 @@ public class BookingPopup extends JDialog {
         final JLabel seatNumberLabel = new JLabel("Seat number");
         seatNumberLabel.setFont(FONT);
 
-        final JLabel seatNumber =
-            new JLabel(this.booking.getSeatCoordinates().toUpperCase());
+        String seatNumberText = this.booking.getSeatCoordinates().toUpperCase();
+        if (this.booking.getState() == BookingState.TAKEN) {
+            seatNumberText +=
+                "     " + this.booking.getPriceType().getAbbreviation();
+        }
+
+        final JLabel seatNumber = new JLabel(seatNumberText);
         seatNumber.setFont(FONT);
 
         // seatState

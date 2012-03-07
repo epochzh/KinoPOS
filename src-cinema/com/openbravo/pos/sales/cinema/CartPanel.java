@@ -11,7 +11,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Logger;
@@ -36,12 +37,17 @@ public class CartPanel extends JPanel {
 
     /**
      */
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
+    private static final Format DATE_FORMAT = new SimpleDateFormat(
         "dd MMMM yyyy");
 
     /**
      */
-    private static final DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
+    private static final Format PRICE_FORMAT = new DecimalFormat(
+        "\u00A4 ##0.00");
+
+    /**
+     */
+    private static final Format TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
     /**
      */
@@ -152,7 +158,9 @@ public class CartPanel extends JPanel {
                 new JLabel(booking.getSeatCoordinates().toUpperCase());
             label.setForeground(Color.white);
 
-            final JLabel text = new JLabel(booking.getPrice().toString());
+            final JLabel text =
+                new JLabel(PRICE_FORMAT.format(booking.getPrice()) + "     "
+                    + booking.getPriceType().getAbbreviation());
             text.setForeground(Color.white);
 
             mainPanel.add(label);
@@ -170,7 +178,7 @@ public class CartPanel extends JPanel {
         totalLabel.setFont(FONT_TOTAL);
         totalLabel.setForeground(Color.white);
 
-        final JLabel totalText = new JLabel(String.valueOf(total));
+        final JLabel totalText = new JLabel(PRICE_FORMAT.format(total));
         totalText.setFont(FONT_TOTAL);
         totalText.setForeground(Color.white);
 

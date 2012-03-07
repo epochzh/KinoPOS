@@ -233,6 +233,8 @@ public class CinemaReservationMap extends JTicketsBag {
 
         if (priceType == null) {
             price = matrix.getPriceFull();
+        } else if (priceType == PriceType.FREE) {
+            price = 0D;
         } else if (priceType == PriceType.FULL_PRICE) {
             price = matrix.getPriceFull();
         } else if (priceType == PriceType.GOLD) {
@@ -965,7 +967,7 @@ public class CinemaReservationMap extends JTicketsBag {
     /**
      * @param booking
      */
-    public void printBooking(final Booking booking) {
+    public void printBooking(@SuppressWarnings("unused") final Booking booking) {
         // TODO: To complete.
         ((JPanelTicket) super.m_panelticket).printTicket("Printer.Ticket");
     }

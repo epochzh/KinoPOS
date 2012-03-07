@@ -71,7 +71,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private Member member;
-    
+
     /**
      */
     private OldMember oldMember;
@@ -83,6 +83,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence createWpUser;
+
     /**
      */
     private BaseSentence createOldWpUser;
@@ -130,7 +131,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence getLastInsertedMemberId;
-    
+
     /**
      */
     private BaseSentence getLastInsertedOldMemberId;
@@ -252,15 +253,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "user_url, user_registered, user_activation_key, user_status, display_name) "
                     + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
                 new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
-        
+
         this.createOldWpUser =
-                new StaticSentence(
-                    this.session,
-                    "INSERT INTO wp_users "
-                        + "(user_login, user_pass, user_nicename, user_email, "
-                        + "user_url, user_registered, user_activation_key, user_status, display_name) "
-                        + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
-                    new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
+            new StaticSentence(
+                this.session,
+                "INSERT INTO wp_users "
+                    + "(user_login, user_pass, user_nicename, user_email, "
+                    + "user_url, user_registered, user_activation_key, user_status, display_name) "
+                    + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
+                new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
 
         this.createUserMeta =
             new StaticSentence(this.session, "INSERT INTO wp_usermeta "
@@ -312,29 +313,31 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "  + "AND details='published' "
-                    + "AND (event_id = ?) ", new SerializerWriteBasic(
-                    Datas.LONG), new SerializerReadClass(Event.class));
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND details='published' " + "AND (event_id = ?) ",
+                new SerializerWriteBasic(Datas.LONG), new SerializerReadClass(
+                    Event.class));
 
         this.getEventByName =
             new StaticSentence(
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
-                    + "AND (venue = ?) " + "AND (event_name = ?) "
-                    + "AND (start_date = ?) ", new SerializerWriteBasic(
-                    Datas.LONG, Datas.STRING, Datas.TIMESTAMP),
-                new SerializerReadClass(Event.class));
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND details='published' " + "AND (venue = ?) "
+                    + "AND (event_name = ?) " + "AND (start_date = ?) ",
+                new SerializerWriteBasic(Datas.LONG, Datas.STRING,
+                    Datas.TIMESTAMP), new SerializerReadClass(Event.class));
 
         this.getFirstFilm =
             new StaticSentence(
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
-                    + "AND (venue = ?) " + "AND (start_date >= ?) "
-                    + "AND (end_date < ?) " + "ORDER BY start_date ASC LIMIT 1",
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND details='published' " + "AND (venue = ?) "
+                    + "AND (start_date >= ?) " + "AND (end_date < ?) "
+                    + "ORDER BY start_date ASC LIMIT 1",
                 new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
                 new SerializerReadClass(Event.class));
 
@@ -342,19 +345,20 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             new StaticSentence(this.session, "SELECT ID " + "FROM wp_users "
                 + "WHERE (user_registered = ?)", new SerializerWriteBasic(
                 Datas.TIMESTAMP), new SerializerReadClass(Member.class));
-        
+
         this.getLastInsertedOldMemberId =
-                new StaticSentence(this.session, "SELECT ID " + "FROM wp_users "
-                	+ "ORDER BY ID DESC LIMIT 1");
+            new StaticSentence(this.session, "SELECT ID " + "FROM wp_users "
+                + "ORDER BY ID DESC LIMIT 1");
 
         this.getNextAvailableFilm =
             new StaticSentence(this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
-                    + "AND (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
-                    + "AND (start_date >= ?) " + "ORDER BY start_date ASC ",
-                new SerializerWriteBasic(Datas.LONG, Datas.STRING),
-                new SerializerReadClass(Event.class));
+                    + "AND (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND details='published' " + "AND (start_date >= ?) "
+                    + "ORDER BY start_date ASC ", new SerializerWriteBasic(
+                    Datas.LONG, Datas.STRING), new SerializerReadClass(
+                    Event.class));
 
         this.getPostByName =
             new StaticSentence(this.session, "SELECT ID, post_title "
@@ -475,10 +479,11 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 this.session,
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events "
-                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') " + "AND details='published' "
-                    + "AND (venue = ?) " + "AND (start_date >= ?) "
-                    + "AND (end_date < ?) " + "ORDER BY event_name ASC ",
-                new SerializerWriteBasic(Datas.LONG, Datas.STRING, Datas.STRING),
+                    + "WHERE (event_type = 'film' or event_type LIKE 'event%') "
+                    + "AND details='published' " + "AND (venue = ?) "
+                    + "AND (start_date >= ?) " + "AND (end_date < ?) "
+                    + "ORDER BY event_name ASC ", new SerializerWriteBasic(
+                    Datas.LONG, Datas.STRING, Datas.STRING),
                 new SerializerReadClass(Event.class));
 
         this.listEventByName =
@@ -486,11 +491,11 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 "SELECT start_date, end_date, event_id, event_name, screen, event_type "
                     + "FROM events " + "WHERE (venue = ?) "
                     + "AND (event_type = 'film' or event_type LIKE 'event%') "
-                    + "AND (event_name = ?) " + "AND (start_date >= ?) " + "AND details='published' "
-                    + "AND (end_date < ?) " + "ORDER BY start_date ASC ",
-                new SerializerWriteBasic(Datas.LONG, Datas.STRING,
-                    Datas.TIMESTAMP, Datas.STRING), new SerializerReadClass(
-                    Event.class));
+                    + "AND (event_name = ?) " + "AND (start_date >= ?) "
+                    + "AND details='published' " + "AND (end_date < ?) "
+                    + "ORDER BY start_date ASC ", new SerializerWriteBasic(
+                    Datas.LONG, Datas.STRING, Datas.TIMESTAMP, Datas.STRING),
+                new SerializerReadClass(Event.class));
 
         this.listPrice =
             new StaticSentence(this.session,
@@ -599,9 +604,9 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             (Member) this.getLastInsertedMemberId.find(newMember
                 .getRegisteredDate(), null);
         this.member.setId(lastMemberId.getId());
-        
-        if(this.member.isSenior()){
-        		this.member.setFreeTickets("3");
+
+        if (this.member.isSenior()) {
+            this.member.setFreeTickets("3");
         }
 
         LOGGER.info("LAST ID: " + lastMemberId.getId());
@@ -613,75 +618,75 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
     }
-    
+
     /**
      * create 2 silver users
+     * 
      * @param newMember
-     * @throws BasicException 
+     * @throws BasicException
      */
-    public void createWpJointUsers(Member newMember) throws BasicException {
-    	if (LOGGER.isLoggable(Level.INFO)) {
+    public void createWpJointUsers(final Member newMember)
+    throws BasicException {
+        if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.info("newMember: " + newMember);
         }
-    	
-    	Boolean secondSenior = false;
-    	for(int i=1; i<=2; i++){
-    		
-    		// create the 2 users
-    		
-	        this.member = this.splitJointMembers(newMember, i);
-	        final Date todaysDate = new Date();
-	        final long time = todaysDate.getTime();
-	        this.member.setRegisteredDate(new Timestamp(time));
-	        this.member.setMemberShipType("Joint Silver Membership");
-	
-	        // TODO: get the price of a membership
-	        // this.getMembershipPrice();
-	
-	        this.createWpUser.exec(this.member.getNickname(), this.member
-	            .getRegisteredDate());
-	
-	        final Member lastMemberId =
-	            (Member) this.getLastInsertedMemberId.find(this.member
-	                .getRegisteredDate(), null);
-	        this.member.setId(lastMemberId.getId());
-	        
-	        if(i==1){
-	        	Integer memberId = this.member.getId() + 1;
-	        	this.member.setAssociation(memberId.toString());
-	        }else{
-	        	Integer memberId = this.member.getId() - 1;
-	        	this.member.setAssociation(memberId.toString());
-	        }
-	        
-	        if(this.member.isSenior()){
-	        	if(!secondSenior){
-	        		this.member.setFreeTickets("3");
-	        	}else{
-	        		this.member.setFreeTickets("2");
-	        	}
-	        }
-	        
-	        
-	
-	        LOGGER.info("LAST ID: " + lastMemberId.getId());
-	
-	        // create the wp_usermeta
-	        // this.createUserMeta();
-	        final Map<String, String> meta = this.member.populateMap();
-	        this.createUserMeta(meta);
-	
-	        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
-    	}
-		
-	}
-    
-    
+
+        final Boolean secondSenior = false;
+        for (int i = 1; i <= 2; i++) {
+
+            // create the 2 users
+
+            this.member = splitJointMembers(newMember, i);
+            final Date todaysDate = new Date();
+            final long time = todaysDate.getTime();
+            this.member.setRegisteredDate(new Timestamp(time));
+            this.member.setMemberShipType("Joint Silver Membership");
+
+            // TODO: get the price of a membership
+            // this.getMembershipPrice();
+
+            this.createWpUser.exec(this.member.getNickname(), this.member
+                .getRegisteredDate());
+
+            final Member lastMemberId =
+                (Member) this.getLastInsertedMemberId.find(this.member
+                    .getRegisteredDate(), null);
+            this.member.setId(lastMemberId.getId());
+
+            if (i == 1) {
+                final Integer memberId = this.member.getId() + 1;
+                this.member.setAssociation(memberId.toString());
+            } else {
+                final Integer memberId = this.member.getId() - 1;
+                this.member.setAssociation(memberId.toString());
+            }
+
+            if (this.member.isSenior()) {
+                if (!secondSenior) {
+                    this.member.setFreeTickets("3");
+                } else {
+                    this.member.setFreeTickets("2");
+                }
+            }
+
+            LOGGER.info("LAST ID: " + lastMemberId.getId());
+
+            // create the wp_usermeta
+            // this.createUserMeta();
+            final Map<String, String> meta = this.member.populateMap();
+            this.createUserMeta(meta);
+
+            LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+        }
+
+    }
+
     /**
      * @param newMember
      * @throws BasicException
      */
-    public void createOldWpUser(final OldMember newMember) throws BasicException {
+    public void createOldWpUser(final OldMember newMember)
+    throws BasicException {
 
         this.oldMember = newMember;
 
@@ -689,22 +694,21 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             .getRegisteredDate());
 
         final DataResultSet resultSet =
-        		this.getLastInsertedOldMemberId.openExec(null);
-            resultSet.next();
-            final int lastMemberId = resultSet.getInt(1);
-            resultSet.close();
-            this.getLastInsertedOldMemberId.closeExec();
+            this.getLastInsertedOldMemberId.openExec(null);
+        resultSet.next();
+        final int lastMemberId = resultSet.getInt(1);
+        resultSet.close();
+        this.getLastInsertedOldMemberId.closeExec();
 
         LOGGER.info("LAST ID: " + lastMemberId);
-        
+
         this.oldMember.setId(lastMemberId);
-        
+
         LOGGER.info("LAST ID 2: " + lastMemberId);
-        
-        
-        		this.oldMember.setFreeTickets("2");
+
+        this.oldMember.setFreeTickets("2");
         LOGGER.info("LAST ID 3: " + lastMemberId);
-      //  LOGGER.info("LAST ID: " + lastMemberId.getId());
+        // LOGGER.info("LAST ID: " + lastMemberId.getId());
 
         // create the wp_usermeta
         final Map<String, String> meta = this.oldMember.populateMap();
@@ -713,64 +717,57 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
     }
-    
-    
+
     /**
      * create 2 silver users
+     * 
      * @param newMember
-     * @throws BasicException 
+     * @throws BasicException
      */
-    public void createOldWpJointUsers(OldMember newMember) throws BasicException {
-    	
-    	for(int i=1; i<=2; i++){
-    		
-    		// create the 2 users
-    		//this.oldMember = newMember;
-	        this.oldMember = this.splitOldJointMembers(newMember, i);
-    		
-	        this.oldMember.setMemberShipType("Joint Silver Membership");
-	
-	        // TODO: fix line below
-	
-	        this.createOldWpUser.exec(this.oldMember.getNickname(), this.oldMember.getRegisteredDate());
-	        
-	        final DataResultSet resultSet =
-	        		this.getLastInsertedOldMemberId.openExec(null);
-	            resultSet.next();
-	            final int lastMemberId = resultSet.getInt(1);
-	            resultSet.close();
-	            this.getLastInsertedOldMemberId.closeExec();
+    public void createOldWpJointUsers(final OldMember newMember)
+    throws BasicException {
 
-	        
-	        this.oldMember.setId(lastMemberId);
-	        
-	        
-	        if(i==1){
-	        	Integer memberId = this.oldMember.getId() + 1;
-	        	this.oldMember.setAssociation(memberId.toString());
-	        }else{
-	        	Integer memberId = this.oldMember.getId() - 1;
-	        	this.oldMember.setAssociation(memberId.toString());
-	        }
-	        		
-	        	this.oldMember.setFreeTickets("3");
-	       
-	        
-	
-	        // create the wp_usermeta
-	        // this.createUserMeta();
-	        final Map<String, String> meta = this.oldMember.populateMap();
-	        this.createUserMeta(meta);
-	
-	        LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
-    	}
-		
-	}
-    
-    
-    
-    
-    
+        for (int i = 1; i <= 2; i++) {
+
+            // create the 2 users
+            // this.oldMember = newMember;
+            this.oldMember = splitOldJointMembers(newMember, i);
+
+            this.oldMember.setMemberShipType("Joint Silver Membership");
+
+            // TODO: fix line below
+
+            this.createOldWpUser.exec(this.oldMember.getNickname(),
+                this.oldMember.getRegisteredDate());
+
+            final DataResultSet resultSet =
+                this.getLastInsertedOldMemberId.openExec(null);
+            resultSet.next();
+            final int lastMemberId = resultSet.getInt(1);
+            resultSet.close();
+            this.getLastInsertedOldMemberId.closeExec();
+
+            this.oldMember.setId(lastMemberId);
+
+            if (i == 1) {
+                final Integer memberId = this.oldMember.getId() + 1;
+                this.oldMember.setAssociation(memberId.toString());
+            } else {
+                final Integer memberId = this.oldMember.getId() - 1;
+                this.oldMember.setAssociation(memberId.toString());
+            }
+
+            this.oldMember.setFreeTickets("3");
+
+            // create the wp_usermeta
+            // this.createUserMeta();
+            final Map<String, String> meta = this.oldMember.populateMap();
+            this.createUserMeta(meta);
+
+            LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+        }
+
+    }
 
     /**
      * @param meta
@@ -780,74 +777,82 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     throws BasicException {
         final Set<String> set = meta.keySet();
         for (final String key : set) {
-        	LOGGER.info("ID: " + this.oldMember.getId() +" key: "+ key+" value: "+meta.get(key));
-            this.createUserMeta.exec(this.oldMember.getId(), key, meta.get(key));
+            LOGGER.info("ID: " + this.oldMember.getId() + " key: " + key
+                + " value: " + meta.get(key));
+            this.createUserMeta
+                .exec(this.oldMember.getId(), key, meta.get(key));
         }
     }
-    
+
     /**
      * takes the joint memberships and creates 2 accounts
+     * 
+     * @param newMember
+     * @param oneOrTwo
+     * @return
      */
-    private Member splitJointMembers(Member newMember, int oneOrTwo){
-    	if(oneOrTwo == 1){
-    		// first member
-    		Member firstMember = new Member();
-    		firstMember.setFirstName(newMember.getFirstName());
-    		firstMember.setLastName(newMember.getLastName());
-    		firstMember.setAddress1(newMember.getAddress1());
-    		firstMember.setAddress2(newMember.getAddress2());
-    		firstMember.setCity(newMember.getCity());
-    		firstMember.setMemberShipType("Joint Silver Membership");
-    		firstMember.setPostcode(newMember.getPostcode());
-    		firstMember.setTelephone(newMember.getTelephone());
-    		firstMember.setMobile(newMember.getMobile());
-    		firstMember.setDob(newMember.getDob());
-    		
-    		return firstMember;
-    	}else{
-    		// second member
-    		Member secondMember = new Member();
-    		secondMember.setFirstName(newMember.getFirstName2());
-    		secondMember.setLastName(newMember.getLastName2());
-    		secondMember.setAddress1(newMember.getAddress1());
-    		secondMember.setAddress2(newMember.getAddress2());
-    		secondMember.setCity(newMember.getCity());
-    		secondMember.setMemberShipType("Joint Silver Membership");
-    		secondMember.setPostcode(newMember.getPostcode());
-    		secondMember.setTelephone(newMember.getTelephone());
-    		secondMember.setMobile(newMember.getMobile());
-    		secondMember.setDob(newMember.getDob2());
-    		
-    		return secondMember;
-    	}
-    }
-    
-    
-    /**
-     * takes the joint memberships and creates 2 accounts
-     */
-    private OldMember splitOldJointMembers(OldMember newMember, int oneOrTwo){
-    	if(oneOrTwo == 1){
-    		// first member
-    		OldMember firstMember = newMember;
-    		firstMember.setFirstName(newMember.getFirstName());
-    		firstMember.setLastName(newMember.getLastName());
-    		firstMember.setMemberShipType("Joint Silver Membership");
-    		
-    		return firstMember;
-    	}else{
-    		// second member
-    		OldMember secondMember = newMember;
-    		secondMember.setFirstName(newMember.getFirstName2());
-    		secondMember.setLastName(newMember.getLastName2());
-    		secondMember.setMemberShipType("Joint Silver Membership");
-    		
-    		return secondMember;
-    	}
+    private static Member splitJointMembers(final Member newMember,
+    final int oneOrTwo) {
+        if (oneOrTwo == 1) {
+            // first member
+            final Member firstMember = new Member();
+            firstMember.setFirstName(newMember.getFirstName());
+            firstMember.setLastName(newMember.getLastName());
+            firstMember.setAddress1(newMember.getAddress1());
+            firstMember.setAddress2(newMember.getAddress2());
+            firstMember.setCity(newMember.getCity());
+            firstMember.setMemberShipType("Joint Silver Membership");
+            firstMember.setPostcode(newMember.getPostcode());
+            firstMember.setTelephone(newMember.getTelephone());
+            firstMember.setMobile(newMember.getMobile());
+            firstMember.setDob(newMember.getDob());
+
+            return firstMember;
+        }
+
+        // second member
+        final Member secondMember = new Member();
+        secondMember.setFirstName(newMember.getFirstName2());
+        secondMember.setLastName(newMember.getLastName2());
+        secondMember.setAddress1(newMember.getAddress1());
+        secondMember.setAddress2(newMember.getAddress2());
+        secondMember.setCity(newMember.getCity());
+        secondMember.setMemberShipType("Joint Silver Membership");
+        secondMember.setPostcode(newMember.getPostcode());
+        secondMember.setTelephone(newMember.getTelephone());
+        secondMember.setMobile(newMember.getMobile());
+        secondMember.setDob(newMember.getDob2());
+
+        return secondMember;
     }
 
-    
-    
+    /**
+     * takes the joint memberships and creates 2 accounts
+     * 
+     * @param newMember
+     * @param oneOrTwo
+     * @return
+     */
+    private static OldMember splitOldJointMembers(final OldMember newMember,
+    final int oneOrTwo) {
+        if (oneOrTwo == 1) {
+            // first member
+            final OldMember firstMember = newMember;
+            firstMember.setFirstName(newMember.getFirstName());
+            firstMember.setLastName(newMember.getLastName());
+            firstMember.setMemberShipType("Joint Silver Membership");
+
+            return firstMember;
+        }
+
+        // second member
+        final OldMember secondMember = newMember;
+        secondMember.setFirstName(newMember.getFirstName2());
+        secondMember.setLastName(newMember.getLastName2());
+        secondMember.setMemberShipType("Joint Silver Membership");
+
+        return secondMember;
+    }
 
     /**
      * @param booking
@@ -1128,7 +1133,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
             (Postmeta) this.getPostMeta.find(post.getId(), "certificate");
 
         final String status =
-            runTime.getMetaValue() + " mins / cert: " + certificate.getMetaValue();
+            runTime.getMetaValue() + " mins / cert: "
+                + certificate.getMetaValue();
 
         return status;
     }
@@ -1330,12 +1336,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         return bookings;
     }
-    
+
     /**
+     * @param evId
      * @return the list of {@link Booking}
      * @throws BasicException
      */
-    public List<Booking> listBookingByEvent(final Long evId) throws BasicException {
+    public List<Booking> listBookingByEvent(final Long evId)
+    throws BasicException {
         @SuppressWarnings("unchecked")
         final List<Booking> bookings = this.listBookingByEvent.list(evId, null);
         for (final Booking booking : bookings) {
@@ -1773,7 +1781,4 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         return price.getPrice();
     }
 
-	
-
-	
 }

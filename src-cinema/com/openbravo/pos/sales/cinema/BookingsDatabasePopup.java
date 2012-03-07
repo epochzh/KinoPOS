@@ -4,12 +4,9 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.sales.cinema.model.Booking;
-import com.openbravo.pos.sales.cinema.model.Event;
 
-import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -22,9 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JDialog;
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -40,26 +35,25 @@ public class BookingsDatabasePopup extends JDialog {
      */
     private static final Logger LOGGER = Logger
         .getLogger(BookingsDatabasePopup.class.getName());
-    
+
     /**
      * 
      */
     private boolean isEvent = false;
-    
-    /**
-	 * @return the isEvent
-	 */
-	public boolean isEvent() {
-		return isEvent;
-	}
 
-	/**
-	 * @param isEvent the isEvent to set
-	 */
-	public void setEvent(boolean isEvent) {
-		this.isEvent = isEvent;
-	}
-   
+    /**
+     * @return the isEvent
+     */
+    public boolean isEvent() {
+        return this.isEvent;
+    }
+
+    /**
+     * @param isEvent the isEvent to set
+     */
+    public void setEvent(final boolean isEvent) {
+        this.isEvent = isEvent;
+    }
 
     /**
      * @param panel
@@ -79,38 +73,6 @@ public class BookingsDatabasePopup extends JDialog {
         myMsg.applyComponentOrientation(panel.getComponentOrientation());
 
         return myMsg;
-    }
-
-    /**
-     */
-    private static class BookingsTableCellRenderer extends
-    DefaultTableCellRenderer {
-
-        /**
-         */
-        private static final Font FONT = new Font("Arial", Font.PLAIN, 18);
-
-        /**
-         */
-        public BookingsTableCellRenderer() {
-            super();
-        }
-
-        /**
-         * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable,
-         * java.lang.Object, boolean, boolean, int, int)
-         */
-        @Override
-        public Component getTableCellRendererComponent(final JTable table,
-        final Object value, final boolean isSelected, final boolean hasFocus,
-        final int row, final int column) {
-            final Component component =
-                super.getTableCellRendererComponent(table, value, isSelected,
-                    hasFocus, row, column);
-            component.setFont(FONT);
-
-            return component;
-        }
     }
 
     /**
@@ -303,8 +265,9 @@ public class BookingsDatabasePopup extends JDialog {
 
         this.jScrollPane1.setViewportView(this.bookingsTable);
     }
-    
+
     /**
+     * @param evId
      */
     public void executeSearchEvent(final Long evId) {
         String barcode = this.barcodeTF.getText();
@@ -467,23 +430,27 @@ public class BookingsDatabasePopup extends JDialog {
         this.bookingsTable.setFocusable(false);
         this.bookingsTable.setRequestFocusEnabled(false);
         this.bookingsTable.setRowHeight(32);
-        if(this.isEvent()){
-        this.bookingsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        if (this.isEvent()) {
+            this.bookingsTable
+                .addMouseListener(new java.awt.event.MouseAdapter() {
 
-            @Override
-            public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                BookingsDatabasePopup.this.bookingsTableMouseClicked();
-            }
-        });
-        }else{
-        	this.bookingsTable.addMouseListener(new java.awt.event.MouseAdapter() {
-        		
-                @Override
-                public void mouseClicked(final java.awt.event.MouseEvent evt) {
-                
-                    BookingsDatabasePopup.this.bookingsTableMouseClicked();
-                }
-            });
+                    @Override
+                    public void
+                    mouseClicked(final java.awt.event.MouseEvent evt) {
+                        BookingsDatabasePopup.this.bookingsTableMouseClicked();
+                    }
+                });
+        } else {
+            this.bookingsTable
+                .addMouseListener(new java.awt.event.MouseAdapter() {
+
+                    @Override
+                    public void
+                    mouseClicked(final java.awt.event.MouseEvent evt) {
+
+                        BookingsDatabasePopup.this.bookingsTableMouseClicked();
+                    }
+                });
         }
         this.jScrollPane1.setViewportView(this.bookingsTable);
 
@@ -533,7 +500,8 @@ public class BookingsDatabasePopup extends JDialog {
         this.executeSearch();
     }
 
-    /** change this for add to cart
+    /**
+     * change this for add to cart
      */
     private void bookingsTableMouseClicked() {
         final int selectedRow = this.bookingsTable.getSelectedRow();
@@ -547,22 +515,6 @@ public class BookingsDatabasePopup extends JDialog {
             (BookingsTableModel) this.bookingsTable.getModel();
         final Booking booking = model.getBookings().get(selectedRow);
         this.panel.showBookingPopup(true, booking);
-    }
-    
-    /** change this for add to cart
-     */
-    private void bookingsTableMouseClickedEvent() {
-        final int selectedRow = this.bookingsTable.getSelectedRow();
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("selectedRow: " + selectedRow);
-        }
-        if (selectedRow == -1) {
-            return;
-        }
-        final BookingsTableModel model =
-            (BookingsTableModel) this.bookingsTable.getModel();
-        final Booking booking = model.getBookings().get(selectedRow);
-        this.panel.showBookingPopup(false, booking);
     }
 
     /**

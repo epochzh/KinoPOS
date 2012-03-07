@@ -37,7 +37,7 @@ public class PriceTypePanel extends JPanel {
 
         this.panel = panel;
 
-        final Insets insets = new Insets(6, 37, 6, 37);
+        final Insets insets = new Insets(6, 30, 6, 30);
 
         // DOUBLE_BILL
 
@@ -47,6 +47,15 @@ public class PriceTypePanel extends JPanel {
         final JToggleButton doubleBillButton = new JToggleButton("Double Bill");
         doubleBillButton.addActionListener(doubleBillListener);
         doubleBillButton.setMargin(insets);
+
+        // FREE
+
+        final PriceTypeAl freeListener =
+            new PriceTypeAl(this.panel, PriceType.FREE);
+
+        final JToggleButton freeButton = new JToggleButton("Free");
+        freeButton.addActionListener(freeListener);
+        freeButton.setMargin(insets);
 
         // GOLD
 
@@ -114,7 +123,7 @@ public class PriceTypePanel extends JPanel {
         this.buttons =
             new JToggleButton[] {
                 goldButton, silverButton, seniorButton, u16Button,
-                studentButton, kinoFriendsButton, kinoStaffButton,
+                studentButton, kinoFriendsButton, kinoStaffButton, freeButton,
                 doubleBillButton
             };
 
@@ -134,10 +143,13 @@ public class PriceTypePanel extends JPanel {
     public void selectPriceType(final PriceType priceType) {
         switch (priceType) {
             case DOUBLE_BILL:
-                this.buttons[7].doClick();
+                this.buttons[8].doClick();
                 break;
             case FIRST_FILM:
                 this.group.clearSelection();
+                break;
+            case FREE:
+                this.buttons[7].doClick();
                 break;
             case FULL_PRICE:
                 this.group.clearSelection();

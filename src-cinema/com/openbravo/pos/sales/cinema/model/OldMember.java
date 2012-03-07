@@ -647,7 +647,7 @@ public class OldMember implements IKeyed, Serializable, SerializableRead {
 	private String createCustomFields() {
 		this.setPin(String.format("%09d", this.getId()));
 		// TODO generate pin
-		final String customFields = "a:12:{i:17;s:12:\"" + this.getPin() + "\";"
+		final String customFields = "a:14:{i:17;s:9:\"" + this.getPin() + "\";"
 				+ "i:12;s:" + String.valueOf(this.getFirstName().length())
 				+ ":\"" + this.getFirstName() + "\";" + "i:13;s:"
 				+ String.valueOf(this.getLastName().length()) + ":\""

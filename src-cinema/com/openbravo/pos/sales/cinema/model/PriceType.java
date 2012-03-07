@@ -6,43 +6,47 @@ public enum PriceType {
 
     /**
      */
-    FIRST_FILM("first_film"),
+    FIRST_FILM("FF", "first_film"),
 
     /**
      */
-    FULL_PRICE("full_price"),
+    FREE("FR", "free"),
 
     /**
      */
-    GOLD("gold"),
+    FULL_PRICE("AD", "full_price"),
 
     /**
      */
-    KINO_FRIENDS("kino_friends"),
+    GOLD("ME", "gold"),
 
     /**
      */
-    KINO_STAFF("kino_staff"),
+    KINO_FRIENDS("", "kino_friends"),
 
     /**
      */
-    SENIOR("senior"),
+    KINO_STAFF("", "kino_staff"),
 
     /**
      */
-    SILVER("silver"),
+    SENIOR("SE", "senior"),
 
     /**
      */
-    STUDENT("student"),
+    SILVER("ME", "silver"),
 
     /**
      */
-    U16("u16"),
+    STUDENT("ST", "student"),
 
     /**
      */
-    DOUBLE_BILL("double_bill");
+    U16("CH", "u16"),
+
+    /**
+     */
+    DOUBLE_BILL("DB", "double_bill");
 
     /**
      * @param type
@@ -65,13 +69,26 @@ public enum PriceType {
 
     /**
      */
+    private final String abbreviation;
+
+    /**
+     */
     private final String type;
 
     /**
+     * @param abbreviation
      * @param type
      */
-    private PriceType(final String type) {
+    private PriceType(final String abbreviation, final String type) {
+        this.abbreviation = abbreviation;
         this.type = type;
+    }
+
+    /**
+     * @return the abbreviation
+     */
+    public String getAbbreviation() {
+        return this.abbreviation;
     }
 
     /**
