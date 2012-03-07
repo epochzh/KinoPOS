@@ -15,6 +15,7 @@ import com.openbravo.pos.sales.cinema.model.Customer;
 import com.openbravo.pos.sales.cinema.model.CustomerMeta;
 import com.openbravo.pos.sales.cinema.model.Day;
 import com.openbravo.pos.sales.cinema.model.Event;
+import com.openbravo.pos.sales.cinema.model.Expense;
 import com.openbravo.pos.sales.cinema.model.Member;
 import com.openbravo.pos.sales.cinema.model.MembershipType;
 import com.openbravo.pos.sales.cinema.model.OldMember;
@@ -75,6 +76,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private OldMember oldMember;
+    
+    /**
+     */
+    private Expense expense;
 
     /**
      */
@@ -87,6 +92,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence createOldWpUser;
+   
+    /**
+     */
+    private BaseSentence createNewExpenses;
 
     /**
      */
@@ -262,6 +271,11 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "user_url, user_registered, user_activation_key, user_status, display_name) "
                     + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
                 new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
+       
+        this.createNewExpenses =
+        		new StaticSentence(this.session, "INSERT INTO dd_expenses "
+        		+ "(name, supplier, amount) " + "VALUES (?, ?, ?) ",
+        		new SerializerWriteBasic(Datas.STRING, Datas.STRING, Datas.STRING));
 
         this.createUserMeta =
             new StaticSentence(this.session, "INSERT INTO wp_usermeta "
@@ -680,6 +694,22 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         }
 
     }
+    
+    /**
+     * @param newMember
+     * @throws BasicException
+     */
+    public void createNewExpense(final Expense expense)
+    throws BasicException {
+
+        this.expense = expense;
+
+        this.createNewExpenses.exec(this.expense.getName(), this.expense.getSupplier(), this.expense.getAmount());
+
+       
+       // LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+    }
+
 
     /**
      * @param newMember
