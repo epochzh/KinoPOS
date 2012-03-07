@@ -153,6 +153,7 @@ public class PriceTypePanel extends JPanel {
                 break;
             case FULL_PRICE:
                 this.group.clearSelection();
+                this.panel.onPriceTypeAction(PriceType.FULL_PRICE);
                 break;
             case GOLD:
                 this.buttons[0].doClick();

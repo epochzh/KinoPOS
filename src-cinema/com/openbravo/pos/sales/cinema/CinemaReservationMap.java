@@ -231,9 +231,7 @@ public class CinemaReservationMap extends JTicketsBag {
     final PriceType priceType) {
         Double price;
 
-        if (priceType == null) {
-            price = matrix.getPriceFull();
-        } else if (priceType == PriceType.FREE) {
+        if (priceType == PriceType.FREE) {
             price = 0D;
         } else if (priceType == PriceType.FULL_PRICE) {
             price = matrix.getPriceFull();
@@ -717,8 +715,7 @@ public class CinemaReservationMap extends JTicketsBag {
 
                 LOGGER.info("isFirstFilmApplicable: " + isFirstFilmApplicable);
 
-                if ((this.priceType != null)
-                    && (this.priceType == PriceType.DOUBLE_BILL)) {
+                if (this.priceType == PriceType.DOUBLE_BILL) {
                     isDoubleBillApplicable = true;
                 }
                 priceMatrixes = this.dao.listPrice(this.venue, this.event);
@@ -776,7 +773,7 @@ public class CinemaReservationMap extends JTicketsBag {
             booking.setEvent(this.event);
             booking.setPrice(price);
             booking.setPriceMatrix(priceMatrix);
-            booking.setPriceType(PriceType.FULL_PRICE);
+            booking.setPriceType(this.priceType);
             booking.setSalesChannel(this.venue.getName());
             booking.setSeatCoordinates(seat.getRow() + "" + seat.getColumn());
             booking.setState(BookingState.LOCKED);
