@@ -4,6 +4,7 @@ import com.openbravo.pos.sales.cinema.listener.BookingsDatabaseAl;
 import com.openbravo.pos.sales.cinema.listener.CancelTicketAl;
 import com.openbravo.pos.sales.cinema.listener.CinemaReservationMapAl;
 import com.openbravo.pos.sales.cinema.listener.CustomerFinderAl;
+import com.openbravo.pos.sales.cinema.listener.ExpensesAl;
 import com.openbravo.pos.sales.cinema.listener.MembershipAl;
 import com.openbravo.pos.sales.cinema.listener.OldMembershipAl;
 
@@ -114,6 +115,17 @@ public class ButtonPanel extends JPanel {
         oldMembership.setMargin(new Insets(12, 14, 12, 14));
         oldMembership.setRequestFocusEnabled(false);
         oldMembership.addActionListener(new OldMembershipAl(panel));
+       
+        // OLDMEMBERSHIP
+        
+        final JButton expenses = new JButton();
+        expenses.setIcon(new ImageIcon(this.getClass().getResource(
+        		"/com/openbravo/images/colorize16.png")));
+        expenses.setFocusPainted(false);
+        expenses.setFocusable(false);
+        expenses.setMargin(new Insets(12, 14, 12, 14));
+        expenses.setRequestFocusEnabled(false);
+        expenses.addActionListener(new ExpensesAl(panel));
 
         this.setSize(700, 100);
 
@@ -123,5 +135,6 @@ public class ButtonPanel extends JPanel {
         this.add(customer);
         this.add(membership);
         this.add(oldMembership);
+        this.add(expenses);
     }
 }

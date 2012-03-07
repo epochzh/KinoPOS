@@ -430,6 +430,15 @@ public class CinemaReservationMap extends JTicketsBag {
 
         return this;
     }
+    
+    /**
+     */
+    public void doExpensesAdd() {
+        final ExpensesPopup popup =
+        		ExpensesPopup.getExpensesPopup(this.dao, this);
+        popup.setVisible(true);
+
+    }
 
     /**
      */
