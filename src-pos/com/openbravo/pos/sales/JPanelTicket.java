@@ -1680,7 +1680,8 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
-        this.m_jPanTotals.add(this.m_jSubtotalEuros, gridBagConstraints);
+        // removes sub total
+        //this.m_jPanTotals.add(this.m_jSubtotalEuros, gridBagConstraints);
 
         this.m_jTaxesEuros.setBackground(java.awt.Color.white);
         this.m_jTaxesEuros
@@ -1701,9 +1702,9 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
-        this.m_jPanTotals.add(this.m_jTaxesEuros, gridBagConstraints);
+       // this.m_jPanTotals.add(this.m_jTaxesEuros, gridBagConstraints);
 
-        this.m_jLblTotalEuros2.setText(AppLocal.getIntString("label.taxcash")); // NOI18N
+      //  this.m_jLblTotalEuros2.setText(AppLocal.getIntString("label.taxcash")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -1712,8 +1713,8 @@ BeanFactoryApp, TicketsEditor {
         gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
         this.m_jPanTotals.add(this.m_jLblTotalEuros2, gridBagConstraints);
 
-        this.m_jLblTotalEuros3.setText(AppLocal
-            .getIntString("label.subtotalcash")); // NOI18N
+        //this.m_jLblTotalEuros3.setText(AppLocal
+         //   .getIntString("label.subtotalcash")); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;

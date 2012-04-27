@@ -59,7 +59,7 @@ public class ButtonPanel extends JPanel {
         map.addActionListener(mapListener);
         map.setFocusPainted(false);
         map.setFocusable(false);
-        map.setIcon(ICON_MAP);
+        map.setText("CINEMA");
         map.setMargin(new Insets(15, 18, 15, 18));
         map.setRequestFocusEnabled(false);
 
@@ -69,7 +69,7 @@ public class ButtonPanel extends JPanel {
         bookings.addActionListener(new BookingsDatabaseAl(this.panel));
         bookings.setFocusPainted(false);
         bookings.setFocusable(false);
-        bookings.setIcon(ICON_BOOKINGS);
+        bookings.setText("SEARCH TICKETS");
         bookings.setMargin(new Insets(15, 18, 15, 18));
         bookings.setRequestFocusEnabled(false);
 
@@ -79,15 +79,14 @@ public class ButtonPanel extends JPanel {
         delete.addActionListener(new CancelTicketAl(this.panel));
         delete.setFocusPainted(false);
         delete.setFocusable(false);
-        delete.setIcon(ICON_DELETE);
+        delete.setText("CLEAR ALL");
         delete.setMargin(new Insets(15, 18, 15, 18));
         delete.setRequestFocusEnabled(false);
 
         // CUSTOMER
 
         final JButton customer = new JButton();
-        customer.setIcon(new ImageIcon(this.getClass().getResource(
-            "/com/openbravo/images/kuser.png")));
+        customer.setText("CUSTOMERS");
         customer.setFocusPainted(false);
         customer.setFocusable(false);
         customer.setMargin(new Insets(15, 18, 15, 18));
@@ -97,8 +96,7 @@ public class ButtonPanel extends JPanel {
         // MEMBERSHIP
 
         final JButton membership = new JButton();
-        membership.setIcon(new ImageIcon(this.getClass().getResource(
-            "/com/openbravo/images/colorize.png")));
+        membership.setText("MEMBERSHIP");
         membership.setFocusPainted(false);
         membership.setFocusable(false);
         membership.setMargin(new Insets(15, 17, 15, 17));
@@ -119,8 +117,7 @@ public class ButtonPanel extends JPanel {
         // OLDMEMBERSHIP
         
         final JButton expenses = new JButton();
-        expenses.setIcon(new ImageIcon(this.getClass().getResource(
-        		"/com/openbravo/images/colorize16.png")));
+        expenses.setText("EXPENSES");
         expenses.setFocusPainted(false);
         expenses.setFocusable(false);
         expenses.setMargin(new Insets(12, 14, 12, 14));
