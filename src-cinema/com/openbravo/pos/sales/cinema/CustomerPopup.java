@@ -168,9 +168,11 @@ public class CustomerPopup extends JDialog {
 
         this.pinTF.addEditorKeys(this.editorKeys);
         this.nameTF.addEditorKeys(this.editorKeys);
+        this.secondNameTF.addEditorKeys(this.editorKeys);
 
         this.pinTF.reset();
         this.nameTF.reset();
+        this.secondNameTF.reset();
 
         this.pinTF.activate();
 
@@ -196,12 +198,17 @@ public class CustomerPopup extends JDialog {
     private void executeSearch() {
         final String name = this.nameTF.getText();
         final String pin = this.pinTF.getText();
+        final String secondName = this.secondNameTF.getText();
 
         final List<Customer> customers;
         try {
-            if (StringUtils.isNotEmpty(name)) {
-                customers = this.dao.searchCustomer(name);
-            } else if (StringUtils.isNotEmpty(pin)) {
+            if (StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(secondName)) {
+                customers = this.dao.searchCustomer(name, secondName);
+            } else if (StringUtils.isNotEmpty(name)) {
+                customers = this.dao.searchCustomer(name, "");
+            } else if (StringUtils.isNotEmpty(secondName)) {
+                customers = this.dao.searchCustomer("", secondName);
+            }else if (StringUtils.isNotEmpty(pin)) {
                 customers = Arrays.asList(this.dao.getCustomerByPin(pin));
             } else {
                 customers = Collections.emptyList();
@@ -245,6 +252,8 @@ public class CustomerPopup extends JDialog {
         this.jPanel7 = new javax.swing.JPanel();
         this.nameLabel = new javax.swing.JLabel();
         this.nameTF = new com.openbravo.editor.JEditorString();
+        this.secondNameLabel = new javax.swing.JLabel();
+        this.secondNameTF = new com.openbravo.editor.JEditorString();
         this.pinLabel = new javax.swing.JLabel();
         this.pinTF = new com.openbravo.editor.JEditorString();
         this.jPanel6 = new javax.swing.JPanel();
@@ -270,12 +279,15 @@ public class CustomerPopup extends JDialog {
 
         this.jPanel5.setLayout(new java.awt.BorderLayout());
 
-        this.nameLabel.setText("Name");
+        this.nameLabel.setText("First Name");
+        
+        this.secondNameLabel.setText("Second Name");
 
         this.pinLabel.setText("PIN");
 
         final javax.swing.GroupLayout jPanel7Layout =
             new javax.swing.GroupLayout(this.jPanel7);
+        
         this.jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(jPanel7Layout.createParallelGroup(
             javax.swing.GroupLayout.Alignment.LEADING).addGroup(
@@ -290,6 +302,14 @@ public class CustomerPopup extends JDialog {
                         .addComponent(this.nameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
+                   jPanel7Layout.createSequentialGroup().addComponent(
+                            this.secondNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(this.secondNameTF,
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
                         this.pinLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
                         140, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -300,6 +320,7 @@ public class CustomerPopup extends JDialog {
                             javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
+        
         jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
             javax.swing.GroupLayout.Alignment.LEADING).addGroup(
             jPanel7Layout.createSequentialGroup().addContainerGap().addGroup(
@@ -310,9 +331,16 @@ public class CustomerPopup extends JDialog {
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                 javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                jPanel7Layout.createParallelGroup(
+                    jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.nameLabel).addComponent(this.nameTF,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                jPanel7Layout.createParallelGroup(
+                    javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+                    this.secondNameLabel).addComponent(this.secondNameTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addContainerGap(
@@ -474,6 +502,7 @@ public class CustomerPopup extends JDialog {
     private void clean() {
         this.pinTF.reset();
         this.nameTF.reset();
+        this.secondNameTF.reset();
 
         this.cleanSearch();
     }
@@ -484,6 +513,8 @@ public class CustomerPopup extends JDialog {
     private javax.swing.JButton searchButton;
 
     private javax.swing.JLabel nameLabel;
+    
+    private javax.swing.JLabel secondNameLabel;
 
     private javax.swing.JLabel pinLabel;
 
@@ -514,6 +545,8 @@ public class CustomerPopup extends JDialog {
     private com.openbravo.editor.JEditorKeys editorKeys;
 
     private com.openbravo.editor.JEditorString nameTF;
+   
+    private com.openbravo.editor.JEditorString secondNameTF;
 
     private com.openbravo.editor.JEditorString pinTF;
 

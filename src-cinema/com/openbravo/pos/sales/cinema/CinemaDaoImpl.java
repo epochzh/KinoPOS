@@ -224,6 +224,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence searchCustomerMeta;
+    
+    
+    /**
+     */
+    private BaseSentence searchCustomerFirstNameMeta;
+    private BaseSentence searchCustomerLastNameMeta;
+    
+    
 
     /**
      */
@@ -547,6 +555,24 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "((meta_key = 'last_name') AND (meta_value LIKE ?)) ",
                 new SerializerWriteBasic(Datas.STRING, Datas.STRING),
                 new SerializerReadClass(CustomerMeta.class));
+        
+        
+        this.searchCustomerFirstNameMeta =
+        		new StaticSentence(this.session,
+        				"SELECT umeta_id, meta_key, meta_value, user_id "
+        						+ "FROM wp_usermeta " + "WHERE "
+        						+ "((meta_key = 'first_name') AND (meta_value LIKE ?)) ",
+        						new SerializerWriteBasic(Datas.STRING),
+        						new SerializerReadClass(CustomerMeta.class));
+        
+        this.searchCustomerLastNameMeta =
+        		new StaticSentence(this.session,
+        				"SELECT umeta_id, meta_key, meta_value, user_id "
+        						+ "FROM wp_usermeta " + "WHERE "
+        						+ "((meta_key = 'last_name') AND (meta_value LIKE ?)) ",
+        						new SerializerWriteBasic(Datas.STRING),
+        						new SerializerReadClass(CustomerMeta.class));
+        
 
         this.updateBooking =
             new StaticSentence(
@@ -1644,23 +1670,37 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      * @return the list of {@link Customer} matching the specified name
      * @throws BasicException
      */
-    public List<Customer> searchCustomer(final String name)
+    public List<Customer> searchCustomer(final String name, final String secondName)
     throws BasicException {
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("name: " + name);
+            LOGGER.info("name: " + name + " second name:"+secondName);
         }
 
         final List<Customer> customers = new ArrayList<Customer>();
 
         final Set<Long> ids = new TreeSet<Long>();
 
-        final String firstName = "%" + name + "%";
-        final String lastName = "%" + name + "%";
+        final String firstName = name + "%";
+        final String lastName = secondName + "%";
+    
+        
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("first: " + firstName + " last name:"+lastName);
+        }
 
-        @SuppressWarnings("unchecked")
-        final List<CustomerMeta> temp =
-            this.searchCustomerMeta.list(firstName, lastName);
 
+       @SuppressWarnings("unchecked")
+        final List<CustomerMeta> 
+	        temp;
+       
+       if(secondName == ""){
+    	   temp = this.searchCustomerFirstNameMeta.list(firstName, null);
+       }else if(name == ""){
+    	   temp = this.searchCustomerLastNameMeta.list(lastName, null);
+       }else{
+    	   temp = this.searchCustomerMeta.list(firstName, lastName);
+       }
+       
         for (final CustomerMeta meta : temp) {
             final Long id = meta.getUserId();
             if (ids.contains(id)) {
