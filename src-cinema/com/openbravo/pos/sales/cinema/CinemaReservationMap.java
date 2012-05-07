@@ -125,14 +125,14 @@ public class CinemaReservationMap extends JTicketsBag {
             return day + "th";
         }
         switch (day % 10) {
-            case 1:
-                return day + "st";
-            case 2:
-                return day + "nd";
-            case 3:
-                return day + "rd";
-            default:
-                return day + "th";
+        case 1:
+            return day + "st";
+        case 2:
+            return day + "nd";
+        case 3:
+            return day + "rd";
+        default:
+            return day + "th";
         }
     }
 
@@ -428,12 +428,12 @@ public class CinemaReservationMap extends JTicketsBag {
 
         return this;
     }
-    
+
     /**
      */
     public void doExpensesAdd() {
         final ExpensesPopup popup =
-        		ExpensesPopup.getExpensesPopup(this.dao, this);
+            ExpensesPopup.getExpensesPopup(this.dao, this);
         popup.setVisible(true);
 
     }

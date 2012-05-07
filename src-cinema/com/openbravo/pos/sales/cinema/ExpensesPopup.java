@@ -4,7 +4,6 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.sales.cinema.model.Expense;
-import com.openbravo.pos.sales.cinema.model.OldMember;
 
 import java.awt.Component;
 import java.awt.Dialog;
@@ -12,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
-import java.util.logging.Logger;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -24,11 +22,6 @@ public class ExpensesPopup extends JDialog {
     /**
 	 */
     private static final long serialVersionUID = -8632989194945075029L;
-
-    /**
-     */
-    private static final Logger LOGGER = Logger.getLogger(ExpensesPopup.class
-        .getName());
 
     /**
      * @param dao
@@ -67,16 +60,14 @@ public class ExpensesPopup extends JDialog {
 
     /**
      */
-    private java.awt.event.ActionListener expensesAction = new java.awt.event.ActionListener() {
+    private final java.awt.event.ActionListener expensesAction =
+        new java.awt.event.ActionListener() {
 
-        @Override
-        public void
-        actionPerformed(final java.awt.event.ActionEvent evt) {
-            ExpensesPopup.this.search();
-        }
-    };
-    
-
+            @Override
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
+                ExpensesPopup.this.search();
+            }
+        };
 
     /**
      */
@@ -106,7 +97,6 @@ public class ExpensesPopup extends JDialog {
 
     /**
      */
-    @SuppressWarnings("unchecked")
     private void init() {
         this.initComponents();
 
@@ -116,7 +106,7 @@ public class ExpensesPopup extends JDialog {
         this.nameTF.addEditorKeys(this.editorKeys);
         this.amountTF.addEditorKeys(this.editorKeys);
         this.supplierTF.addEditorKeys(this.editorKeys);
-       // this.membershipTF.addItem("gold membership");
+        // this.membershipTF.addItem("gold membership");
 
         this.nameTF.reset();
         this.amountTF.reset();
@@ -144,21 +134,19 @@ public class ExpensesPopup extends JDialog {
                 "Please fill in all required fields marked by '*'");
         } else {
             try {
-			this.dao.createNewExpense(expense);
-            this.okButton.setEnabled(true);
-            this.nameTF.setEnabled(false);
-            this.amountTF.setEnabled(false);
-            this.supplierTF.setEnabled(false);
+                this.dao.createNewExpense(expense);
+                this.okButton.setEnabled(true);
+                this.nameTF.setEnabled(false);
+                this.amountTF.setEnabled(false);
+                this.supplierTF.setEnabled(false);
 
-             } catch (BasicException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-             }
+            } catch (final BasicException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
-    
-    
-   
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -204,12 +192,6 @@ public class ExpensesPopup extends JDialog {
         this.nameLabel.setText("Receipt Name *");
         this.amountLabel.setText("Amount *");
         this.supplierLabel.setText("Supplier *");
-        
-        
-        
-       
-        
-       
 
         final javax.swing.GroupLayout jPanel7Layout =
             new javax.swing.GroupLayout(this.jPanel7);
@@ -220,9 +202,8 @@ public class ExpensesPopup extends JDialog {
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
-                        this.nameLabel,
-                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        this.nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(this.nameTF,
@@ -242,15 +223,15 @@ public class ExpensesPopup extends JDialog {
                         javax.swing.GroupLayout.PREFERRED_SIZE, 140,
                         javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(
-                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(this.amountTF,
-                        javax.swing.GroupLayout.PREFERRED_SIZE, 220,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            javax.swing.GroupLayout.PREFERRED_SIZE, 220,
+                            javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
-                jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
-                    javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-                    jPanel7Layout.createSequentialGroup().addContainerGap().addGroup(
+        jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
+            javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+            jPanel7Layout.createSequentialGroup().addContainerGap().addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.nameLabel).addComponent(this.nameTF,
@@ -264,15 +245,16 @@ public class ExpensesPopup extends JDialog {
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.amountLabel).addComponent(this.amountTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addContainerGap(
-                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE)));
 
         this.jPanel5.add(this.jPanel7, java.awt.BorderLayout.CENTER);
 
@@ -292,8 +274,7 @@ public class ExpensesPopup extends JDialog {
         this.searchButton.setFocusPainted(false);
         this.searchButton.setFocusable(false);
         this.searchButton.setRequestFocusEnabled(false);
-        this.searchButton
-            .addActionListener(this.expensesAction);
+        this.searchButton.addActionListener(this.expensesAction);
         this.jPanel6.add(this.searchButton);
 
         this.jPanel5.add(this.jPanel6, java.awt.BorderLayout.SOUTH);
@@ -323,7 +304,7 @@ public class ExpensesPopup extends JDialog {
                     ExpensesPopup.this.cancel();
                 }
             });
-        //this.jPanel1.add(this.cancelButton);
+        // this.jPanel1.add(this.cancelButton);
 
         this.okButton.setIcon(new javax.swing.ImageIcon(this.getClass()
             .getResource("/com/openbravo/images/button_ok.png"))); // NOI18N
@@ -361,13 +342,13 @@ public class ExpensesPopup extends JDialog {
 
         this.dispose();
     }
-    
+
     /**
-     * if the drop down is equal to joint membership add the extra fields and change the function 
-     * else revert back to normal
+     * if the drop down is equal to joint membership add the extra fields and
+     * change the function else revert back to normal
      */
-    public void addExtraFields(){
-    
+    public void addExtraFields() {
+
     }
 
     /**
@@ -383,8 +364,6 @@ public class ExpensesPopup extends JDialog {
     private void search() {
         this.executeExpenses();
     }
-    
-    
 
     private void clean() {
         this.nameTF.reset();
@@ -401,14 +380,10 @@ public class ExpensesPopup extends JDialog {
     private javax.swing.JButton searchButton;
 
     private javax.swing.JLabel nameLabel;
-    
+
     private javax.swing.JLabel amountLabel;
 
     private javax.swing.JLabel supplierLabel;
-    
-
-
-    
 
     private javax.swing.JPanel jPanel1;
 
@@ -435,12 +410,10 @@ public class ExpensesPopup extends JDialog {
     private com.openbravo.editor.JEditorKeys editorKeys;
 
     private com.openbravo.editor.JEditorString nameTF;
-    
+
     private com.openbravo.editor.JEditorString amountTF;
 
     private com.openbravo.editor.JEditorString supplierTF;
-    
-
 
     // End of variables declaration//GEN-END:variables
 

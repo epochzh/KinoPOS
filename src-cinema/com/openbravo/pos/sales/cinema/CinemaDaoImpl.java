@@ -76,10 +76,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private OldMember oldMember;
-    
-    /**
-     */
-    private Expense expense;
 
     /**
      */
@@ -92,7 +88,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence createOldWpUser;
-   
+
     /**
      */
     private BaseSentence createNewExpenses;
@@ -224,14 +220,14 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      */
     private BaseSentence searchCustomerMeta;
-    
-    
+
     /**
      */
     private BaseSentence searchCustomerFirstNameMeta;
+
+    /**
+     */
     private BaseSentence searchCustomerLastNameMeta;
-    
-    
 
     /**
      */
@@ -279,11 +275,12 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "user_url, user_registered, user_activation_key, user_status, display_name) "
                     + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
                 new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
-       
+
         this.createNewExpenses =
-        		new StaticSentence(this.session, "INSERT INTO dd_expenses "
-        		+ "(name, supplier, amount) " + "VALUES (?, ?, ?) ",
-        		new SerializerWriteBasic(Datas.STRING, Datas.STRING, Datas.STRING));
+            new StaticSentence(this.session, "INSERT INTO dd_expenses "
+                + "(name, supplier, amount) " + "VALUES (?, ?, ?) ",
+                new SerializerWriteBasic(Datas.STRING, Datas.STRING,
+                    Datas.STRING));
 
         this.createUserMeta =
             new StaticSentence(this.session, "INSERT INTO wp_usermeta "
@@ -326,9 +323,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         this.getCustomerMetaByPin =
             new StaticSentence(this.session,
                 "SELECT umeta_id, meta_key, meta_value, user_id "
-                    + "FROM wp_usermeta " + "WHERE (meta_key = 'ym_pin') "
-                    + "AND (meta_value = ?) ", new SerializerWriteBasic(
-                    Datas.LONG), new SerializerReadClass(CustomerMeta.class));
+                    + "FROM wp_usermeta "
+                    + "WHERE (meta_key = 'ym_custom_fields') "
+                    + "AND (meta_value LIKE ?) ", new SerializerWriteBasic(
+                    Datas.STRING), new SerializerReadClass(CustomerMeta.class));
 
         this.getEvent =
             new StaticSentence(
@@ -555,24 +553,22 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "((meta_key = 'last_name') AND (meta_value LIKE ?)) ",
                 new SerializerWriteBasic(Datas.STRING, Datas.STRING),
                 new SerializerReadClass(CustomerMeta.class));
-        
-        
+
         this.searchCustomerFirstNameMeta =
-        		new StaticSentence(this.session,
-        				"SELECT umeta_id, meta_key, meta_value, user_id "
-        						+ "FROM wp_usermeta " + "WHERE "
-        						+ "((meta_key = 'first_name') AND (meta_value LIKE ?)) ",
-        						new SerializerWriteBasic(Datas.STRING),
-        						new SerializerReadClass(CustomerMeta.class));
-        
+            new StaticSentence(this.session,
+                "SELECT umeta_id, meta_key, meta_value, user_id "
+                    + "FROM wp_usermeta " + "WHERE "
+                    + "((meta_key = 'first_name') AND (meta_value LIKE ?)) ",
+                new SerializerWriteBasic(Datas.STRING),
+                new SerializerReadClass(CustomerMeta.class));
+
         this.searchCustomerLastNameMeta =
-        		new StaticSentence(this.session,
-        				"SELECT umeta_id, meta_key, meta_value, user_id "
-        						+ "FROM wp_usermeta " + "WHERE "
-        						+ "((meta_key = 'last_name') AND (meta_value LIKE ?)) ",
-        						new SerializerWriteBasic(Datas.STRING),
-        						new SerializerReadClass(CustomerMeta.class));
-        
+            new StaticSentence(this.session,
+                "SELECT umeta_id, meta_key, meta_value, user_id "
+                    + "FROM wp_usermeta " + "WHERE "
+                    + "((meta_key = 'last_name') AND (meta_value LIKE ?)) ",
+                new SerializerWriteBasic(Datas.STRING),
+                new SerializerReadClass(CustomerMeta.class));
 
         this.updateBooking =
             new StaticSentence(
@@ -720,22 +716,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         }
 
     }
-    
+
     /**
-     * @param newMember
+     * @param expense
      * @throws BasicException
      */
-    public void createNewExpense(final Expense expense)
-    throws BasicException {
-
-        this.expense = expense;
-
-        this.createNewExpenses.exec(this.expense.getName(), this.expense.getSupplier(), this.expense.getAmount());
-
-       
-       // LOGGER.info("Meta: " + meta.get("ym_custom_fields"));
+    public void createNewExpense(final Expense expense) throws BasicException {
+        this.createNewExpenses.exec(expense.getName(), expense.getSupplier(),
+            expense.getAmount());
     }
-
 
     /**
      * @param newMember
@@ -743,7 +732,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      */
     public void createOldWpUser(final OldMember newMember)
     throws BasicException {
-
         this.oldMember = newMember;
 
         this.createOldWpUser.exec(this.oldMember.getNickname(), this.oldMember
@@ -1057,7 +1045,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
         final Customer customer;
 
         final CustomerMeta meta =
-            (CustomerMeta) this.getCustomerMetaByPin.find(pin, null);
+            (CustomerMeta) this.getCustomerMetaByPin.find("%s:9:\"%" + pin
+                + "%\"%", null);
         if (meta == null) {
             customer = null;
         } else {
@@ -1217,7 +1206,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
     /**
      * @param venue
      * @param type
-     * @return
+     * @return a PriceMatrix
      * @throws BasicException
      */
     public PriceMatrix
@@ -1667,13 +1656,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
     /**
      * @param name
+     * @param secondName
      * @return the list of {@link Customer} matching the specified name
      * @throws BasicException
      */
-    public List<Customer> searchCustomer(final String name, final String secondName)
-    throws BasicException {
+    @SuppressWarnings("unchecked")
+    public List<Customer> searchCustomer(final String name,
+    final String secondName) throws BasicException {
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("name: " + name + " second name:"+secondName);
+            LOGGER.info("name: " + name + ", secondName: " + secondName);
         }
 
         final List<Customer> customers = new ArrayList<Customer>();
@@ -1682,25 +1673,21 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         final String firstName = name + "%";
         final String lastName = secondName + "%";
-    
-        
+
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("first: " + firstName + " last name:"+lastName);
+            LOGGER.info("first: " + firstName + " last name:" + lastName);
         }
 
+        final List<CustomerMeta> temp;
 
-       @SuppressWarnings("unchecked")
-        final List<CustomerMeta> 
-	        temp;
-       
-       if(secondName == ""){
-    	   temp = this.searchCustomerFirstNameMeta.list(firstName, null);
-       }else if(name == ""){
-    	   temp = this.searchCustomerLastNameMeta.list(lastName, null);
-       }else{
-    	   temp = this.searchCustomerMeta.list(firstName, lastName);
-       }
-       
+        if (secondName == "") {
+            temp = this.searchCustomerFirstNameMeta.list(firstName, null);
+        } else if (name == "") {
+            temp = this.searchCustomerLastNameMeta.list(lastName, null);
+        } else {
+            temp = this.searchCustomerMeta.list(firstName, lastName);
+        }
+
         for (final CustomerMeta meta : temp) {
             final Long id = meta.getUserId();
             if (ids.contains(id)) {
@@ -1840,7 +1827,7 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
     /**
      * @param venue
-     * @return
+     * @return a Double
      * @throws BasicException
      */
     public Double getDoubleBillPrice(final Venue venue) throws BasicException {
@@ -1850,5 +1837,4 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
         return price.getPrice();
     }
-
 }

@@ -8,7 +8,6 @@ import com.openbravo.pos.sales.cinema.model.Booking;
 import com.openbravo.pos.sales.cinema.model.Customer;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -29,6 +28,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -52,37 +52,37 @@ public class CustomerPopup extends JDialog {
 
     /**
      * @param dao
-     * @param parent
+     * @param panel
      * @return a new CustomerPopup
      */
     public static CustomerPopup getCustomerPopup(final CinemaDaoImpl dao,
-    final Component parent) {
-        final Window window = CinemaReservationMap.getWindow(parent);
+    final CinemaReservationMap panel) {
+        final Window window = CinemaReservationMap.getWindow(panel);
 
         CustomerPopup myMsg;
         if (window instanceof Frame) {
-            myMsg = new CustomerPopup(dao, (Frame) window, true);
+            myMsg = new CustomerPopup(panel, dao, (Frame) window, true);
         } else {
-            myMsg = new CustomerPopup(dao, (Dialog) window, true);
+            myMsg = new CustomerPopup(panel, dao, (Dialog) window, true);
         }
         myMsg.init();
-        myMsg.applyComponentOrientation(parent.getComponentOrientation());
+        myMsg.applyComponentOrientation(panel.getComponentOrientation());
 
         return myMsg;
     }
 
     /**
      * @param app
-     * @param parent
+     * @param panel
      * @return a new CustomerPopup
      */
     public static CustomerPopup getCustomerPopup(final AppView app,
-    final Component parent) {
+    final CinemaReservationMap panel) {
         final CinemaDaoImpl dao =
             (CinemaDaoImpl) app
                 .getBean("com.openbravo.pos.sales.cinema.CinemaDaoImpl");
 
-        return getCustomerPopup(dao, parent);
+        return getCustomerPopup(dao, panel);
     }
 
     /**
@@ -123,6 +123,10 @@ public class CustomerPopup extends JDialog {
 
     /**
      */
+    private final CinemaReservationMap panel;
+
+    /**
+     */
     private final CinemaDaoImpl dao;
 
     /**
@@ -130,25 +134,29 @@ public class CustomerPopup extends JDialog {
     private Customer selectedCustomer;
 
     /**
+     * @param panel
      * @param dao
      * @param parent
      * @param modal
      */
-    private CustomerPopup(final CinemaDaoImpl dao, final Frame parent,
-    final boolean modal) {
+    private CustomerPopup(final CinemaReservationMap panel,
+    final CinemaDaoImpl dao, final Frame parent, final boolean modal) {
         super(parent, modal);
         this.dao = dao;
+        this.panel = panel;
     }
 
     /**
+     * @param panel
      * @param dao
      * @param parent
      * @param modal
      */
-    private CustomerPopup(final CinemaDaoImpl dao, final Dialog parent,
-    final boolean modal) {
+    private CustomerPopup(final CinemaReservationMap panel,
+    final CinemaDaoImpl dao, final Dialog parent, final boolean modal) {
         super(parent, modal);
         this.dao = dao;
+        this.panel = panel;
     }
 
     /**
@@ -202,13 +210,14 @@ public class CustomerPopup extends JDialog {
 
         final List<Customer> customers;
         try {
-            if (StringUtils.isNotEmpty(name) && StringUtils.isNotEmpty(secondName)) {
+            if (StringUtils.isNotEmpty(name)
+                && StringUtils.isNotEmpty(secondName)) {
                 customers = this.dao.searchCustomer(name, secondName);
             } else if (StringUtils.isNotEmpty(name)) {
                 customers = this.dao.searchCustomer(name, "");
             } else if (StringUtils.isNotEmpty(secondName)) {
                 customers = this.dao.searchCustomer("", secondName);
-            }else if (StringUtils.isNotEmpty(pin)) {
+            } else if (StringUtils.isNotEmpty(pin)) {
                 customers = Arrays.asList(this.dao.getCustomerByPin(pin));
             } else {
                 customers = Collections.emptyList();
@@ -280,14 +289,13 @@ public class CustomerPopup extends JDialog {
         this.jPanel5.setLayout(new java.awt.BorderLayout());
 
         this.nameLabel.setText("First Name");
-        
+
         this.secondNameLabel.setText("Second Name");
 
         this.pinLabel.setText("PIN");
 
         final javax.swing.GroupLayout jPanel7Layout =
             new javax.swing.GroupLayout(this.jPanel7);
-        
         this.jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(jPanel7Layout.createParallelGroup(
             javax.swing.GroupLayout.Alignment.LEADING).addGroup(
@@ -302,12 +310,13 @@ public class CustomerPopup extends JDialog {
                         .addComponent(this.nameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
-                   jPanel7Layout.createSequentialGroup().addComponent(
-                            this.secondNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                            140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(
+                    jPanel7Layout.createSequentialGroup().addComponent(
+                        this.secondNameLabel,
+                        javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(
                             javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(this.secondNameTF,
+                        .addComponent(this.secondNameTF,
                             javax.swing.GroupLayout.PREFERRED_SIZE, 220,
                             javax.swing.GroupLayout.PREFERRED_SIZE)).addGroup(
                     jPanel7Layout.createSequentialGroup().addComponent(
@@ -320,7 +329,6 @@ public class CustomerPopup extends JDialog {
                             javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
                     Short.MAX_VALUE)));
-        
         jPanel7Layout.setVerticalGroup(jPanel7Layout.createParallelGroup(
             javax.swing.GroupLayout.Alignment.LEADING).addGroup(
             jPanel7Layout.createSequentialGroup().addContainerGap().addGroup(
@@ -331,13 +339,13 @@ public class CustomerPopup extends JDialog {
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
                 javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
-                    jPanel7Layout.createParallelGroup(
+                jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.nameLabel).addComponent(this.nameTF,
                     javax.swing.GroupLayout.PREFERRED_SIZE,
                     javax.swing.GroupLayout.DEFAULT_SIZE,
                     javax.swing.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-                    javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
+                javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(
                 jPanel7Layout.createParallelGroup(
                     javax.swing.GroupLayout.Alignment.LEADING).addComponent(
                     this.secondNameLabel).addComponent(this.secondNameTF,
@@ -481,6 +489,20 @@ public class CustomerPopup extends JDialog {
         this.executeSearch();
     }
 
+    private void bookingsTableMouseClicked(final JTable bookingsTable) {
+        final int selectedRow = bookingsTable.getSelectedRow();
+        if (LOGGER.isLoggable(Level.INFO)) {
+            LOGGER.info("selectedRow: " + selectedRow);
+        }
+        if (selectedRow == -1) {
+            return;
+        }
+        final CustomerPopupBookingTM model =
+            (CustomerPopupBookingTM) bookingsTable.getModel();
+        final Booking booking = model.getBookings().get(selectedRow);
+        this.panel.showBookingPopup(true, booking);
+    }
+
     private void jListCustomersValueChanged(
     final javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_jListCustomersValueChanged
 
@@ -513,7 +535,7 @@ public class CustomerPopup extends JDialog {
     private javax.swing.JButton searchButton;
 
     private javax.swing.JLabel nameLabel;
-    
+
     private javax.swing.JLabel secondNameLabel;
 
     private javax.swing.JLabel pinLabel;
@@ -545,7 +567,7 @@ public class CustomerPopup extends JDialog {
     private com.openbravo.editor.JEditorKeys editorKeys;
 
     private com.openbravo.editor.JEditorString nameTF;
-   
+
     private com.openbravo.editor.JEditorString secondNameTF;
 
     private com.openbravo.editor.JEditorString pinTF;
