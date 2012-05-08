@@ -11,9 +11,10 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.apache.commons.lang.StringUtils;
@@ -516,7 +518,14 @@ public class CustomerPopup extends JDialog {
         if (evt.getClickCount() == 2) {
             this.selectedCustomer =
                 (Customer) this.customersList.getSelectedValue();
-            this.dispose();
+
+            final JPanel customerPanel = this.toPanel(this.selectedCustomer);
+
+            this.okButton.setEnabled(true);
+
+            this.jScrollPane1.setViewportView(customerPanel);
+
+            // this.dispose();
         }
 
     }// GEN-LAST:event_jListCustomersMouseClicked
@@ -594,6 +603,7 @@ public class CustomerPopup extends JDialog {
         final JPanel customerPanel = new JPanel();
         customerPanel.setBackground(Color.WHITE);
         customerPanel.setLayout(new GridLayout2(7, 2));
+        customerPanel.setPreferredSize(new Dimension(380, 160));
 
         final JLabel idLabel = new JLabel("ID");
         idLabel.setSize(80, 20);
@@ -639,24 +649,50 @@ public class CustomerPopup extends JDialog {
                 .getMsEnd())));
         }
 
-        final JPanel bookingPanel = new JPanel();
-        bookingPanel.setBackground(Color.WHITE);
-        bookingPanel.setLayout(new GridLayout(bookings.size() + 1, 4));
+        // final JPanel bookingPanel = new JPanel();
+        // bookingPanel.setBackground(Color.WHITE);
+        // bookingPanel.setLayout(new GridLayout(bookings.size() + 1, 4));
+        //
+        // if (!bookings.isEmpty()) {
+        // bookingPanel.add(new JLabel("Film"));
+        // bookingPanel.add(new JLabel("Date"));
+        // bookingPanel.add(new JLabel("Seat"));
+        // bookingPanel.add(new JLabel("State"));
+        //
+        // for (final Booking booking : bookings) {
+        // bookingPanel.add(new JLabel(booking.getEvent().getName()));
+        // bookingPanel.add(new JLabel(DATE_FORMAT_MS.format(booking
+        // .getEvent().getDateBegin())));
+        // bookingPanel.add(new JLabel(booking.getSeatCoordinates()));
+        // bookingPanel.add(new JLabel(booking.getState().name()));
+        // }
+        // }
 
-        if (!bookings.isEmpty()) {
-            bookingPanel.add(new JLabel("Film"));
-            bookingPanel.add(new JLabel("Date"));
-            bookingPanel.add(new JLabel("Seat"));
-            bookingPanel.add(new JLabel("State"));
+        final CustomerPopupBookingTM tm = new CustomerPopupBookingTM(bookings);
+        final CustomerPopupBookingTCM tcm = new CustomerPopupBookingTCM();
 
-            for (final Booking booking : bookings) {
-                bookingPanel.add(new JLabel(booking.getEvent().getName()));
-                bookingPanel.add(new JLabel(DATE_FORMAT_MS.format(booking
-                    .getEvent().getDateBegin())));
-                bookingPanel.add(new JLabel(booking.getSeatCoordinates()));
-                bookingPanel.add(new JLabel(booking.getState().name()));
+        final JTable bookingsTable = new JTable(tm, tcm);
+        bookingsTable.setFocusable(false);
+        bookingsTable.setRequestFocusEnabled(false);
+        bookingsTable.setRowHeight(32);
+
+        bookingsTable.createDefaultColumnsFromModel();
+
+        bookingsTable.addMouseListener(new MouseAdapter() {
+
+            /**
+             * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+             */
+            @Override
+            public void mouseClicked(final MouseEvent event) {
+                CustomerPopup.this.bookingsTableMouseClicked((JTable) event
+                    .getSource());
             }
-        }
+        });
+
+        final JScrollPane bookingPanel = new JScrollPane();
+        bookingPanel.setPreferredSize(new Dimension(380, 160));
+        bookingPanel.setViewportView(bookingsTable);
 
         this.selectedCustomer = customer;
 
