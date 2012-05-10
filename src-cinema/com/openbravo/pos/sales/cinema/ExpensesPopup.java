@@ -1,6 +1,7 @@
 package com.openbravo.pos.sales.cinema;
 
 import com.openbravo.basic.BasicException;
+import com.openbravo.data.gui.MessageInf;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
 import com.openbravo.pos.sales.cinema.model.Expense;
@@ -11,9 +12,11 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  */
@@ -63,6 +66,9 @@ public class ExpensesPopup extends JDialog {
     private final java.awt.event.ActionListener expensesAction =
         new java.awt.event.ActionListener() {
 
+            /**
+             * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+             */
             @Override
             public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 ExpensesPopup.this.search();
@@ -118,6 +124,20 @@ public class ExpensesPopup extends JDialog {
         this.getRootPane().setDefaultButton(this.okButton);
 
         this.dao.setMember(null);
+
+        try {
+            final List<Expense> expenses = this.dao.listExpense();
+            final ExpensesPopupExpenseTM tm =
+                new ExpensesPopupExpenseTM(expenses);
+
+            final JTable expensesTable = new JTable(tm);
+            expensesTable.setFocusable(false);
+            expensesTable.setRequestFocusEnabled(false);
+
+            this.jScrollPane1.setViewportView(expensesTable);
+        } catch (final BasicException ex) {
+            new MessageInf(ex).show(this);
+        }
     }
 
     /**
@@ -134,7 +154,7 @@ public class ExpensesPopup extends JDialog {
                 "Please fill in all required fields marked by '*'");
         } else {
             try {
-                this.dao.createNewExpense(expense);
+                this.dao.createExpense(expense);
                 this.okButton.setEnabled(true);
                 this.nameTF.setEnabled(false);
                 this.amountTF.setEnabled(false);
@@ -155,7 +175,6 @@ public class ExpensesPopup extends JDialog {
     // <editor-fold defaultstate="collapsed"
     // desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         this.jPanel2 = new javax.swing.JPanel();
         this.editorKeys = new com.openbravo.editor.JEditorKeys();
         this.jPanel3 = new javax.swing.JPanel();
@@ -284,6 +303,8 @@ public class ExpensesPopup extends JDialog {
         this.jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(5,
             5, 5, 5));
         this.jPanel4.setLayout(new java.awt.BorderLayout());
+
+        this.jPanel4.add(this.jScrollPane1, java.awt.BorderLayout.CENTER);
 
         this.jPanel3.add(this.jPanel4, java.awt.BorderLayout.CENTER);
 

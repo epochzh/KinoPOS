@@ -83,15 +83,15 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
     /**
      */
+    private BaseSentence createExpense;
+
+    /**
+     */
     private BaseSentence createWpUser;
 
     /**
      */
     private BaseSentence createOldWpUser;
-
-    /**
-     */
-    private BaseSentence createNewExpenses;
 
     /**
      */
@@ -207,6 +207,10 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
 
     /**
      */
+    private BaseSentence listExpense;
+
+    /**
+     */
     private BaseSentence listPrice;
 
     /**
@@ -258,6 +262,12 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.LONG, Datas.DOUBLE, Datas.LONG, Datas.STRING,
                     Datas.STRING, Datas.STRING, Datas.STRING));
 
+        this.createExpense =
+            new StaticSentence(this.session, "INSERT INTO dd_expenses "
+                + "(name, supplier, amount) " + "VALUES (?, ?, ?) ",
+                new SerializerWriteBasic(Datas.STRING, Datas.STRING,
+                    Datas.STRING));
+
         this.createWpUser =
             new StaticSentence(
                 this.session,
@@ -275,12 +285,6 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     + "user_url, user_registered, user_activation_key, user_status, display_name) "
                     + "VALUES (?, '', '', '', '', ?, '', 0, '') ",
                 new SerializerWriteBasic(Datas.STRING, Datas.TIMESTAMP));
-
-        this.createNewExpenses =
-            new StaticSentence(this.session, "INSERT INTO dd_expenses "
-                + "(name, supplier, amount) " + "VALUES (?, ?, ?) ",
-                new SerializerWriteBasic(Datas.STRING, Datas.STRING,
-                    Datas.STRING));
 
         this.createUserMeta =
             new StaticSentence(this.session, "INSERT INTO wp_usermeta "
@@ -517,6 +521,12 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                     Datas.LONG, Datas.STRING, Datas.TIMESTAMP, Datas.STRING),
                 new SerializerReadClass(Event.class));
 
+        this.listExpense =
+            new StaticSentence(this.session,
+                "SELECT amount, id, name, supplier "
+                    + "FROM dd_expenses ORDER BY id DESC LIMIT 10", null,
+                new SerializerReadClass(Expense.class));
+
         this.listPrice =
             new StaticSentence(this.session,
                 "SELECT day, id, name, full_price, gold, kino_friends, "
@@ -721,8 +731,8 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
      * @param expense
      * @throws BasicException
      */
-    public void createNewExpense(final Expense expense) throws BasicException {
-        this.createNewExpenses.exec(expense.getName(), expense.getSupplier(),
+    public void createExpense(final Expense expense) throws BasicException {
+        this.createExpense.exec(expense.getName(), expense.getSupplier(),
             expense.getAmount());
     }
 
@@ -1537,6 +1547,17 @@ public class CinemaDaoImpl extends BeanFactoryDataSingle {
                 .format(dateBegin), DATE_FORMAT.format(dateEnd));
 
         return events;
+    }
+
+    /**
+     * @return the list of last 10 {@link Expense}
+     * @throws BasicException
+     */
+    public List<Expense> listExpense() throws BasicException {
+        @SuppressWarnings("unchecked")
+        final List<Expense> expenses = this.listExpense.list();
+
+        return expenses;
     }
 
     /**
